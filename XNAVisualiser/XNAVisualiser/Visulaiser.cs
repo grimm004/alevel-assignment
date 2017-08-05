@@ -48,7 +48,6 @@ namespace XNAVisualiser
             Content.RootDirectory = "Content";
             database = new DatabaseManager.CSVDatabase("C:\\Data", false, ".csv");
             locations = new List<Vector2>();
-            // Test Change
         }
 
         protected void UpdateMac()
