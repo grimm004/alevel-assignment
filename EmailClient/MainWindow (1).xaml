@@ -1,0 +1,40 @@
+﻿<Window x:Class="EmailClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmailClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="430" Width="600" MinHeight="420" MinWidth="525">
+    <Grid>
+        <TextBox x:Name="messageRecipientEntryBox" Height="23" Margin="64,10,229,0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="ccEntryBox" Height="23" Margin="64,38,229,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="bccEntryBox" Height="23" Margin="64,66,229,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="subjectEntryBox" Height="23" Margin="64,94,229,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="senderEmailEntryBox" HorizontalAlignment="Right" Height="23" Margin="0,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" VerticalContentAlignment="Center" Text="grimm004@gmail.com"/>
+        <PasswordBox x:Name="senderPasswordEntryBox" HorizontalAlignment="Right" Margin="0,38,10,0" VerticalAlignment="Top" Width="159" Height="23" VerticalContentAlignment="Center" Password="oznrmhqotylrkdys"/>
+        <TextBox x:Name="senderNameEntryBox" HorizontalAlignment="Right" Height="23" Margin="0,66,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" VerticalContentAlignment="Center" Text="Max Grimmett"/>
+        <TextBox x:Name="serverEntryBox" HorizontalAlignment="Right" Height="23" Margin="0,94,73,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" Text="smtp.gmail.com" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="portEntryBox" HorizontalAlignment="Right" Height="23" Margin="0,94,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="63" Text="587" VerticalContentAlignment="Center"/>
+        <RichTextBox x:Name="emailBodyRichTextBox" Margin="10,122,10,35">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="75" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="SendButton_Click"/>
+
+        <Label Content="Email" HorizontalAlignment="Right" Margin="0,10,169,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="23"/>
+        <Label Content="Password" HorizontalAlignment="Right" Margin="0,38,169,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="23"/>
+        <Label Content="Name" HorizontalAlignment="Right" Margin="0,66,162,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Height="23"/>
+        <Label Content="To" HorizontalAlignment="Left" Margin="37,10,0,0" VerticalAlignment="Top" Height="23" VerticalContentAlignment="Center"/>
+        <Label Content="Subject" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Height="23"/>
+        <Button x:Name="attachmentsButton" Content="Manage Attachments" HorizontalAlignment="Left" Margin="90,0,0,10" VerticalAlignment="Bottom" Width="125" Click="AttachmentsButton_Click"/>
+        <Label x:Name="statusLabel" Content="Ready" HorizontalAlignment="Right" Margin="0,0,10,4" VerticalAlignment="Bottom" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Width="261"/>
+        <Label Content="CC" HorizontalAlignment="Left" Margin="34,38,0,0" VerticalAlignment="Top" Height="23"/>
+        <Label Content="BCC" HorizontalAlignment="Left" Margin="28,66,0,0" VerticalAlignment="Top" Height="23"/>
+        <Button x:Name="colourSelectionButton" Content="Colour Selection" HorizontalAlignment="Left" Margin="220,0,0,10" VerticalAlignment="Bottom" Width="101" Click="ColourSelectionButton_Click"/>
+    </Grid>
+</Window>
