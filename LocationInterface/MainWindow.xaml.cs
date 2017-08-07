@@ -47,11 +47,11 @@ namespace LocationInterface
 
         private void KeyPress(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down)
+            if (e.Key == Key.A || e.Key == Key.D || e.Key == Key.W || e.Key == Key.S)
             {
-                e.Handled = true;
-                Keyboard.Focus(mapPage.canvas);
+                Keyboard.Focus(null);
                 mapPage.canvas.Focus();
+                e.Handled = true;
             }
         }
 
