@@ -21,7 +21,7 @@ namespace XNAVisualiser
         private const float ORATE = .5f;
         private int updateCounter = 0;
         private int pointSize = 2;
-        private DatabaseManager.Database database;
+        private DatabaseManagerLibrary.Database database;
         private List<Point> points;
         private Point currentPoint;
         private int currentPointIndex = 0;
@@ -44,19 +44,19 @@ namespace XNAVisualiser
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            database = new DatabaseManager.CSVDatabase("C:\\Data", false, ".csv");
+            database = new DatabaseManagerLibrary.CSV("C:\\Data", false, ".csv");
             points = new List<Point>();
             Console.WriteLine(database.GetTable("LocationCount"));
-            foreach (DatabaseManager.Record record in database.GetTable("LocationCount").GetRecords()) Console.WriteLine(record);
+            foreach (DatabaseManagerLibrary.Record record in database.GetTable("LocationCount").GetRecords()) Console.WriteLine(record);
         }
 
         protected void UpdateMac()
         {
             Console.WriteLine("Enter new mac address:");
             string newMac = Console.ReadLine();
-            DatabaseManager.Table table = database.GetTable("TUI_D1_location_data_03-12-2017");
+            DatabaseManagerLibrary.Table table = database.GetTable("TUI_D1_location_data_03-12-2017");
             Console.WriteLine("Loading...");
-            DatabaseManager.Record[] records = table.GetRecords("mac", newMac);
+            DatabaseManagerLibrary.Record[] records = table.GetRecords("mac", newMac);
             points = new List<Point>();
             for (int i = 0; i < records.Length; i++)
                 if ((string)records[i].GetValue("deck") == "Deck4") if ((string)records[i].GetValue("locationid") == "POO000447DEGSB") points.Add(new Point((float)(double)records[i].GetValue("x"), (float)(double)records[i].GetValue("y"), pointTextureBlue));

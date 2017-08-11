@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using LocationInterface.Pages;
 
@@ -13,72 +10,65 @@ namespace LocationInterface
     /// </summary>
     public partial class MainWindow : Window
     {
-        protected static HomePage homePage;
-        protected static DataViewerPage dataViewerPage;
-        protected static SettingsPage settingsPage;
-        protected static MapViewPage mapPage;
-
-        protected Page previousPage;
+        public HomePage HomePage { get; protected set; }
+        public DataViewerPage DataViewerPage { get; protected set; }
+        public SettingsPage SettingsPage { get; protected set; }
+        public MapViewPage MapPage { get; protected set; }
+        protected Page PreviousPage { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            homePage = new HomePage(ShowDataViewerPage, ShowMapPage);
-            dataViewerPage = new DataViewerPage(ShowPreviousPage);
-            settingsPage = new SettingsPage(ShowPreviousPage);
-            mapPage = new MapViewPage(ShowHomePage);
+            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage);
+            DataViewerPage = new DataViewerPage(ShowPreviousPage);
+            SettingsPage = new SettingsPage(ShowPreviousPage);
+            MapPage = new MapViewPage(ShowHomePage, HomePage.Database);
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             this.KeyDown += KeyPress;
 
-            //ShowHomePage();
-            ShowMapPage();
+            ShowHomePage();
         }
 
         protected Key[] keys = new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right };
-        private void KeyPress(object sender, KeyEventArgs e)
+        protected void KeyPress(object sender, KeyEventArgs e)
         {
             foreach (Key key in keys)
                 if (e.Key == key)
                 {
-                    Keyboard.Focus(mapPage.canvas);
-                    mapPage.canvas.Focus();
+                    Keyboard.Focus(MapPage.canvas);
+                    MapPage.canvas.Focus();
                     e.Handled = true;
                     break;
                 }
         }
 
-        public void ShowHomePage()
+        protected void ShowHomePage()
         {
-            ShowPage(homePage);
+            ShowPage(HomePage);
         }
-
-        public void ShowSettingsPage()
+        protected void ShowSettingsPage()
         {
-            ShowPage(settingsPage);
+            ShowPage(SettingsPage);
         }
-
-        public void ShowDataViewerPage()
+        protected void ShowDataViewerPage()
         {
-            dataViewerPage.UpdateTable();
-            ShowPage(dataViewerPage);
+            DataViewerPage.UpdateTable();
+            ShowPage(DataViewerPage);
         }
-
-        public void ShowPreviousPage()
+        protected void ShowPreviousPage()
         {
-            ShowPage(previousPage);
+            ShowPage(PreviousPage);
         }
-
-        public void ShowMapPage()
+        protected void ShowMapPage()
         {
-            ShowPage(mapPage);
+            ShowPage(MapPage);
         }
-
         protected void ShowPage(Page page)
         {
-            previousPage = (Page)frame.Content;
+            PreviousPage = (Page)frame.Content;
             frame.Content = page;
         }
     }

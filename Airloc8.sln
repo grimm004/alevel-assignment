@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAVisualiser", "XNAVisuali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAVisualiserContent", "XNAVisualiser\XNAVisualiserContent\XNAVisualiserContent.contentproj", "{96ADBAB7-8160-4CBA-99C6-89E18A74769B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManager", "..\DatabaseManager\DatabaseManager.csproj", "{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagerLibrary", "..\DatabaseManager\DatabaseManagerLibrary.csproj", "{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationAnalysis", "LocationAnalysis\LocationAnalysis.csproj", "{256CF56F-8BD3-484F-AE7F-727D4C1E6970}"
 EndProject

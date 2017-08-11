@@ -7,7 +7,10 @@ using System.Windows.Forms;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
-using DatabaseManager;
+using DatabaseManagerLibrary;
+using DatabaseManagerLibrary.CSV;
+using DatabaseManagerLibrary.BIN;
+using LocationInterface.Utils;
 
 namespace LocationInterface.Pages
 {
@@ -16,16 +19,17 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class HomePage : Page
     {
-        private Action ShowDataViewerPage;
-        private Action ShowMapPage;
-        private const string header = "MAC:string,Unknown1:string,Date:string,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
-        private const int bufferSize = 16384;
+        public Database Database { get; protected set; }
+        private Action ShowDataViewerPage { get; set; }
+        private Action ShowMapPage { get; set; }
+        private const string HEADER = "MAC:string,Unknown1:string,Date:string,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
         private const double percentagePerUpdate = 10;
 
         public HomePage(Action ShowDataViewerPage, Action ShowMapPage)
         {
             this.ShowDataViewerPage = ShowDataViewerPage;
             this.ShowMapPage = ShowMapPage;
+            Database = new BINDatabase("DataCache");
             InitializeComponent();
         }
 
@@ -34,7 +38,6 @@ namespace LocationInterface.Pages
             importFolderButton.Content = "Importing Folder";
             importFolderButton.IsEnabled = false;
         }
-
         private void OnFinish()
         {
             importFolderButton.Content = "Import Folder";
@@ -67,7 +70,7 @@ namespace LocationInterface.Pages
                     using (FileStream sourceFile = new FileStream(fileInfos[i].FullName, FileMode.Open))
                         using (FileStream desinationFile = new FileStream(newFileName, FileMode.Create))
                         {
-                            byte[] data = Encoding.UTF8.GetBytes(header + Environment.NewLine);
+                            byte[] data = Encoding.UTF8.GetBytes(HEADER + Environment.NewLine);
                             desinationFile.Write(data, 0, data.Length);
                             sourceFile.CopyTo(desinationFile);
                         }
@@ -81,7 +84,7 @@ namespace LocationInterface.Pages
                     using (FileStream originalFileStream = zippedFileInfos[i].OpenRead())
                     using (FileStream decompressedFileStream = File.Create(newFileName))
                     {
-                        byte[] data = Encoding.UTF8.GetBytes(header + Environment.NewLine);
+                        byte[] data = Encoding.UTF8.GetBytes(HEADER + Environment.NewLine);
                         decompressedFileStream.Write(data, 0, data.Length);
                         using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                             decompressionStream.CopyTo(decompressedFileStream);
@@ -140,7 +143,7 @@ namespace LocationInterface.Pages
             }
             Console.WriteLine("Done");
         }
-        
+
         private CSVTableFields currentFields;
         private ushort[] currentFieldSizes;
         private void FieldSizeCalculatorCallback(Record record)

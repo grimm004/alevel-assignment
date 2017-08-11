@@ -8,14 +8,15 @@
       Title="DataViewerPage">
 
     <Grid Height="469" Width="735">
-        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Margin="0,275,0,0" Click="BackButton_Click"/>
-        <DataGrid x:Name="dataFiles" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFiles_SelectionChange">
+        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Margin="0,275,0,0" Click="BackButtonClick"/>
+        <DataGrid x:Name="dataFiles" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Location ID" IsReadOnly="True" Binding="{Binding Path=LocationIdentifier}" Width="33*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="33*"></DataGridTextColumn>
                 <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="33*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Click="UpdateButton_Click" Margin="53,0,0,0"/>
+        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Click="UpdateButtonClick" Margin="53,0,0,0"/>
+        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Click="SubmitButtonClick" Margin="106,0,0,0"/>
     </Grid>
 </Page>

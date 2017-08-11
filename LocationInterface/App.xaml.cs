@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using System.Windows;
-using DatabaseManager;
+﻿using System.Windows;
 using System.IO;
-using Newtonsoft.Json;
+using LocationInterface.Utils;
 
 namespace LocationInterface
 {
@@ -32,41 +24,6 @@ namespace LocationInterface
         {
             for (int i = DataIndex.LocationDataFiles.Count - 1; i >= 0; i--) if (!DataIndex.LocationDataFiles[i].Exists) DataIndex.LocationDataFiles.RemoveAt(i);
             DataIndex.SaveIndex();
-        }
-    }
-
-    public class DataIndex
-    {
-        public List<LocationDataFile> LocationDataFiles { get; set; }
-
-        public DataIndex()
-        {
-            LocationDataFiles = new List<LocationDataFile>();
-        }
-
-        public static DataIndex LoadIndex()
-        {
-            byte[] data = File.ReadAllBytes(@"LocationData\index.json");
-            return JsonConvert.DeserializeObject<DataIndex>(Encoding.UTF8.GetString(data));
-        }
-
-        public void SaveIndex()
-        {
-            byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, Formatting.Indented));
-            File.WriteAllBytes(@"LocationData\index.json", data);
-        }
-    }
-
-    public class LocationDataFile
-    {
-        public string LocationIdentifier { get; set; }
-        public string FileName { get; set; }
-        public DateTime DateTime { get; set; }
-        public bool Exists { get { return File.Exists(@"LocationData\" + FileName); } }
-
-        public override string ToString()
-        {
-            return string.Format("LocationFile('{0}', {1}, {2})", LocationIdentifier, DateTime, FileName);
         }
     }
 }

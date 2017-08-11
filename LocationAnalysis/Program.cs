@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using DatabaseManager;
+using DatabaseManagerLibrary;
 
 namespace LocationAnalysis
 {

@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DatabaseManager\DatabaseManager.csproj">
+    <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
       <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
-      <Name>DatabaseManager</Name>
+      <Name>DatabaseManagerLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

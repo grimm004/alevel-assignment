@@ -1,17 +1,9 @@
-﻿using System;
+﻿using LocationInterface.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LocationInterface.Pages
 {
@@ -20,7 +12,9 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class DataViewerPage : Page
     {
-        private Action ShowPreviousPage;
+        protected Action ShowPreviousPage { get; set; }
+        protected Action<LocationDataFile[]> LoadTables { get; set; }
+        protected List<LocationDataFile> SelectedDataFiles { get; set; }
 
         public DataViewerPage(Action ShowPreviousPage)
         {
@@ -29,33 +23,37 @@ namespace LocationInterface.Pages
             LoadTable();
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowPreviousPage?.Invoke();
-        }
-
         public void UpdateTable()
         {
             App.VerifyFiles();
             LoadTable();
         }
-
-        private void LoadTable()
+        protected void LoadTable()
         {
             dataFiles.Items.Clear();
             foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) dataFiles.Items.Add(currentFile);
         }
-
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        protected void SubmitSelection()
         {
-            Console.WriteLine(selected.Count);
+            LoadTables?.Invoke(SelectedDataFiles.ToArray());
+        }
+
+        private void DataFilesSelectionChange(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedDataFiles = dataFiles.SelectedItems.Cast<LocationDataFile>().ToList();
+        }
+        private void UpdateButtonClick(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine(SelectedDataFiles.Count);
             UpdateTable();
         }
-        
-        List<LocationDataFile> selected;
-        private void DataFiles_SelectionChange(object sender, SelectionChangedEventArgs e)
+        private void SubmitButtonClick(object sender, RoutedEventArgs e)
         {
-            selected = dataFiles.SelectedItems.Cast<LocationDataFile>().ToList();
+            SubmitSelection();
+        }
+        private void BackButtonClick(object sender, RoutedEventArgs e)
+        {
+            ShowPreviousPage?.Invoke();
         }
     }
 }
