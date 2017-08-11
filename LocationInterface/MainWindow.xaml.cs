@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LocationInterface.Pages;
 
 namespace LocationInterface
@@ -45,14 +37,17 @@ namespace LocationInterface
             ShowMapPage();
         }
 
+        protected Key[] keys = new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right };
         private void KeyPress(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A || e.Key == Key.D || e.Key == Key.W || e.Key == Key.S)
-            {
-                Keyboard.Focus(null);
-                mapPage.canvas.Focus();
-                e.Handled = true;
-            }
+            foreach (Key key in keys)
+                if (e.Key == key)
+                {
+                    Keyboard.Focus(mapPage.canvas);
+                    mapPage.canvas.Focus();
+                    e.Handled = true;
+                    break;
+                }
         }
 
         public void ShowHomePage()

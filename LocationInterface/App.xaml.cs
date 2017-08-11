@@ -17,22 +17,21 @@ namespace LocationInterface
     /// </summary>
     public partial class App : Application
     {
-        public static CSVDatabase database;
-        public static DataIndex dataIndex;
+        public static DataIndex DataIndex { get; protected set; }
         
         public App()
         {
-            //database = new CSVDatabase("Ship");
+            if (!Directory.Exists(@"DataCache")) Directory.CreateDirectory(@"DataCache");
             if (!Directory.Exists(@"LocationData")) Directory.CreateDirectory(@"LocationData");
-            if (!File.Exists(@"LocationData\index.json") || (dataIndex = DataIndex.LoadIndex()) == null) { File.Create(@"LocationData\index.json").Close(); dataIndex = new DataIndex(); }
+            if (!File.Exists(@"LocationData\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create(@"LocationData\index.json").Close(); DataIndex = new DataIndex(); }
             else VerifyFiles();
-            dataIndex.SaveIndex();
+            DataIndex.SaveIndex();
         }
 
         public static void VerifyFiles()
         {
-            for (int i = dataIndex.LocationDataFiles.Count - 1; i >= 0; i--) if (!dataIndex.LocationDataFiles[i].Exists) dataIndex.LocationDataFiles.RemoveAt(i);
-            dataIndex.SaveIndex();
+            for (int i = DataIndex.LocationDataFiles.Count - 1; i >= 0; i--) if (!DataIndex.LocationDataFiles[i].Exists) DataIndex.LocationDataFiles.RemoveAt(i);
+            DataIndex.SaveIndex();
         }
     }
 

@@ -13,6 +13,7 @@
         <Label x:Name="statusLabel" Content="Ready" HorizontalAlignment="Left" Margin="110,0,0,0" RenderTransformOrigin="0.2,-4.3" VerticalContentAlignment="Center" Height="33" VerticalAlignment="Bottom" Width="416"/>
         <Button x:Name="importedDataFileViewButton" Content="View Imported Files" HorizontalAlignment="Left" Margin="116,69,0,0" VerticalAlignment="Top" Width="128" Height="50" Click="ViewImportedFilesClick"/>
         <Button x:Name="mapViewer" Content="Map Viewer" HorizontalAlignment="Left" Margin="249,69,0,0" VerticalAlignment="Top" Width="128" Height="50" Click="ViewMapClick"/>
+        <Button x:Name="clearCacheButton" Content="Clear Cache" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="ClearCacheButtonClick"/>
 
     </Grid>
 </Page>

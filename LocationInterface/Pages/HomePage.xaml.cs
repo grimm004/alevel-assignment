@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using DatabaseManager;
 
 namespace LocationInterface.Pages
 {
@@ -26,22 +18,15 @@ namespace LocationInterface.Pages
     {
         private Action ShowDataViewerPage;
         private Action ShowMapPage;
+        private const string header = "MAC:string,Unknown1:string,Date:string,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
+        private const int bufferSize = 16384;
+        private const double percentagePerUpdate = 10;
 
         public HomePage(Action ShowDataViewerPage, Action ShowMapPage)
         {
             this.ShowDataViewerPage = ShowDataViewerPage;
             this.ShowMapPage = ShowMapPage;
             InitializeComponent();
-        }
-
-        private void ImportDataFileClick(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            if (folderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                string path = folderBrowser.SelectedPath;
-                new Thread(new ParameterizedThreadStart(delegate { ImportFolder(path); })) { IsBackground = true }.Start();
-            }
         }
 
         private void OnStart()
@@ -58,8 +43,7 @@ namespace LocationInterface.Pages
 
         private void UpdateStatus(string statusText, double statusBarValue)
         {
-            Dispatcher.Invoke(
-                delegate
+            Dispatcher.Invoke(delegate
            {
                statusProgressBar.Value = statusBarValue;
                statusLabel.Content = statusText;
@@ -70,39 +54,106 @@ namespace LocationInterface.Pages
         {
             Dispatcher.Invoke(delegate { OnStart(); });
             DirectoryInfo directorySelected = new DirectoryInfo(path);
-            FileInfo[] fileInfos = directorySelected.GetFiles("*.gz");
-            totalFiles = fileInfos.Length;
-            if (totalFiles == 0) System.Windows.Forms.MessageBox.Show("Could not find any data files to import.", "Data Import");
-            foreach (FileInfo fileInfo in fileInfos) Decompress(fileInfo);
-            UpdateStatus("Import Complete", 0);
-            App.dataIndex.SaveIndex();
-            Dispatcher.Invoke(delegate { OnFinish(); });
-            currentFileNumber = 0;
-            totalFiles = 0;
-        }
-
-        int currentFileNumber = 0;
-        int totalFiles = 0;
-        public void Decompress(FileInfo fileToDecompress)
-        {
-            if (!File.Exists(@"LocationData\" + System.IO.Path.GetFileNameWithoutExtension(fileToDecompress.Name)))
+            FileInfo[] zippedFileInfos = directorySelected.GetFiles("*.gz");
+            FileInfo[] fileInfos = directorySelected.GetFiles("*.csv");
+            if (zippedFileInfos.Length + fileInfos.Length == 0) System.Windows.Forms.MessageBox.Show("Could not find any data files to import.", "Data Import");
+            Console.WriteLine(fileInfos.Length);
+            for (int i = 0; i < fileInfos.Length; i++)
             {
-                Dispatcher.Invoke(delegate { UpdateStatus(string.Format("Importing '{0}'", fileToDecompress.Name), (double)100 * (double)currentFileNumber / (double)totalFiles); });
-                using (FileStream originalFileStream = fileToDecompress.OpenRead())
-                using (FileStream decompressedFileStream = File.Create(@"LocationData\" + System.IO.Path.GetFileNameWithoutExtension(fileToDecompress.FullName)))
-                using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                string newFileName = @"DataCache\" + fileInfos[i].Name;
+                if (!File.Exists(newFileName))
                 {
-                    decompressionStream.CopyTo(decompressedFileStream);
-                    LocationDataFile next = new LocationDataFile { LocationIdentifier = GetDataFileLocationIdentifier(decompressedFileStream.Name), DateTime = GetDataFileDateTime(decompressedFileStream.Name), FileName = new FileInfo(decompressedFileStream.Name).Name };
-                    if (IsUniqueDataFile(next)) App.dataIndex.LocationDataFiles.Add(next);
+                    UpdateStatus(string.Format("Importing '{0}'", fileInfos[i].Name), 100d * i / fileInfos.Length);
+                    using (FileStream sourceFile = new FileStream(fileInfos[i].FullName, FileMode.Open))
+                        using (FileStream desinationFile = new FileStream(newFileName, FileMode.Create))
+                        {
+                            byte[] data = Encoding.UTF8.GetBytes(header + Environment.NewLine);
+                            desinationFile.Write(data, 0, data.Length);
+                            sourceFile.CopyTo(desinationFile);
+                        }
                 }
             }
-            currentFileNumber++;
+            for (int i = 0; i < zippedFileInfos.Length; i++)
+            {
+                UpdateStatus(string.Format("Importing '{0}'", zippedFileInfos[i].Name), 100d * i / zippedFileInfos.Length);
+                string newFileName = @"DataCache\" + System.IO.Path.GetFileNameWithoutExtension(zippedFileInfos[i].Name);
+                if (!File.Exists(newFileName))
+                    using (FileStream originalFileStream = zippedFileInfos[i].OpenRead())
+                    using (FileStream decompressedFileStream = File.Create(newFileName))
+                    {
+                        byte[] data = Encoding.UTF8.GetBytes(header + Environment.NewLine);
+                        decompressedFileStream.Write(data, 0, data.Length);
+                        using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                            decompressionStream.CopyTo(decompressedFileStream);
+                    }
+            }
+            ConvertDataFiles();
+            UpdateStatus("Import Complete", 0);
+            App.DataIndex.SaveIndex();
+            Dispatcher.Invoke(delegate { OnFinish(); });
+        }
+
+        public void ConvertDataFiles()
+        {
+            List<ushort[]> varCharSizes = new List<ushort[]>();
+            List<uint> recordBufferSizes = new List<uint>();
+            CSVDatabase database = new CSVDatabase("DataCache", true, ".csv");
+
+            int fieldIndex = 0;
+            foreach (Table table in database.Tables)
+            {
+                UpdateStatus(string.Format("Calculating field sizes '{0}'.", table.Name), 100d * fieldIndex++ / database.TableCount);
+                Console.WriteLine("Calculating field sizes {0}...", table.Name);
+                currentFieldSizes = new ushort[table.FieldCount];
+                for (int i = 0; i < currentFieldSizes.Length; i++) currentFieldSizes[i] = 0x00;
+                currentFields = (CSVTableFields)table.Fields;
+                table.SearchRecords(FieldSizeCalculatorCallback);
+                //for (int i = 0; i < fieldSizes.Length; i++) fieldSizes[i] += (ushort)(fieldSizes[i] > 0x00 ? 0x02 : 0x00);
+                Console.WriteLine("Done");
+                varCharSizes.Add(currentFieldSizes);
+            }
+
+            for (int i = 0; i < database.TableCount; i++) recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / percentagePerUpdate)));
+            
+            Console.WriteLine("Converting files...");
+            database.ToBINDatabase("LocationData", varCharSizes, recordBufferSizes, updateCommand: (table, ratio) =>
+                UpdateStatus("Converting Files (may take a while)", 100d * (database.Tables.IndexOf(table) + ratio) / database.TableCount));
+            Console.WriteLine("Done");
+
+            UpdateStatus("Clearing Cache", 100);
+            Console.WriteLine("Clearing cache...");
+            ClearCache();
+            Console.WriteLine("Done");
+
+            UpdateStatus("Updating Index File", 100);
+            Console.WriteLine("Adding files to index...");
+            foreach (string fileName in Directory.GetFiles("LocationData", "*.table"))
+            {
+                LocationDataFile locationFile = new LocationDataFile
+                {
+                    LocationIdentifier = GetDataFileLocationIdentifier(fileName),
+                    DateTime = GetDataFileDateTime(fileName),
+                    FileName = new FileInfo(fileName).Name
+                };
+                if (IsUniqueDataFile(locationFile))
+                    App.DataIndex.LocationDataFiles.Add(locationFile);
+            }
+            Console.WriteLine("Done");
+        }
+        
+        private CSVTableFields currentFields;
+        private ushort[] currentFieldSizes;
+        private void FieldSizeCalculatorCallback(Record record)
+        {
+            object[] values = record.GetValues();
+            for (int i = 0; i < currentFields.Fields.Length; i++)
+                if (currentFields.Fields[i].DataType == Datatype.VarChar)
+                    if (Encoding.UTF8.GetByteCount(((string)values[i])) > currentFieldSizes[i]) currentFieldSizes[i] = (ushort)Encoding.UTF8.GetByteCount(((string)values[i]));
         }
 
         public static bool IsUniqueDataFile(LocationDataFile file)
         {
-            foreach (LocationDataFile currentFile in App.dataIndex.LocationDataFiles) if (currentFile.DateTime == file.DateTime) return false;
+            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) if (currentFile.DateTime == file.DateTime) return false;
             return true;
         }
 
@@ -123,14 +174,32 @@ namespace LocationInterface.Pages
             return System.IO.Path.GetFileNameWithoutExtension(System.IO.Path.GetFileNameWithoutExtension(fileName));
         }
 
+        public void ClearCache()
+        {
+            foreach (string fileName in Directory.GetFiles("DataCache")) File.Delete(fileName);
+        }
+
         private void ViewImportedFilesClick(object sender, RoutedEventArgs e)
         {
             ShowDataViewerPage();
         }
-
         private void ViewMapClick(object sender, RoutedEventArgs e)
         {
             ShowMapPage();
+        }
+        private void ClearCacheButtonClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult result = System.Windows.Forms.MessageBox.Show("Are you sure you want to delete the data cache?", "Confirmation", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes) ClearCache();
+        }
+        private void ImportDataFileClick(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                string path = folderBrowser.SelectedPath;
+                new Thread(new ParameterizedThreadStart(delegate { ImportFolder(path); })) { IsBackground = true }.Start();
+            }
         }
     }
 }

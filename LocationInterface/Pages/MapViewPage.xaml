@@ -4,14 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LocationInterface.Pages"
-      mc:Ignorable="d" 
-      d:DesignHeight="300"
+      mc:Ignorable="d"
       Title="MapViewPage">
 
     <Grid>
-        <Canvas x:Name="canvas" Panel.ZIndex="-10" Margin="0,20,0,0">
-        </Canvas>
-        <TextBox x:Name="macAddressEntry" Height="20" Canvas.Left="300" TextWrapping="Wrap" Text="40:40:a7:93:18:8b" Canvas.Top="-20" Width="120" Margin="300,0,1,280"/>
+        <Canvas x:Name="canvas" Panel.ZIndex="-10" Margin="0,20,0,0" Focusable="True" FocusVisualStyle="{x:Null}"/>
+        <TextBox x:Name="macAddressEntry" Height="20" Canvas.Left="300" TextWrapping="Wrap" Text="40:40:a7:93:18:8b" Canvas.Top="-20" Width="120" Margin="300,0,1,280" TextChanged="MacAddressEntry_TextChanged"/>
         <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Click="BackButton_Click"/>
         <ComboBox x:Name="deckSelectionComboBox" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="170" SelectionChanged="DeckSelectionComboBox_SelectionChanged" Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
             <ComboBoxItem>Deck 1</ComboBoxItem>

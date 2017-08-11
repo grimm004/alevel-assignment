@@ -43,7 +43,7 @@ namespace LocationInterface.Pages
         private void LoadTable()
         {
             dataFiles.Items.Clear();
-            foreach (LocationDataFile currentFile in App.dataIndex.LocationDataFiles) dataFiles.Items.Add(currentFile);
+            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) dataFiles.Items.Add(currentFile);
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
