@@ -21,9 +21,9 @@ namespace LocationInterface
             InitializeComponent();
 
             HomePage = new HomePage(ShowDataViewerPage, ShowMapPage);
-            DataViewerPage = new DataViewerPage(ShowPreviousPage);
             SettingsPage = new SettingsPage(ShowPreviousPage);
             MapPage = new MapViewPage(ShowHomePage, HomePage.Database);
+            DataViewerPage = new DataViewerPage(ShowPreviousPage, MapPage.LoadTables);
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
@@ -64,6 +64,7 @@ namespace LocationInterface
         }
         protected void ShowMapPage()
         {
+            MapPage.LoadRecords();
             ShowPage(MapPage);
         }
         protected void ShowPage(Page page)

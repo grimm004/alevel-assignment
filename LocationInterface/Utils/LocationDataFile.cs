@@ -7,6 +7,7 @@ namespace LocationInterface.Utils
     {
         public string LocationIdentifier { get; set; }
         public string FileName { get; set; }
+        public string TableName { get { return Path.GetFileNameWithoutExtension(FileName); } }
         public DateTime DateTime { get; set; }
         public bool Exists { get { return File.Exists(@"LocationData\" + FileName); } }
 

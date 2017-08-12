@@ -27,7 +27,7 @@ namespace LocationInterface.Pages
         protected double PointMultiplier { get; set; }
         protected Vector2 PointOffset { get; set; }
         protected static Camera Camera { get; set; }
-        public static Table[] LoadedTables { get; set; }
+        public Table[] LoadedTables { get; set; }
 
         public MapViewPage(Action ShowHomePage, Database database)
         {
@@ -61,8 +61,8 @@ namespace LocationInterface.Pages
         public void LoadTables(LocationDataFile[] dataFiles)
         {
             LoadedTables = new Table[dataFiles.Length];
-            for (int i = 0; i < MapViewPage.LoadedTables.Length; i++)
-                LoadedTables[i] = Database.GetTable(dataFiles[i].LocationIdentifier);
+            for (int i = 0; i < dataFiles.Length; i++)
+                LoadedTables[i] = Database.GetTable(dataFiles[i].TableName);
         }
 
         protected void Update()
@@ -94,13 +94,12 @@ namespace LocationInterface.Pages
             PointOffset += new Vector2(x, y);
         }
 
-        private void DeckSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void LoadRecords()
         {
             int currentDeck = deckSelectionComboBox.SelectedIndex + 1;
             string macAddress = macAddressEntry.Text;
             Task.Run(() => LoadRecords(currentDeck, macAddress));
         }
-
         private void LoadRecords(int deckNumber, string macAddress)
         {
             try
@@ -108,6 +107,7 @@ namespace LocationInterface.Pages
                 // Load Points
                 Stopwatch timer = Stopwatch.StartNew();
                 Points = new List<Utils.Point>();
+                Console.WriteLine("Loading tables...");
                 foreach (Table table in LoadedTables)
                 {
                     Stopwatch tableTimer = Stopwatch.StartNew();
@@ -115,11 +115,11 @@ namespace LocationInterface.Pages
                     tableTimer.Stop();
                     Console.WriteLine("Loaded {0} of {1} records in {2:0.000} seconds.", records.Length, table.RecordCount, tableTimer.ElapsedMilliseconds / 1000d);
                     for (int i = 0; i < records.Length; i++)
-                        if (records[i].GetValue<string>("Deck") == string.Format("Deck{0}", deckNumber)) if (records[i].GetValue<string>("Locationid") == "POO000447DEGSB") Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y"), new Ellipse() { Width = 5, Height = 5, Fill = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0xFF)) }));
-                            else Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")));
+                        if (records[i].GetValue<string>("Deck") == string.Format("Deck{0}", deckNumber))
+                            Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")));
                 }
                 timer.Stop();
-                Console.WriteLine("Added {0} points in {1:0.000} seconds.", Points.Count, timer.ElapsedMilliseconds / 1000d);
+                Console.WriteLine("Added {0} points from {1} table(s) in {2:0.000} seconds.", Points.Count, LoadedTables.Length, timer.ElapsedMilliseconds / 1000d);
 
                 Dispatcher.Invoke(delegate
                 {
@@ -157,10 +157,12 @@ namespace LocationInterface.Pages
 
         private void MacAddressEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
-            int currentDeck = deckSelectionComboBox != null ? deckSelectionComboBox.SelectedIndex + 1 : 0;
-            string macAddress = macAddressEntry.Text;
             if (deckSelectionComboBox != null && macAddressEntry.Text.Length == 17)
-                Task.Run(() => LoadRecords(currentDeck, macAddress));
+                LoadRecords();
+        }
+        private void DeckSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadRecords();
         }
     }
 }

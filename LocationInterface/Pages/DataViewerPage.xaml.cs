@@ -16,8 +16,9 @@ namespace LocationInterface.Pages
         protected Action<LocationDataFile[]> LoadTables { get; set; }
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
 
-        public DataViewerPage(Action ShowPreviousPage)
+        public DataViewerPage(Action ShowPreviousPage, Action<LocationDataFile[]> LoadTables)
         {
+            this.LoadTables = LoadTables;
             this.ShowPreviousPage = ShowPreviousPage;
             InitializeComponent();
             LoadTable();
@@ -44,7 +45,6 @@ namespace LocationInterface.Pages
         }
         private void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(SelectedDataFiles.Count);
             UpdateTable();
         }
         private void SubmitButtonClick(object sender, RoutedEventArgs e)

@@ -29,7 +29,7 @@ namespace LocationInterface.Pages
         {
             this.ShowDataViewerPage = ShowDataViewerPage;
             this.ShowMapPage = ShowMapPage;
-            Database = new BINDatabase("DataCache");
+            Database = new BINDatabase("LocationData");
             InitializeComponent();
         }
 
