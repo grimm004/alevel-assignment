@@ -8,10 +8,9 @@
       Title="MapViewPage">
 
     <Grid>
-        <Canvas x:Name="canvas" Panel.ZIndex="-10" Margin="0,20,0,0" Focusable="True" FocusVisualStyle="{x:Null}"/>
-        <TextBox x:Name="macAddressEntry" Height="20" TextWrapping="Wrap" Text="00:19:94:32:fc:20" Width="120" Margin="300,0,0,0" TextChanged="MacAddressEntry_TextChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Click="BackButton_Click"/>
-        <ComboBox x:Name="deckSelectionComboBox" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="170" SelectionChanged="DeckSelectionComboBox_SelectionChanged" Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+        <Canvas x:Name="canvas" Margin="0,0,20,0" Focusable="True" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Button x:Name="backButton" Content="Back" Margin="0,0,0,0" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="BackButtonClick"/>
+        <ComboBox x:Name="deckSelectionComboBox" Margin="50,0,0,0" Width="100" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="DeckSelectionComboBoxSelectionChanged">
             <ComboBoxItem>Deck 1</ComboBoxItem>
             <ComboBoxItem>Deck 2</ComboBoxItem>
             <ComboBoxItem>Deck 3</ComboBoxItem>
@@ -24,6 +23,6 @@
             <ComboBoxItem>Deck 10</ComboBoxItem>
             <ComboBoxItem>Deck 11</ComboBoxItem>
         </ComboBox>
-
+        <TextBox x:Name="macAddressEntry" Margin="150,0,0,0" Width="100" Height="20" Text="00:19:94:32:fc:20" TextChanged="MacAddressEntryTextChanged" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
     </Grid>
 </Page>

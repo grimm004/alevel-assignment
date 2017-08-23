@@ -159,18 +159,18 @@ namespace LocationInterface.Pages
             }
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private void BackButtonClick(object sender, RoutedEventArgs e)
         {
             ShowHomePage();
         }
-        private void MacAddressEntry_TextChanged(object sender, TextChangedEventArgs e)
+        private void MacAddressEntryTextChanged(object sender, TextChangedEventArgs e)
         {
             if (deckSelectionComboBox != null && macAddressEntry.Text.Length == 17)
                 LoadTables();
         }
-        private void DeckSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DeckSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LoadTables();
+            if (macAddressEntry != null) LoadTables();
         }
     }
 }

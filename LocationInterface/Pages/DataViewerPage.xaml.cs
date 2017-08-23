@@ -27,7 +27,6 @@ namespace LocationInterface.Pages
         protected Action<LocationDataFile[]>[] SetTablesActions { get; }
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
         private const string HEADER = "MAC:string,Unknown1:string,Date:datetime,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
-        private const double PERCENTAGEPERUPDATE = 10;
 
         public DataViewerPage(Action ShowPreviousPage, Action<LocationDataFile[]>[] SetTablesActions)
         {
@@ -141,7 +140,7 @@ namespace LocationInterface.Pages
                 varCharSizes.Add(currentFieldSizes);
             }
 
-            for (int i = 0; i < database.TableCount; i++) recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / PERCENTAGEPERUPDATE)));
+            for (int i = 0; i < database.TableCount; i++) recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / SettingsManager.Active.PercentagePerUpdate)));
 
             Console.WriteLine("Converting files...");
             database.ToBINDatabase("LocationData", varCharSizes, recordBufferSizes, updateCommand: (table, ratio) =>

@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using LocationInterface.Pages;
+using LocationInterface.Utils;
 
 namespace LocationInterface
 {
@@ -21,8 +22,8 @@ namespace LocationInterface
         {
             InitializeComponent();
 
-            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage);
-            SettingsPage = new SettingsPage(ShowPreviousPage);
+            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage, ShowSettingsPage);
+            SettingsPage = new SettingsPage(ShowPreviousPage, UpdateSettings);
             MapViewPage = new MapViewPage(ShowHomePage);
             RawDataPage = new RawDataPage(ShowPreviousPage);
             DataViewerPage = new DataViewerPage(ShowPreviousPage, new System.Action<Utils.LocationDataFile[]>[] { MapViewPage.SetTables, RawDataPage.SetTables });
@@ -47,12 +48,18 @@ namespace LocationInterface
                 }
         }
 
+        protected void UpdateSettings()
+        {
+            SettingsManager.Save();
+        }
+
         protected void ShowHomePage()
         {
             ShowPage(HomePage);
         }
         protected void ShowSettingsPage()
         {
+            SettingsPage.LoadSettings();
             ShowPage(SettingsPage);
         }
         protected void ShowDataViewerPage()

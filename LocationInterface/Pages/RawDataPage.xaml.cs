@@ -14,7 +14,6 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class RawDataPage : Page
     {
-        protected const int RECORDBUFFER = 1000;
         protected Action ShowPreviousPage { get; }
         protected Database Database { get; set; }
         protected Table[] LoadedTables { get; set; }
@@ -45,7 +44,7 @@ namespace LocationInterface.Pages
                     foreach (Record currentLocationRecord in table.GetRecords())
                     {
                         locationRecordBuffer.Add(currentLocationRecord.ToObject<LocationRecord>());
-                        if (locationRecordBuffer.Count == RECORDBUFFER) PopulateDataGrid(ref locationRecordBuffer);
+                        if (locationRecordBuffer.Count == SettingsManager.Active.RawDataRecordBuffer) PopulateDataGrid(ref locationRecordBuffer);
                     }
                 PopulateDataGrid(ref locationRecordBuffer);
             })
