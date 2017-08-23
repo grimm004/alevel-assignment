@@ -10,24 +10,26 @@ namespace LocationInterface
     /// </summary>
     public partial class MainWindow : Window
     {
-        public HomePage HomePage { get; protected set; }
-        public DataViewerPage DataViewerPage { get; protected set; }
-        public SettingsPage SettingsPage { get; protected set; }
-        public MapViewPage MapPage { get; protected set; }
+        protected HomePage HomePage { get; set; }
+        protected DataViewerPage DataViewerPage { get; set; }
+        protected SettingsPage SettingsPage { get; set; }
+        protected MapViewPage MapViewPage { get; set; }
+        protected RawDataPage RawDataPage { get; set; }
         protected Page PreviousPage { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage);
+            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage);
             SettingsPage = new SettingsPage(ShowPreviousPage);
-            MapPage = new MapViewPage(ShowHomePage, HomePage.Database);
-            DataViewerPage = new DataViewerPage(ShowPreviousPage, MapPage.LoadTables);
+            MapViewPage = new MapViewPage(ShowHomePage);
+            RawDataPage = new RawDataPage(ShowPreviousPage);
+            DataViewerPage = new DataViewerPage(ShowPreviousPage, new System.Action<Utils.LocationDataFile[]>[] { MapViewPage.SetTables, RawDataPage.SetTables });
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            this.KeyDown += KeyPress;
+            KeyDown += KeyPress;
 
             ShowHomePage();
         }
@@ -38,8 +40,8 @@ namespace LocationInterface
             foreach (Key key in keys)
                 if (e.Key == key)
                 {
-                    Keyboard.Focus(MapPage.canvas);
-                    MapPage.canvas.Focus();
+                    Keyboard.Focus(MapViewPage.canvas);
+                    MapViewPage.canvas.Focus();
                     e.Handled = true;
                     break;
                 }
@@ -64,8 +66,13 @@ namespace LocationInterface
         }
         protected void ShowMapPage()
         {
-            MapPage.LoadRecords();
-            ShowPage(MapPage);
+            MapViewPage.LoadTables();
+            ShowPage(MapViewPage);
+        }
+        protected void ShowRawDataPage()
+        {
+            RawDataPage.LoadTables();
+            ShowPage(RawDataPage);
         }
         protected void ShowPage(Page page)
         {

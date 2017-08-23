@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+        Title="Location Service Visualiser" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
     
     <Grid>
-        <Frame x:Name="frame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Frame x:Name="frame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

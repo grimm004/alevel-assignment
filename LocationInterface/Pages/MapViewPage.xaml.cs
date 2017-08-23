@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using DatabaseManagerLibrary;
+using DatabaseManagerLibrary.BIN;
 using LocationInterface.Utils;
 
 namespace LocationInterface.Pages
@@ -28,14 +29,16 @@ namespace LocationInterface.Pages
         protected Vector2 PointOffset { get; set; }
         protected static Camera Camera { get; set; }
         public Table[] LoadedTables { get; set; }
+        protected bool LoadingPoints { get; private set; }
 
-        public MapViewPage(Action ShowHomePage, Database database)
+        public MapViewPage(Action ShowHomePage)
         {
-            Database = database;
+            Database = new BINDatabase("LocationData");
             this.ShowHomePage = ShowHomePage;
             
             LoadedTables = new Table[0];
             Points = new List<Utils.Point>();
+            LoadingPoints = false;
             PointOffset = new Vector2(1);
             PointMultiplier = 1;
             Camera = new Camera();
@@ -58,7 +61,7 @@ namespace LocationInterface.Pages
             });
         }
 
-        public void LoadTables(LocationDataFile[] dataFiles)
+        public void SetTables(LocationDataFile[] dataFiles)
         {
             LoadedTables = new Table[dataFiles.Length];
             for (int i = 0; i < dataFiles.Length; i++)
@@ -79,7 +82,7 @@ namespace LocationInterface.Pages
             if (Keyboard.IsKeyDown(Key.G)) Translate(0, shiftDown ? +4 : +1);
             if (Keyboard.IsKeyDown(Key.H)) Translate(shiftDown ? +4 : +1, 0);
 
-            foreach (Utils.Point point in Points) point.Update(Camera, PointOffset, PointMultiplier);
+            if (!LoadingPoints) foreach (Utils.Point point in Points) point.Update(Camera, PointOffset, PointMultiplier);
 
             if (CurrentImage != null) Canvas.SetLeft(CurrentImage, Camera.Position.X);
             if (CurrentImage != null) Canvas.SetTop(CurrentImage, Camera.Position.Y);
@@ -94,18 +97,19 @@ namespace LocationInterface.Pages
             PointOffset += new Vector2(x, y);
         }
 
-        public void LoadRecords()
+        public void LoadTables()
         {
             int currentDeck = deckSelectionComboBox.SelectedIndex + 1;
             string macAddress = macAddressEntry.Text;
-            Task.Run(() => LoadRecords(currentDeck, macAddress));
+            Task.Run(() => LoadTables(currentDeck, macAddress));
         }
-        private void LoadRecords(int deckNumber, string macAddress)
+        private void LoadTables(int deckNumber, string macAddress)
         {
             try
             {
                 // Load Points
                 Stopwatch timer = Stopwatch.StartNew();
+                LoadingPoints = true;
                 Points = new List<Utils.Point>();
                 Console.WriteLine("Loading tables...");
                 foreach (Table table in LoadedTables)
@@ -148,21 +152,24 @@ namespace LocationInterface.Pages
             {
                 MessageBox.Show("Deck image file could not be found.", "File Not Found");
             }
+            finally
+            {
+                LoadingPoints = false;
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             ShowHomePage();
         }
-
         private void MacAddressEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (deckSelectionComboBox != null && macAddressEntry.Text.Length == 17)
-                LoadRecords();
+                LoadTables();
         }
         private void DeckSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LoadRecords();
+            LoadTables();
         }
     }
 }

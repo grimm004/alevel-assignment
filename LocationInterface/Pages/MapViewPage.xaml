@@ -9,7 +9,7 @@
 
     <Grid>
         <Canvas x:Name="canvas" Panel.ZIndex="-10" Margin="0,20,0,0" Focusable="True" FocusVisualStyle="{x:Null}"/>
-        <TextBox x:Name="macAddressEntry" Height="20" Canvas.Left="300" TextWrapping="Wrap" Text="40:40:a7:93:18:8b" Canvas.Top="-20" Width="120" Margin="300,0,1,280" TextChanged="MacAddressEntry_TextChanged"/>
+        <TextBox x:Name="macAddressEntry" Height="20" TextWrapping="Wrap" Text="00:19:94:32:fc:20" Width="120" Margin="300,0,0,0" TextChanged="MacAddressEntry_TextChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="130" Click="BackButton_Click"/>
         <ComboBox x:Name="deckSelectionComboBox" HorizontalAlignment="Left" Margin="130,0,0,0" VerticalAlignment="Top" Width="170" SelectionChanged="DeckSelectionComboBox_SelectionChanged" Height="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
             <ComboBoxItem>Deck 1</ComboBoxItem>

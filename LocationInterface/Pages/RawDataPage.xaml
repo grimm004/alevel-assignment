@@ -1,0 +1,24 @@
+﻿<Page x:Class="LocationInterface.Pages.RawDataPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LocationInterface.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="RawDataPage">
+
+    <Grid>
+        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Margin="0,275,0,0" Click="BackButtonClick"/>
+        <DataGrid x:Name="rawData" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="MAC" IsReadOnly="True" Binding="{Binding Path=MAC}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Date" IsReadOnly="True"  Binding="{Binding Path=Date}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Location" IsReadOnly="True"  Binding="{Binding Path=Location}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Deck" IsReadOnly="True"  Binding="{Binding Path=Deck}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="X" IsReadOnly="True"  Binding="{Binding Path=X}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Y" IsReadOnly="True"  Binding="{Binding Path=Y}" Width="*"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

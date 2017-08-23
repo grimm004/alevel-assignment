@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LocationInterface")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Analysis and visualisation tool for location services.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LocationInterface")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("Airloc8")]
+[assembly: AssemblyProduct("Location Services Interface")]
+[assembly: AssemblyCopyright("Copyright © UTCReading 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,22 +1,31 @@
 ﻿<Page x:Class="LocationInterface.Pages.DataViewerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LocationInterface.Pages"
-      mc:Ignorable="d" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
       Title="DataViewerPage">
 
-    <Grid Height="469" Width="735">
-        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Margin="0,275,0,0" Click="BackButtonClick"/>
+    <Grid>
         <DataGrid x:Name="dataFiles" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Location ID" IsReadOnly="True" Binding="{Binding Path=LocationIdentifier}" Width="33*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="33*"></DataGridTextColumn>
-                <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="33*"></DataGridTextColumn>
+                <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Table Name" IsReadOnly="True"  Binding="{Binding Path=TableName}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Click="UpdateButtonClick" Margin="53,0,0,0"/>
-        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="53" Click="SubmitButtonClick" Margin="106,0,0,0"/>
+        <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="0,275,0,0" Click="BackButtonClick"/>
+        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="UpdateButtonClick" Margin="50,0,0,0"/>
+        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="SubmitButtonClick" Margin="100,0,0,0"/>
+        <Button x:Name="importFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Bottom" Width="100" Click="ImportDataFileClick"/>
+        <Grid VerticalAlignment="Bottom" Margin="250,0,80,0" Height="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar x:Name="statusProgressBar" Height="20" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+            <Label x:Name="statusLabel" Height="30"  Grid.Column="1" Grid.Row="0" Content="Ready" VerticalContentAlignment="Center" Margin="0,0,0,-5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        </Grid>
+        <Button x:Name="clearCacheButton" Content="Clear Cache" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="80" Click="ClearCacheButtonClick"/>
     </Grid>
 </Page>
