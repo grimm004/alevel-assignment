@@ -16,7 +16,7 @@ namespace LocationInterface.Pages
     {
         protected const int RECORDBUFFER = 1000;
         protected Action ShowPreviousPage { get; }
-        protected Database Database { get; }
+        protected Database Database { get; set; }
         protected Table[] LoadedTables { get; set; }
 
         public RawDataPage(Action ShowPreviousPage)
@@ -29,6 +29,7 @@ namespace LocationInterface.Pages
 
         public void SetTables(LocationDataFile[] dataFiles)
         {
+            Database = new BINDatabase("LocationData");
             LoadedTables = new Table[dataFiles.Length];
             for (int i = 0; i < dataFiles.Length; i++)
                 LoadedTables[i] = Database.GetTable(dataFiles[i].TableName);

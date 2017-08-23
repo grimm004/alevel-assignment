@@ -26,7 +26,7 @@ namespace LocationInterface.Pages
         protected Action ShowPreviousPage { get; }
         protected Action<LocationDataFile[]>[] SetTablesActions { get; }
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
-        private const string HEADER = "MAC:string,Unknown1:string,Date:string,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
+        private const string HEADER = "MAC:string,Unknown1:string,Date:datetime,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
         private const double PERCENTAGEPERUPDATE = 10;
 
         public DataViewerPage(Action ShowPreviousPage, Action<LocationDataFile[]>[] SetTablesActions)
@@ -181,15 +181,15 @@ namespace LocationInterface.Pages
 
         public static bool IsUniqueDataFile(LocationDataFile file)
         {
-            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) if (currentFile.DateTime == file.DateTime) return false;
+            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles)
+                if (currentFile.DateTime == file.DateTime) return false;
             return true;
         }
 
         public static bool IsUniqueDataFile(string tableName)
         {
-            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) if (currentFile.TableName == tableName)
-                { Console.WriteLine("Not New"); return false; }
-            Console.WriteLine("New");
+            foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles)
+                if (currentFile.TableName == tableName) return false;
             return true;
         }
 

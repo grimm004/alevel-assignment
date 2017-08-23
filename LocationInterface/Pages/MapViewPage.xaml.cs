@@ -63,6 +63,7 @@ namespace LocationInterface.Pages
 
         public void SetTables(LocationDataFile[] dataFiles)
         {
+            Database = new BINDatabase("LocationData");
             LoadedTables = new Table[dataFiles.Length];
             for (int i = 0; i < dataFiles.Length; i++)
                 LoadedTables[i] = Database.GetTable(dataFiles[i].TableName);
