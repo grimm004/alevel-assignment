@@ -5,11 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LocationInterface.Pages"
       mc:Ignorable="d"
-      d:DesignHeight="600" d:DesignWidth="900"
       Title="SettingsPage">
 
     <Grid>
-        <Grid HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -20,16 +19,16 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button x:Name="backButton" Grid.Row="0" Grid.Column="0" Margin="0,0,10,5" Content="Back" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Click="BackButtonClick"/>
-            <Button x:Name="applyButton" Grid.Row="0" Grid.Column="1" Margin="10,0,0,5" Content="Apply" HorizontalAlignment="Left" Width="75" Click="ApplyButtonClick" VerticalAlignment="Center"/>
-
+            <Label Content="Settings" FontSize="18" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            
             <Label Content="Data Cache Folder" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="dataCacheFolderInput" Grid.Row="1" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="DataCache" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <TextBox x:Name="dataCacheFolderInput" IsEnabled="False" Grid.Row="1" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="DataCache" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
             <Label Content="Location Data Folder" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="locationDataFolderInput" Grid.Row="2" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="LocationData" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <TextBox x:Name="locationDataFolderInput" IsEnabled="False" Grid.Row="2" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="LocationData" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
             <Label Content="Raw Data Record Buffer" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox x:Name="rawDataRecordBufferInput" Grid.Row="3" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="1000" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
@@ -37,6 +36,8 @@
             <Label Content="Percentage Per Update" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox x:Name="percentagePerUpdateInput" Grid.Row="4" Grid.Column="1" Height="20" TextWrapping="Wrap" Text="10" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
+            <Button x:Name="backButton" Grid.Row="5" Grid.Column="0" Margin="0,0,10,5" Content="Back" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Click="BackButtonClick"/>
+            <Button x:Name="applyButton" Grid.Row="5" Grid.Column="1" Margin="10,0,0,5" Content="Apply" HorizontalAlignment="Left" Width="75" Click="ApplyButtonClick" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </Page>
