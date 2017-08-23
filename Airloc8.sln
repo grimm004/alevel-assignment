@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAVisualiser", "XNAVisualiser\XNAVisualiser\XNAVisualiser.csproj", "{AB8BD952-3D45-4698-9F14-79EF3A5209BE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAVisualiserContent", "XNAVisualiser\XNAVisualiserContent\XNAVisualiserContent.contentproj", "{96ADBAB7-8160-4CBA-99C6-89E18A74769B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagerLibrary", "..\DatabaseManager\DatabaseManagerLibrary.csproj", "{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationAnalysis", "LocationAnalysis\LocationAnalysis.csproj", "{256CF56F-8BD3-484F-AE7F-727D4C1E6970}"
@@ -25,16 +21,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Debug|x86.ActiveCfg = Debug|x86
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Debug|x86.Build.0 = Debug|x86
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Release|Any CPU.ActiveCfg = Release|x86
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Release|x86.ActiveCfg = Release|x86
-		{AB8BD952-3D45-4698-9F14-79EF3A5209BE}.Release|x86.Build.0 = Release|x86
-		{96ADBAB7-8160-4CBA-99C6-89E18A74769B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{96ADBAB7-8160-4CBA-99C6-89E18A74769B}.Debug|x86.ActiveCfg = Debug|x86
-		{96ADBAB7-8160-4CBA-99C6-89E18A74769B}.Release|Any CPU.ActiveCfg = Release|x86
-		{96ADBAB7-8160-4CBA-99C6-89E18A74769B}.Release|x86.ActiveCfg = Release|x86
 		{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -78,5 +64,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {69C90A4A-C3D4-484A-A77C-C201E7F6F947}
 	EndGlobalSection
 EndGlobal
