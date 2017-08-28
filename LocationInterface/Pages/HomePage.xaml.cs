@@ -13,13 +13,15 @@ namespace LocationInterface.Pages
         private Action ShowMapPage { get; set; }
         private Action ShowRawDataPage { get; set; }
         private Action ShowSettingsPage { get; set; }
+        private Action ShowAnalysisPage { get; set; }
 
-        public HomePage(Action ShowDataViewerPage, Action ShowMapPage, Action ShowRawDataPage, Action ShowSettingsPage)
+        public HomePage(Action ShowDataViewerPage, Action ShowMapPage, Action ShowRawDataPage, Action ShowSettingsPage, Action ShowAnalysisPage)
         {
             this.ShowDataViewerPage = ShowDataViewerPage;
             this.ShowMapPage = ShowMapPage;
             this.ShowRawDataPage = ShowRawDataPage;
             this.ShowSettingsPage = ShowSettingsPage;
+            this.ShowAnalysisPage = ShowAnalysisPage;
             InitializeComponent();
         }
 
@@ -38,6 +40,10 @@ namespace LocationInterface.Pages
         private void SettingsButtonClick(object sender, RoutedEventArgs e)
         {
             ShowSettingsPage?.Invoke();
+        }
+        private void AnalysisPageButtonClick(object sender, RoutedEventArgs e)
+        {
+            ShowAnalysisPage?.Invoke();
         }
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {

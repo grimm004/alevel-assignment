@@ -13,6 +13,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -21,14 +22,15 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Content="Location Service Data Analysis" Margin="0,-10,0,0" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="48" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Location Service Data Analysis" Margin="0,-10,0,0" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="48" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-            <Button x:Name="importedDataFileViewButton" Grid.Column="0" Grid.Row="1" Content="Location File Viewer" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ViewImportedFilesButtonClick"/>
+            <Button x:Name="importedDataFileViewButton" Grid.Column="0" Grid.Row="1" Content="File Manager" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ViewImportedFilesButtonClick"/>
             <Button x:Name="mapViewerButton" Grid.Column="1" Grid.Row="1" Content="Map Viewer" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ViewMapViewerButtonClick"/>
             <Button x:Name="rawDataViewerButton" Grid.Column="2" Grid.Row="1" Content="Raw Data Viewer" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="RawDataViewerButtonClick"/>
-            <Button x:Name="settingsButton" Grid.Column="3" Grid.Row="1" Content="Settings" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="SettingsButtonClick"/>
+            <Button x:Name="analysisPageButton" Grid.Column="3" Grid.Row="1" Content="Data Analysis" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="AnalysisPageButtonClick"/>
+            <Button x:Name="settingsButton" Grid.Column="4" Grid.Row="1" Content="Settings" Width="128" Height="50" HorizontalAlignment="Center" VerticalAlignment="Top" Click="SettingsButtonClick"/>
 
-            <Button x:Name="exitButton" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Content="Exit" Width="64" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ExitButtonClick"/>
+            <Button x:Name="exitButton" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="5" Content="Exit" Width="64" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top" Click="ExitButtonClick"/>
         </Grid>
     </Grid>
 </Page>

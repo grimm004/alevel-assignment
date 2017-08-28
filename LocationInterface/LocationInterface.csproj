@@ -119,16 +119,48 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ContactSelectorWindow.xaml.cs">
+      <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContactWindow.xaml.cs">
+      <DependentUpon>ContactWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EmailPresetWindow.xaml.cs">
+      <DependentUpon>EmailPresetWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EmailWindow.xaml.cs">
+      <DependentUpon>EmailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AnalysisPage.xaml.cs">
+      <DependentUpon>AnalysisPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\RawDataPage.xaml.cs">
       <DependentUpon>RawDataPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Camera.cs" />
     <Compile Include="Utils\DataIndex.cs" />
+    <Compile Include="Utils\Email.cs" />
     <Compile Include="Utils\LocationDataFile.cs" />
     <Compile Include="Utils\LocationRecord.cs" />
     <Compile Include="Utils\Point.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Vector2.cs" />
+    <Page Include="ContactSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ContactWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EmailPresetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EmailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -141,6 +173,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\AnalysisPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\DataViewerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

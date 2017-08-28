@@ -16,16 +16,19 @@ namespace LocationInterface
         protected SettingsPage SettingsPage { get; set; }
         protected MapViewPage MapViewPage { get; set; }
         protected RawDataPage RawDataPage { get; set; }
+        protected AnalysisPage AnalysisPage { get; set; }
         protected Page PreviousPage { get; set; }
+        protected Page CurrentPage { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage, ShowSettingsPage);
+            HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage, ShowSettingsPage, ShowAnalysisPage);
             SettingsPage = new SettingsPage(ShowPreviousPage, UpdateSettings);
             MapViewPage = new MapViewPage(ShowHomePage);
             RawDataPage = new RawDataPage(ShowPreviousPage);
+            AnalysisPage = new AnalysisPage(ShowPreviousPage);
             DataViewerPage = new DataViewerPage(ShowPreviousPage, new System.Action<Utils.LocationDataFile[]>[] { MapViewPage.SetTables, RawDataPage.SetTables });
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -38,14 +41,15 @@ namespace LocationInterface
         protected Key[] keys = new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right };
         protected void KeyPress(object sender, KeyEventArgs e)
         {
-            foreach (Key key in keys)
-                if (e.Key == key)
-                {
-                    Keyboard.Focus(MapViewPage.canvas);
-                    MapViewPage.canvas.Focus();
-                    e.Handled = true;
-                    break;
-                }
+            if (CurrentPage.GetType() == typeof(MapViewPage))
+                foreach (Key key in keys)
+                    if (e.Key == key)
+                    {
+                        Keyboard.Focus(MapViewPage.canvas);
+                        MapViewPage.canvas.Focus();
+                        e.Handled = true;
+                        break;
+                    }
         }
 
         protected void UpdateSettings()
@@ -81,10 +85,14 @@ namespace LocationInterface
             RawDataPage.LoadTables();
             ShowPage(RawDataPage);
         }
+        protected void ShowAnalysisPage()
+        {
+            ShowPage(AnalysisPage);
+        }
         protected void ShowPage(Page page)
         {
-            PreviousPage = (Page)frame.Content;
-            frame.Content = page;
+            PreviousPage = CurrentPage;
+            frame.Content = CurrentPage = page;
         }
     }
 }

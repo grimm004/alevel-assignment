@@ -22,6 +22,13 @@ namespace LocationInterface.Utils
                 PercentagePerUpdate = 10,
                 DataCacheFolder = "DataCache",
                 LocationDataFolder = "LocationData",
+                EmailDatabase = "Email",
+
+                EmailServer = "smtp.gmail.com",
+                EmailPort = 587,
+                DisplayName = "",
+                EmailAddress = "",
+                Password = "",
             };
         }
 
@@ -44,10 +51,18 @@ namespace LocationInterface.Utils
         public int PercentagePerUpdate { get; set; }
         public string DataCacheFolder { get; set; }
         public string LocationDataFolder { get; set; }
+        public string EmailDatabase { get; set; }
+
+        public string EmailServer { get; set; }
+        public int EmailPort { get; set; }
+        public string DisplayName { get; set; }
+        public string EmailAddress { get; set; }
+        public string Password { get; set; }
     }
 
     public class Constants
     {
         public const string CONFIGFILE = "config.xml";
+        public const string EMAILREGEX = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
     }
 }

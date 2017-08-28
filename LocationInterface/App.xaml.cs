@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.IO;
 using LocationInterface.Utils;
+using DatabaseManagerLibrary;
+using DatabaseManagerLibrary.CSV;
 
 namespace LocationInterface
 {
@@ -17,6 +19,11 @@ namespace LocationInterface
             if (!Directory.Exists(@"LocationData")) Directory.CreateDirectory(@"LocationData");
             if (!File.Exists(@"LocationData\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create(@"LocationData\index.json").Close(); DataIndex = new DataIndex(); }
             else VerifyFiles();
+
+            Database database = new CSVDatabase(SettingsManager.Active.EmailDatabase, tableFileExtention : ".csv");
+            if (database.GetTable("Contacts") == null) database.CreateTable("Contacts", new CSVTableFields("Name:string,EmailAddress:string"));
+            database.SaveChanges();
+
             DataIndex.SaveIndex();
         }
 

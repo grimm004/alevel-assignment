@@ -1,0 +1,22 @@
+﻿<Window x:Class="LocationInterface.ContactSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface"
+        mc:Ignorable="d"
+        MinWidth="300"
+        MinHeight="300"
+        Width="400"
+        Height="300"
+        Title="Select From Contacts">
+    <Grid>
+        <DataGrid x:Name="contactsDataGrid" IsReadOnly="True" SelectionChanged="ContactsDataGridSelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Path=Name}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Email Address" IsReadOnly="True"  Binding="{Binding Path=EmailAddress}" Width="*"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Submit" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="SubmitSelectionClick"/>
+    </Grid>
+</Window>
