@@ -28,7 +28,7 @@ namespace LocationInterface.Pages
 
         private void SendEmailButtonClick(object sender, RoutedEventArgs e)
         {
-            new EmailWindow().ShowDialog();
+            new Windows.EmailWindow().ShowDialog();
         }
     }
 }

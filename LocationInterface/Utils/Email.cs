@@ -5,6 +5,24 @@ using System.Windows;
 
 namespace LocationInterface.Utils
 {
+    public class EmailPreset
+    {
+        public string Name { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+
+        public EmailPreset()
+        {
+            Subject = "";
+            Body = "";
+        }
+        public EmailPreset(string name, string subject, string body)
+        {
+            Name = name;
+            Subject = subject;
+            Body = body;
+        }
+    }
     public class EmailAccount
     {
         public MailAddress MailAddress { get; }

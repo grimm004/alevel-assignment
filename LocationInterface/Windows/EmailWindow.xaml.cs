@@ -5,8 +5,9 @@ using System.Windows;
 using System.Threading;
 using LocationInterface.Utils;
 using System.Windows.Documents;
+using System.Windows.Markup;
 
-namespace LocationInterface
+namespace LocationInterface.Windows
 {
     /// <summary>
     /// Interaction logic for EmailWindow.xaml
@@ -33,6 +34,11 @@ namespace LocationInterface
             return contacts.ToArray();
         }
 
+        private EmailContact[] GetEmailContacts()
+        {
+            return GetEmailContacts($"{ recipientEntryBox.Text };{ ccEntryBox.Text };{ bccEntryBox.Text }");
+        }
+
         private string CompleteContactsString(string currentString, EmailContact[] contacts)
         {
             if (!string.IsNullOrWhiteSpace(currentString) && currentString[currentString.Length - 1] != ';') currentString += ';';
@@ -54,6 +60,13 @@ namespace LocationInterface
             }
         }
 
+        private string HandleSelection(string currentSelection)
+        {
+            ContactSelectorWindow window = new ContactSelectorWindow(GetEmailContacts());
+            window.ShowDialog();
+            return CompleteContactsString(currentSelection, window.SelectedContacts);
+        }
+
         private void SendEmail(object email)
         {
             statusLabel.Dispatcher.Invoke(() => statusLabel.Content = "Sending Email");
@@ -65,28 +78,28 @@ namespace LocationInterface
 
         private void AddRecipientsButtonClick(object sender, RoutedEventArgs e)
         {
-            ContactSelectorWindow window = new ContactSelectorWindow(GetEmailContacts(recipientEntryBox.Text));
-            window.ShowDialog();
-            recipientEntryBox.Text = CompleteContactsString(recipientEntryBox.Text, window.SelectedContacts);
+            recipientEntryBox.Text = HandleSelection(recipientEntryBox.Text);
         }
 
         private void AddCCsButtonClick(object sender, RoutedEventArgs e)
         {
-            ContactSelectorWindow window = new ContactSelectorWindow(GetEmailContacts(ccEntryBox.Text));
-            window.ShowDialog();
-            ccEntryBox.Text = CompleteContactsString(ccEntryBox.Text, window.SelectedContacts);
+            ccEntryBox.Text = HandleSelection(ccEntryBox.Text);
         }
 
         private void AddBCCsButtonClick(object sender, RoutedEventArgs e)
         {
-            ContactSelectorWindow window = new ContactSelectorWindow(GetEmailContacts(bccEntryBox.Text));
-            window.ShowDialog();
-            bccEntryBox.Text = CompleteContactsString(bccEntryBox.Text, window.SelectedContacts);
+            bccEntryBox.Text = HandleSelection(bccEntryBox.Text);
         }
 
         private void LoadPresetButtonClick(object sender, RoutedEventArgs e)
         {
-            new EmailPresetWindow().ShowDialog();
+            EmailPresetWindow window = new EmailPresetWindow(subjectEntryBox.Text, XamlWriter.Save(emailBodyRichTextBox.Document));
+            window.ShowDialog();
+            if (window.PresetLoaded)
+            {
+                subjectEntryBox.Text = window.SelectedPreset.Subject;
+                emailBodyRichTextBox.Document = (FlowDocument)XamlReader.Parse(window.SelectedPreset.Body);
+            }
         }
     }
 }

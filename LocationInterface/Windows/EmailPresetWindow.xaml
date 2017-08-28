@@ -1,0 +1,23 @@
+﻿<Window x:Class="LocationInterface.Windows.EmailPresetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        MinWidth="300"
+        MinHeight="300"
+        Title="Email Presets" Height="300" Width="300">
+
+    <Grid>
+        <DataGrid x:Name="presetsDataGrid" IsReadOnly="True" SelectionChanged="PresetsDataGridSelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Path=Name}" Width="*"/>
+                <DataGridTextColumn Header="Subject" IsReadOnly="True"  Binding="{Binding Path=Subject}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button x:Name="loadPresetButton" Content="Load Preset" Width="75" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="LoadPresetButtonClick"/>
+        <Button x:Name="savePresetButton" Content="Save Current Preset" Width="115" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="SavePresetButtonClick"/>
+        <Button Content="Cancel" Width="75" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="CancelButtonClick"/>
+    </Grid>
+</Window>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using LocationInterface.Utils;
+using System.Windows;
 
 namespace LocationInterface.Pages
 {
@@ -11,30 +12,64 @@ namespace LocationInterface.Pages
     {
         protected Action ShowPreviousPage { get; set; }
         protected Action UpdateSettings { get; set; }
+        protected Settings EnteredSettings
+        {
+            get
+            {
+                return new Settings
+                {
+                    PercentagePerUpdate = Convert.ToInt32(percentagePerUpdateInput.Text),
+                    RawDataRecordBuffer = Convert.ToInt32(rawDataRecordBufferInput.Text),
+                    DataCacheFolder = dataCacheFolderInput.Text,
+                    LocationDataFolder = locationDataFolderInput.Text,
+                    EmailDatabase = emailDatabaseFolder.Text,
+
+                    EmailServer = emailServerInput.Text,
+                    EmailPort = Convert.ToInt32(emailPortInput.Text),
+                    EmailAddress = emailAddressInput.Text,
+                    DisplayName = emailNameInput.Text,
+                    Password = emailPasswordInput.Password
+                };
+            }
+            set
+            {
+                percentagePerUpdateInput.Text = value.PercentagePerUpdate.ToString();
+                rawDataRecordBufferInput.Text = value.RawDataRecordBuffer.ToString();
+                dataCacheFolderInput.Text = value.DataCacheFolder;
+                locationDataFolderInput.Text = value.LocationDataFolder;
+                emailDatabaseFolder.Text = value.EmailDatabase;
+
+                emailServerInput.Text = value.EmailServer;
+                emailPortInput.Text = value.EmailPort.ToString();
+                emailAddressInput.Text = value.EmailAddress;
+                emailNameInput.Text = value.DisplayName;
+                emailPasswordInput.Password = value.Password;
+            }
+        }
 
         public SettingsPage(Action ShowPreviousPage, Action UpdateSettings)
         {
             this.ShowPreviousPage = ShowPreviousPage;
             this.UpdateSettings = UpdateSettings;
             InitializeComponent();
+            loadDefaultsButton.IsEnabled = false;
+            applyButton.IsEnabled = false;
         }
 
         public void LoadSettings(bool loadDefaults = false)
         {
             if (!loadDefaults) SettingsManager.Load();
-            else SettingsManager.LoadDefaultSettings();
-
-            percentagePerUpdateInput.Text = SettingsManager.Active.PercentagePerUpdate.ToString();
-            rawDataRecordBufferInput.Text = SettingsManager.Active.RawDataRecordBuffer.ToString();
-            dataCacheFolderInput.Text = SettingsManager.Active.DataCacheFolder;
-            locationDataFolderInput.Text = SettingsManager.Active.LocationDataFolder;
-            emailDatabaseFolder.Text = SettingsManager.Active.EmailDatabase;
-
-            emailServerInput.Text = SettingsManager.Active.EmailServer;
-            emailPortInput.Text = SettingsManager.Active.EmailPort.ToString();
-            emailAddressInput.Text = SettingsManager.Active.EmailAddress;
-            emailNameInput.Text = SettingsManager.Active.DisplayName;
-            emailPasswordInput.Password = SettingsManager.Active.Password;
+            else SettingsManager.Active = SettingsManager.Defaults;
+            EnteredSettings = SettingsManager.Active;
+        }
+        
+        private void FieldChange()
+        {
+            if (IsInitialized)
+            {
+                loadDefaultsButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Defaults.GetHashCode();
+                applyButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Active.GetHashCode();
+            }
         }
 
         private void BackButtonClick(object sender, System.Windows.RoutedEventArgs e)
@@ -43,24 +78,20 @@ namespace LocationInterface.Pages
         }
         private void ApplyButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            SettingsManager.Active.PercentagePerUpdate = Convert.ToInt32(percentagePerUpdateInput.Text);
-            SettingsManager.Active.RawDataRecordBuffer = Convert.ToInt32(rawDataRecordBufferInput.Text);
-            SettingsManager.Active.DataCacheFolder = dataCacheFolderInput.Text;
-            SettingsManager.Active.LocationDataFolder = locationDataFolderInput.Text;
-            SettingsManager.Active.EmailDatabase = emailDatabaseFolder.Text;
-
-            SettingsManager.Active.EmailServer = emailServerInput.Text;
-            SettingsManager.Active.EmailPort = Convert.ToInt32(emailPortInput.Text);
-            SettingsManager.Active.EmailAddress = emailAddressInput.Text;
-            SettingsManager.Active.DisplayName = emailNameInput.Text;
-            SettingsManager.Active.Password = emailPasswordInput.Password;
-
+            SettingsManager.Active = EnteredSettings;
             UpdateSettings?.Invoke();
         }
         private void LoadDefaultsButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            SettingsManager.LoadDefaultSettings();
             LoadSettings(true);
+        }
+        private void SettingsTextChanged(object sender, TextChangedEventArgs e)
+        {
+            FieldChange();
+        }
+        private void SettingsPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            FieldChange();
         }
     }
 }

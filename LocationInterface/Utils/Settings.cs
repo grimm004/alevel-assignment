@@ -1,35 +1,39 @@
 ﻿using System.IO;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace LocationInterface.Utils
 {
     public static class SettingsManager
     {
-        public static Settings Active { get; private set; }
+        public static Settings Active { get; set; }
+
+        public static Settings Defaults
+        {
+            get
+            {
+                return new Settings
+                {
+                    RawDataRecordBuffer = 1000,
+                    PercentagePerUpdate = 10,
+                    DataCacheFolder = "DataCache",
+                    LocationDataFolder = "LocationData",
+                    EmailDatabase = "Email",
+
+                    EmailServer = "smtp.gmail.com",
+                    EmailPort = 587,
+                    DisplayName = "",
+                    EmailAddress = "",
+                    Password = "",
+                };
+            }
+        }
 
         static SettingsManager()
         {
-            LoadDefaultSettings();
+            Active = Defaults;
             if (File.Exists(Constants.CONFIGFILE)) Load();
             else Save();
-        }
-
-        public static void LoadDefaultSettings()
-        {
-            Active = new Settings
-            {
-                RawDataRecordBuffer = 1000,
-                PercentagePerUpdate = 10,
-                DataCacheFolder = "DataCache",
-                LocationDataFolder = "LocationData",
-                EmailDatabase = "Email",
-
-                EmailServer = "smtp.gmail.com",
-                EmailPort = 587,
-                DisplayName = "",
-                EmailAddress = "",
-                Password = "",
-            };
         }
 
         public static void Save()
@@ -58,6 +62,33 @@ namespace LocationInterface.Utils
         public string DisplayName { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+
+        public bool Equals(Settings settings)
+        {
+            bool equal = true;
+            foreach (PropertyInfo property in typeof(Settings).GetProperties())
+                equal = property.GetValue(settings) != property.GetValue(this) ? false : equal;
+            return equal;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 0x00;
+            foreach (PropertyInfo property in typeof(Settings).GetProperties())
+                hash ^= property.GetValue(this).GetHashCode();
+            System.Console.WriteLine(hash);
+            return hash;
+            //return RawDataRecordBuffer.GetHashCode() ^
+            //    PercentagePerUpdate.GetHashCode() ^
+            //    DataCacheFolder.GetHashCode() ^
+            //    LocationDataFolder.GetHashCode() ^
+            //    EmailDatabase.GetHashCode() ^
+            //    EmailServer.GetHashCode() ^
+            //    EmailPort.GetHashCode() ^
+            //    DisplayName.GetHashCode() ^
+            //    EmailAddress.GetHashCode() ^
+            //    Password.GetHashCode();
+        }
     }
 
     public class Constants

@@ -119,16 +119,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ContactSelectorWindow.xaml.cs">
+    <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContactWindow.xaml.cs">
+    <Compile Include="Windows\ContactWindow.xaml.cs">
       <DependentUpon>ContactWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmailPresetWindow.xaml.cs">
+    <Compile Include="Windows\EmailPresetWindow.xaml.cs">
       <DependentUpon>EmailPresetWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmailWindow.xaml.cs">
+    <Compile Include="Windows\EmailWindow.xaml.cs">
       <DependentUpon>EmailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AnalysisPage.xaml.cs">
@@ -136,6 +136,9 @@
     </Compile>
     <Compile Include="Pages\RawDataPage.xaml.cs">
       <DependentUpon>RawDataPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PresetNameWindow.xaml.cs">
+      <DependentUpon>PresetNameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Camera.cs" />
     <Compile Include="Utils\DataIndex.cs" />
@@ -145,19 +148,19 @@
     <Compile Include="Utils\Point.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Vector2.cs" />
-    <Page Include="ContactSelectorWindow.xaml">
+    <Page Include="Windows\ContactSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ContactWindow.xaml">
+    <Page Include="Windows\ContactWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EmailPresetWindow.xaml">
+    <Page Include="Windows\EmailPresetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EmailWindow.xaml">
+    <Page Include="Windows\EmailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PresetNameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -272,5 +279,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,7 +6,7 @@ using LocationInterface.Utils;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 
-namespace LocationInterface
+namespace LocationInterface.Windows
 {
     /// <summary>
     /// Interaction logic for ContactWindow.xaml
@@ -37,8 +37,8 @@ namespace LocationInterface
         public void UpdateTable()
         {
             contactsDataGrid.Items.Clear();
-            Contacts = Database.GetRecords<EmailContact>("Contacts");
-            foreach (EmailContact contact in Contacts) contactsDataGrid.Items.Add(contact);
+            foreach (EmailContact contact in (Contacts = Database.GetRecords<EmailContact>("Contacts")))
+                contactsDataGrid.Items.Add(contact);
         }
 
         private void AddContactClick(object sender, RoutedEventArgs e)

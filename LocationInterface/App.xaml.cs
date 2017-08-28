@@ -22,6 +22,7 @@ namespace LocationInterface
 
             Database database = new CSVDatabase(SettingsManager.Active.EmailDatabase, tableFileExtention : ".csv");
             if (database.GetTable("Contacts") == null) database.CreateTable("Contacts", new CSVTableFields("Name:string,EmailAddress:string"));
+            if (database.GetTable("Presets") == null) database.CreateTable("Presets", new CSVTableFields("Name:string,Subject:string,Body:string"));
             database.SaveChanges();
 
             DataIndex.SaveIndex();

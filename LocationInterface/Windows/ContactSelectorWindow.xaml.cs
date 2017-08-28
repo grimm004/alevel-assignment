@@ -4,7 +4,7 @@ using DatabaseManagerLibrary.CSV;
 using LocationInterface.Utils;
 using System.Windows.Controls;
 
-namespace LocationInterface
+namespace LocationInterface.Windows
 {
     /// <summary>
     /// Interaction logic for ContactWindow.xaml
@@ -39,15 +39,21 @@ namespace LocationInterface
             }
         }
 
-        private void SubmitSelectionClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void ContactsDataGridSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedContacts = new EmailContact[contactsDataGrid.SelectedItems.Count];
             for (int i = 0; i < SelectedContacts.Length; i++) SelectedContacts[i] = (EmailContact)contactsDataGrid.SelectedItems[i];
+        }
+
+        private void SubmitSelectionButtonClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void CancelButtonClick(object sender, RoutedEventArgs e)
+        {
+            SelectedContacts = new EmailContact[0];
+            Close();
         }
     }
 }
