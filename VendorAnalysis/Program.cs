@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DatabaseManagerLibrary;
+using DatabaseManagerLibrary.CSV;
 using System.Net;
 using System.IO;
 
@@ -16,7 +17,7 @@ namespace LocationAnalysis
             CSVDatabase database = new CSVDatabase("Ship");
             Console.WriteLine("Done!");
             Console.WriteLine("Fetching all records...");
-            Record[] records = database.GetTable("day1").records.ToArray();
+            Record[] records = database.GetTable("day1").GetRecords().ToArray();
             Console.WriteLine("Count: {0}", records.Length);
 
             HashSet<string> uniqueMacAddresses = new HashSet<string>();

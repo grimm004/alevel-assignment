@@ -12,13 +12,15 @@
                 <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Table Name" IsReadOnly="True"  Binding="{Binding Path=TableName}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Record Count" IsReadOnly="True"  Binding="{Binding Path=RecordCount}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="0,275,0,0" Click="BackButtonClick"/>
         <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="UpdateButtonClick" Margin="50,0,0,0"/>
         <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="SubmitButtonClick" Margin="100,0,0,0"/>
-        <Button x:Name="importFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Bottom" Width="100" Click="ImportDataFileClick"/>
-        <Grid VerticalAlignment="Bottom" Margin="250,0,80,0" Height="20">
+        <Button x:Name="viewSelectionInformationButton" Content="Selection Information" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="130" Click="SelectionInformationButtonClick" Margin="150,0,0,0"/>
+        <Button x:Name="importFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="280,0,0,0" VerticalAlignment="Bottom" Width="100" Click="ImportDataFileClick"/>
+        <Grid VerticalAlignment="Bottom" Margin="380,0,80,0" Height="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>

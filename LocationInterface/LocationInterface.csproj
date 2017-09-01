@@ -119,6 +119,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\Common.cs" />
+    <Compile Include="Utils\VendorAnalysis.cs" />
     <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
     </Compile>
@@ -148,6 +150,12 @@
     <Compile Include="Utils\Point.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\Vector2.cs" />
+    <Compile Include="Windows\SelectionInformationWindow.xaml.cs">
+      <DependentUpon>SelectionInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\VendorAnalysisWindow.xaml.cs">
+      <DependentUpon>VendorAnalysisWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Windows\ContactSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +209,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\PresetNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SelectionInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\VendorAnalysisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

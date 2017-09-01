@@ -15,23 +15,13 @@ namespace LocationInterface.Pages
     public partial class RawDataPage : Page
     {
         protected Action ShowPreviousPage { get; }
-        protected Database Database { get; set; }
-        protected Table[] LoadedTables { get; set; }
+        protected Common Common { get; }
 
-        public RawDataPage(Action ShowPreviousPage)
+        public RawDataPage(Common common, Action ShowPreviousPage)
         {
+            Common = common;
             this.ShowPreviousPage = ShowPreviousPage;
-            Database = new BINDatabase("LocationData");
-            LoadedTables = new Table[0];
             InitializeComponent();
-        }
-
-        public void SetTables(LocationDataFile[] dataFiles)
-        {
-            Database = new BINDatabase("LocationData");
-            LoadedTables = new Table[dataFiles.Length];
-            for (int i = 0; i < dataFiles.Length; i++)
-                LoadedTables[i] = Database.GetTable(dataFiles[i].TableName);
         }
 
         public void LoadTables()
@@ -40,7 +30,7 @@ namespace LocationInterface.Pages
             {
                 rawData.Dispatcher.Invoke(rawData.Items.Clear);
                 List<LocationRecord> locationRecordBuffer = new List<LocationRecord>();
-                foreach (Table table in LoadedTables)
+                foreach (Table table in Common.LoadedDataTables)
                     foreach (Record currentLocationRecord in table.GetRecords())
                     {
                         locationRecordBuffer.Add(currentLocationRecord.ToObject<LocationRecord>());

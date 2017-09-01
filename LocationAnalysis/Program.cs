@@ -8,18 +8,20 @@ namespace LocationAnalysis
     {
         static void Main(string[] args)
         {
-            Database db = new BINDatabase("Ship");
+            Console.WriteLine(DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss"));
 
-            //db.CreateTable("TestTable", new BINTableFields(new BINField("number", Datatype.Integer), new BINField("datetime", Datatype.DateTime)));
-            //db.SaveChanges();
+            //Database db = new BINDatabase("Ship");
 
-            Table table = db.GetTable("TestTable");
+            ////db.CreateTable("TestTable", new BINTableFields(new BINField("number", Datatype.Integer), new BINField("datetime", Datatype.DateTime)));
+            ////db.SaveChanges();
+
+            //Table table = db.GetTable("TestTable");
             
-            //for (int i = 0; i < 10; i++) table.AddRecord(new object[] { i, DateTime.Now });
-            //db.SaveChanges();
+            ////for (int i = 0; i < 10; i++) table.AddRecord(new object[] { i, DateTime.Now });
+            ////db.SaveChanges();
 
-            Console.WriteLine(db.GetTable("TestTable"));
-            foreach (Record record in table.GetRecords()) Console.WriteLine(record);
+            //Console.WriteLine(db.GetTable("TestTable"));
+            //foreach (Record record in table.GetRecords()) Console.WriteLine(record);
 
             Console.ReadKey();
         }

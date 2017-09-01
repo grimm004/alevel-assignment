@@ -1,14 +1,37 @@
 ﻿<Page x:Class="LocationInterface.Pages.AnalysisPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LocationInterface.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
       Title="AnalysisPage">
 
     <Grid>
-        <Button Content="Back" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="BackButtonClick"/>
-        <Button Content="Send Email" Margin="50,0,0,0" Width="75" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="SendEmailButtonClick"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Content="Run Vendor Analysis" Width="120" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="VendorAnalysisButtonClick"/>
+        </Grid>
+
+        <Button Grid.Row="1" Grid.Column="0" Content="Back" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="BackButtonClick"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="Send Email" Width="75" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="SendEmailButtonClick"/>
+        <Button Grid.Row="1" Grid.Column="2" Content="Export as PDF" Width="75" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="ExportPdfButtonClick"/>
     </Grid>
 </Page>

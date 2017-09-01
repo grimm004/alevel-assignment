@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using LocationInterface.Utils;
 using System.Windows;
+using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace LocationInterface.Pages
 {
@@ -18,7 +20,7 @@ namespace LocationInterface.Pages
             {
                 return new Settings
                 {
-                    PercentagePerUpdate = Convert.ToInt32(percentagePerUpdateInput.Text),
+                    PercentagePerUpdate = Convert.ToDouble(percentagePerUpdateInput.Text),
                     RawDataRecordBuffer = Convert.ToInt32(rawDataRecordBufferInput.Text),
                     DataCacheFolder = dataCacheFolderInput.Text,
                     LocationDataFolder = locationDataFolderInput.Text,
@@ -61,29 +63,39 @@ namespace LocationInterface.Pages
             if (!loadDefaults) SettingsManager.Load();
             else SettingsManager.Active = SettingsManager.Defaults;
             EnteredSettings = SettingsManager.Active;
+            FieldChange();
         }
         
         private void FieldChange()
         {
             if (IsInitialized)
             {
-                loadDefaultsButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Defaults.GetHashCode();
-                applyButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Active.GetHashCode();
+                try
+                {
+                    loadDefaultsButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Defaults.GetHashCode();
+                    applyButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Active.GetHashCode();
+                } catch (FormatException)
+                {
+                    loadDefaultsButton.IsEnabled = true;
+                    applyButton.IsEnabled = false;
+                }
             }
         }
 
-        private void BackButtonClick(object sender, System.Windows.RoutedEventArgs e)
+        private void BackButtonClick(object sender, RoutedEventArgs e)
         {
             ShowPreviousPage?.Invoke();
         }
-        private void ApplyButtonClick(object sender, System.Windows.RoutedEventArgs e)
+        private void ApplyButtonClick(object sender, RoutedEventArgs e)
         {
             SettingsManager.Active = EnteredSettings;
             UpdateSettings?.Invoke();
+            FieldChange();
         }
-        private void LoadDefaultsButtonClick(object sender, System.Windows.RoutedEventArgs e)
+        private void LoadDefaultsButtonClick(object sender, RoutedEventArgs e)
         {
-            LoadSettings(true);
+            EnteredSettings = SettingsManager.Defaults;
+            FieldChange();
         }
         private void SettingsTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -92,6 +104,26 @@ namespace LocationInterface.Pages
         private void SettingsPasswordChanged(object sender, RoutedEventArgs e)
         {
             FieldChange();
+        }
+        private void NumberValidation(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsNumericalText(e.Text);
+            if (e.Text.Length == 0) { e.Handled = true; ((TextBox)sender).Text = "0"; }
+        }
+        private void PasteNumberValidation(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(String)))
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                if (!IsNumericalText(text)) e.CancelCommand();
+            }
+            else e.CancelCommand();
+        }
+
+        private bool IsNumericalText(string text)
+        {
+            Regex regex = new Regex("[^0-9.-]+");
+            return !regex.IsMatch(text);
         }
     }
 }

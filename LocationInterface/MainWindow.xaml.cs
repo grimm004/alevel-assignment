@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using LocationInterface.Pages;
 using LocationInterface.Utils;
+using DatabaseManagerLibrary.BIN;
+using DatabaseManagerLibrary;
 
 namespace LocationInterface
 {
@@ -11,6 +13,8 @@ namespace LocationInterface
     /// </summary>
     public partial class MainWindow : Window
     {
+        protected Common Common { get; set; }
+
         protected HomePage HomePage { get; set; }
         protected DataViewerPage DataViewerPage { get; set; }
         protected SettingsPage SettingsPage { get; set; }
@@ -24,12 +28,14 @@ namespace LocationInterface
         {
             InitializeComponent();
 
+            Common = new Common();
+
             HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage, ShowSettingsPage, ShowAnalysisPage);
             SettingsPage = new SettingsPage(ShowPreviousPage, UpdateSettings);
-            MapViewPage = new MapViewPage(ShowHomePage);
-            RawDataPage = new RawDataPage(ShowPreviousPage);
-            AnalysisPage = new AnalysisPage(ShowPreviousPage);
-            DataViewerPage = new DataViewerPage(ShowPreviousPage, new System.Action<Utils.LocationDataFile[]>[] { MapViewPage.SetTables, RawDataPage.SetTables });
+            MapViewPage = new MapViewPage(Common, ShowHomePage);
+            RawDataPage = new RawDataPage(Common, ShowPreviousPage);
+            AnalysisPage = new AnalysisPage(Common, ShowPreviousPage);
+            DataViewerPage = new DataViewerPage(Common, ShowPreviousPage);
 
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 

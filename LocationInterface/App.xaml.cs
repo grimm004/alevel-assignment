@@ -15,6 +15,7 @@ namespace LocationInterface
         
         public App()
         {
+            if (!Directory.Exists(@"Analysis")) Directory.CreateDirectory(@"Analysis");
             if (!Directory.Exists(@"DataCache")) Directory.CreateDirectory(@"DataCache");
             if (!Directory.Exists(@"LocationData")) Directory.CreateDirectory(@"LocationData");
             if (!File.Exists(@"LocationData\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create(@"LocationData\index.json").Close(); DataIndex = new DataIndex(); }

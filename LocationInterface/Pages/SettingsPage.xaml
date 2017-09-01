@@ -37,16 +37,16 @@
             <TextBox x:Name="locationDataFolderInput" IsEnabled="False" Grid.Row="2" Grid.Column="1" Height="20" Text="LocationData" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>
 
             <Label Content="Raw Data Record Buffer" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox x:Name="rawDataRecordBufferInput" Grid.Row="3" Grid.Column="1" Height="20" Text="1000" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>
+            <TextBox x:Name="rawDataRecordBufferInput" Grid.Row="3" Grid.Column="1" Height="20" Text="1000" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" PreviewTextInput="NumberValidation" DataObject.Pasting="PasteNumberValidation" TextChanged="SettingsTextChanged"/>
 
             <Label Content="Percentage Per Update" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox x:Name="percentagePerUpdateInput" Grid.Row="4" Grid.Column="1" Height="20" Text="10" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>
+            <TextBox x:Name="percentagePerUpdateInput" Grid.Row="4" Grid.Column="1" Height="20" Text="10" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" PreviewTextInput="NumberValidation" DataObject.Pasting="PasteNumberValidation" TextChanged="SettingsTextChanged"/>
 
             <Label Content="Email Server" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox x:Name="emailServerInput" Grid.Row="5" Grid.Column="1" Height="20" Text="smtp.gmail.com" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>
 
             <Label Content="Email Port" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox x:Name="emailPortInput" Grid.Row="6" Grid.Column="1" Height="20" Text="587" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>
+            <TextBox x:Name="emailPortInput" Grid.Row="6" Grid.Column="1" Height="20" Text="587" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" PreviewTextInput="NumberValidation" DataObject.Pasting="PasteNumberValidation" TextChanged="SettingsTextChanged"/>
 
             <Label Content="Email Address" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox x:Name="emailAddressInput" Grid.Row="7" Grid.Column="1" Height="20" Width="120" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextChanged="SettingsTextChanged"/>

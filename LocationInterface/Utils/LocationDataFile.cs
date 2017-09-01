@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using DatabaseManagerLibrary.BIN;
 
 namespace LocationInterface.Utils
 {
@@ -12,7 +13,15 @@ namespace LocationInterface.Utils
         [JsonIgnore]
         public string TableName { get { return Path.GetFileNameWithoutExtension(FileName); } }
         [JsonIgnore]
-        public bool Exists { get { return File.Exists(@"LocationData\" + FileName); } }
+        public bool Exists { get { return File.Exists($"{ SettingsManager.Active.LocationDataFolder }\\{ FileName }"); } }
+        [JsonIgnore]
+        public uint RecordCount
+        {
+            get
+            {
+                return new BINDatabase(SettingsManager.Active.LocationDataFolder).GetTable(TableName).RecordCount;
+            }
+        }
 
         public override string ToString()
         {

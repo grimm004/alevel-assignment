@@ -11,7 +11,8 @@ using System.IO.Compression;
 using System.Threading;
 using System.Text;
 using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.BIN;
+using System.Windows.Input;
+using LocationInterface.Windows;
 
 // TODO: ADD SETTINGS TO SAVE MULTIPLIER AND OFFSET PER FILE
 
@@ -22,38 +23,52 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class DataViewerPage : Page
     {
-        public Database Database { get; protected set; }
         protected Action ShowPreviousPage { get; }
-        protected Action<LocationDataFile[]>[] SetTablesActions { get; }
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
         private const string HEADER = "MAC:string,Unknown1:string,Date:datetime,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
+        protected bool Importing { get; set; }
+        protected Common Common { get; set; }
 
-        public DataViewerPage(Action ShowPreviousPage, Action<LocationDataFile[]>[] SetTablesActions)
+        public DataViewerPage(Common common, Action ShowPreviousPage)
         {
-            this.SetTablesActions = SetTablesActions;
+            Common = common;
             this.ShowPreviousPage = ShowPreviousPage;
+            Importing = false;
             SelectedDataFiles = new List<LocationDataFile>();
-            Database = new BINDatabase("LocationData");
             InitializeComponent();
             LoadTables();
+
+            KeyDown += delegate { if (Keyboard.IsKeyDown(Key.Delete)) RemoveTable(); };
+        }
+
+        public void RemoveTable()
+        {
+            foreach (LocationDataFile file in dataFiles.SelectedItems)
+                Common.LocationDatabase.DeleteTable(file.TableName);
+            Common.LocationDatabase.SaveChanges();
+            UpdateTable();
         }
 
         public void UpdateTable()
         {
-            App.VerifyFiles();
-            LoadTables();
+            if (!Importing)
+            {
+                App.VerifyFiles();
+                LoadTables();
+            }
         }
         protected void LoadTables()
         {
-            Dispatcher.Invoke(() =>
-            {
-                dataFiles.Items.Clear();
-                foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) dataFiles.Items.Add(currentFile);
-            });
+            if (!Importing)
+                Dispatcher.Invoke(() =>
+                {
+                    dataFiles.Items.Clear();
+                    foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) dataFiles.Items.Add(currentFile);
+                });
         }
         protected void SubmitSelection()
         {
-            foreach (Action<LocationDataFile[]> LoadTablesCommand in SetTablesActions) LoadTablesCommand?.Invoke(SelectedDataFiles.ToArray());
+            Common.LoadTables(SelectedDataFiles.ToArray());
         }
         
         private void OnStart()
@@ -79,6 +94,7 @@ namespace LocationInterface.Pages
         private void ImportFolder(string path)
         {
             Dispatcher.Invoke(OnStart);
+            Importing = true;
             ClearCache();
             DirectoryInfo directorySelected = new DirectoryInfo(path);
             int processedFileCount = 0;
@@ -117,6 +133,8 @@ namespace LocationInterface.Pages
             else ConvertDataFiles();
             UpdateStatus("Import Complete", 0);
             App.DataIndex.SaveIndex();
+            Importing = false;
+            UpdateTable();
             Dispatcher.Invoke(OnFinish);
         }
 
@@ -135,7 +153,6 @@ namespace LocationInterface.Pages
                 for (int i = 0; i < currentFieldSizes.Length; i++) currentFieldSizes[i] = 0x00;
                 currentFields = (CSVTableFields)table.Fields;
                 table.SearchRecords(FieldSizeCalculatorCallback);
-                //for (int i = 0; i < fieldSizes.Length; i++) fieldSizes[i] += (ushort)(fieldSizes[i] > 0x00 ? 0x02 : 0x00);
                 Console.WriteLine("Done");
                 varCharSizes.Add(currentFieldSizes);
             }
@@ -244,6 +261,11 @@ namespace LocationInterface.Pages
                 string path = folderBrowser.SelectedPath;
                 new Thread(() => ImportFolder(path)) { IsBackground = true }.Start();
             }
+        }
+
+        private void SelectionInformationButtonClick(object sender, RoutedEventArgs e)
+        {
+            new SelectionInformationWindow(SelectedDataFiles.ToArray()).ShowDialog();
         }
     }
 }

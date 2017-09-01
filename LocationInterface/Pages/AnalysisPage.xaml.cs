@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.CSV;
 using LocationInterface.Utils;
-using System.Net.Mail;
+using LocationInterface.Windows;
 
 namespace LocationInterface.Pages
 {
@@ -14,9 +12,12 @@ namespace LocationInterface.Pages
     public partial class AnalysisPage : Page
     {
         protected Action ShowPreviousPage { get; set; }
+        protected Common Common { get; }
+        public bool AnalysisRunning { get; protected set; }
 
-        public AnalysisPage(Action ShowPreviousPage)
+        public AnalysisPage(Common common, Action ShowPreviousPage)
         {
+            Common = common;
             this.ShowPreviousPage = ShowPreviousPage;
             InitializeComponent();
         }
@@ -29,6 +30,16 @@ namespace LocationInterface.Pages
         private void SendEmailButtonClick(object sender, RoutedEventArgs e)
         {
             new Windows.EmailWindow().ShowDialog();
+        }
+
+        private void VendorAnalysisButtonClick(object sender, RoutedEventArgs e)
+        {
+            new VendorAnalysisWindow(Common).ShowDialog();
+        }
+
+        private void ExportPdfButtonClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

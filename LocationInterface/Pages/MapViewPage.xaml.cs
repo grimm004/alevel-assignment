@@ -23,20 +23,18 @@ namespace LocationInterface.Pages
     {
         protected Image CurrentImage { get; set; }
         protected Action ShowHomePage { get; set; }
-        protected Database Database { get; set; }
         protected List<Utils.Point> Points { get; set; }
         protected double PointMultiplier { get; set; }
         protected Vector2 PointOffset { get; set; }
         protected static Camera Camera { get; set; }
-        public Table[] LoadedTables { get; set; }
+        protected Common Common { get; }
         protected bool LoadingPoints { get; private set; }
 
-        public MapViewPage(Action ShowHomePage)
+        public MapViewPage(Common common, Action ShowHomePage)
         {
-            Database = new BINDatabase("LocationData");
+            Common = common;
             this.ShowHomePage = ShowHomePage;
             
-            LoadedTables = new Table[0];
             Points = new List<Utils.Point>();
             LoadingPoints = false;
             PointOffset = new Vector2(1);
@@ -59,14 +57,6 @@ namespace LocationInterface.Pages
                     catch (TaskCanceledException) { }
                 }
             });
-        }
-
-        public void SetTables(LocationDataFile[] dataFiles)
-        {
-            Database = new BINDatabase("LocationData");
-            LoadedTables = new Table[dataFiles.Length];
-            for (int i = 0; i < dataFiles.Length; i++)
-                LoadedTables[i] = Database.GetTable(dataFiles[i].TableName);
         }
 
         protected void Update()
@@ -113,7 +103,7 @@ namespace LocationInterface.Pages
                 LoadingPoints = true;
                 Points = new List<Utils.Point>();
                 Console.WriteLine("Loading tables...");
-                foreach (Table table in LoadedTables)
+                foreach (Table table in Common.LoadedDataTables)
                 {
                     Stopwatch tableTimer = Stopwatch.StartNew();
                     Record[] records = table.GetRecords("MAC", macAddress);
@@ -124,7 +114,7 @@ namespace LocationInterface.Pages
                             Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")));
                 }
                 timer.Stop();
-                Console.WriteLine("Added {0} points from {1} table(s) in {2:0.000} seconds.", Points.Count, LoadedTables.Length, timer.ElapsedMilliseconds / 1000d);
+                Console.WriteLine("Added {0} points from {1} table(s) in {2:0.000} seconds.", Points.Count, Common.LoadedDataTables.Length, timer.ElapsedMilliseconds / 1000d);
 
                 Dispatcher.Invoke(delegate
                 {

@@ -6,6 +6,8 @@ namespace LocationInterface.Utils
 {
     public static class SettingsManager
     {
+        private static XmlSerializer Serializer { get; set; }
+
         public static Settings Active { get; set; }
 
         public static Settings Defaults
@@ -31,6 +33,7 @@ namespace LocationInterface.Utils
 
         static SettingsManager()
         {
+            Serializer = new XmlSerializer(typeof(Settings));
             Active = Defaults;
             if (File.Exists(Constants.CONFIGFILE)) Load();
             else Save();
@@ -38,21 +41,19 @@ namespace LocationInterface.Utils
 
         public static void Save()
         {
-            XmlSerializer serializer = new XmlSerializer(Active.GetType());
-            using (FileStream writer = new FileStream(Constants.CONFIGFILE, FileMode.Create)) serializer.Serialize(writer, Active);
+            using (FileStream writer = new FileStream(Constants.CONFIGFILE, FileMode.Create)) Serializer.Serialize(writer, Active);
         }
 
         public static void Load()
         {
-            XmlSerializer serializer = new XmlSerializer(Active.GetType());
-            using (StreamReader reader = new StreamReader(Constants.CONFIGFILE)) Active = (Settings)serializer.Deserialize(reader);
+            using (StreamReader reader = new StreamReader(Constants.CONFIGFILE)) Active = (Settings)Serializer.Deserialize(reader);
         }
     }
 
     public class Settings
     {
         public int RawDataRecordBuffer { get; set; }
-        public int PercentagePerUpdate { get; set; }
+        public double PercentagePerUpdate { get; set; }
         public string DataCacheFolder { get; set; }
         public string LocationDataFolder { get; set; }
         public string EmailDatabase { get; set; }
@@ -70,24 +71,12 @@ namespace LocationInterface.Utils
                 equal = property.GetValue(settings) != property.GetValue(this) ? false : equal;
             return equal;
         }
-
         public override int GetHashCode()
         {
             int hash = 0x00;
             foreach (PropertyInfo property in typeof(Settings).GetProperties())
                 hash ^= property.GetValue(this).GetHashCode();
-            System.Console.WriteLine(hash);
             return hash;
-            //return RawDataRecordBuffer.GetHashCode() ^
-            //    PercentagePerUpdate.GetHashCode() ^
-            //    DataCacheFolder.GetHashCode() ^
-            //    LocationDataFolder.GetHashCode() ^
-            //    EmailDatabase.GetHashCode() ^
-            //    EmailServer.GetHashCode() ^
-            //    EmailPort.GetHashCode() ^
-            //    DisplayName.GetHashCode() ^
-            //    EmailAddress.GetHashCode() ^
-            //    Password.GetHashCode();
         }
     }
 
@@ -95,5 +84,6 @@ namespace LocationInterface.Utils
     {
         public const string CONFIGFILE = "config.xml";
         public const string EMAILREGEX = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+        public const string MACVENDORAPISITE = "api.macvendors.com";
     }
 }
