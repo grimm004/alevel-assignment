@@ -1,0 +1,3 @@
+[submodule "DatabaseManager"]
+	path = DatabaseManager
+	url = https://github.com/grimm004/DatabaseManager
