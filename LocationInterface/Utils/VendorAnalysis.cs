@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.CSV;
 using System.Net;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -36,7 +35,14 @@ namespace LocationInterface.Utils
 
         public bool TestConnection()
         {
-            return new Ping().Send(Constants.MACVENDORAPISITE).Status == IPStatus.Success;
+            try
+            {
+                return new Ping().Send(Constants.MACVENDORAPISITE).Status == IPStatus.Success;
+            }
+            catch (PingException)
+            {
+                return false;
+            }
         }
 
         public void RunAnalysis(Table[] tables)
@@ -85,7 +91,7 @@ namespace LocationInterface.Utils
                     }
                 }
             }
-            else if (MessageBox.Show("Could not connect to vendor API service.", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes) RunAnalysis(tables);
+            else if (MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes) RunAnalysis(tables);
         }
     }
 }

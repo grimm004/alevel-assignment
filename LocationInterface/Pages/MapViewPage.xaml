@@ -1,28 +1,15 @@
 ﻿<Page x:Class="LocationInterface.Pages.MapViewPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LocationInterface.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
       Title="MapViewPage">
 
     <Grid>
         <Canvas x:Name="canvas" Margin="0,0,20,0" Focusable="True" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button x:Name="backButton" Content="Back" Margin="0,0,0,0" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="BackButtonClick"/>
-        <ComboBox x:Name="deckSelectionComboBox" Margin="50,0,0,0" Width="100" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="DeckSelectionComboBoxSelectionChanged">
-            <ComboBoxItem>Deck 1</ComboBoxItem>
-            <ComboBoxItem>Deck 2</ComboBoxItem>
-            <ComboBoxItem>Deck 3</ComboBoxItem>
-            <ComboBoxItem IsSelected="True">Deck 4</ComboBoxItem>
-            <ComboBoxItem>Deck 5</ComboBoxItem>
-            <ComboBoxItem>Deck 6</ComboBoxItem>
-            <ComboBoxItem>Deck 7</ComboBoxItem>
-            <ComboBoxItem>Deck 8</ComboBoxItem>
-            <ComboBoxItem>Deck 9</ComboBoxItem>
-            <ComboBoxItem>Deck 10</ComboBoxItem>
-            <ComboBoxItem>Deck 11</ComboBoxItem>
-        </ComboBox>
+        <ComboBox x:Name="deckSelectionComboBox" Margin="50,0,0,0" Width="100" Height="20" ItemsSource="{Binding Path=Tests}" DisplayMemberPath="FileName" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" SelectionChanged="DeckSelectionComboBoxSelectionChanged"/>
         <TextBox x:Name="macAddressEntry" Margin="150,0,0,0" Width="100" Height="20" Text="00:19:94:32:fc:20" TextChanged="MacAddressEntryTextChanged" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
     </Grid>
 </Page>

@@ -120,6 +120,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utils\Common.cs" />
+    <Compile Include="Utils\ImageFile.cs" />
+    <Compile Include="Utils\ImageIndex.cs" />
+    <Compile Include="Utils\KeyBind.cs" />
     <Compile Include="Utils\VendorAnalysis.cs" />
     <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>

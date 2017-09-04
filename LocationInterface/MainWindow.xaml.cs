@@ -1,10 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using LocationInterface.Pages;
 using LocationInterface.Utils;
-using DatabaseManagerLibrary.BIN;
-using DatabaseManagerLibrary;
 
 namespace LocationInterface
 {
@@ -24,80 +21,93 @@ namespace LocationInterface
         protected Page PreviousPage { get; set; }
         protected Page CurrentPage { get; set; }
 
+        /// <summary>
+        /// Initialize the MainWindow
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
 
+            // Create a new instance of the common properties and methods class
             Common = new Common();
 
+            // Load all the application's pages
             HomePage = new HomePage(ShowDataViewerPage, ShowMapPage, ShowRawDataPage, ShowSettingsPage, ShowAnalysisPage);
-            SettingsPage = new SettingsPage(ShowPreviousPage, UpdateSettings);
+            SettingsPage = new SettingsPage(ShowPreviousPage);
             MapViewPage = new MapViewPage(Common, ShowHomePage);
             RawDataPage = new RawDataPage(Common, ShowPreviousPage);
             AnalysisPage = new AnalysisPage(Common, ShowPreviousPage);
             DataViewerPage = new DataViewerPage(Common, ShowPreviousPage);
 
+            // Set the window to launch in the center of the screen
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            KeyDown += KeyPress;
-
+            
+            // Show the hompage (as the first page when the application opens)
             ShowHomePage();
         }
 
-        protected Key[] keys = new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right };
-        protected void KeyPress(object sender, KeyEventArgs e)
-        {
-            if (CurrentPage.GetType() == typeof(MapViewPage))
-                foreach (Key key in keys)
-                    if (e.Key == key)
-                    {
-                        Keyboard.Focus(MapViewPage.canvas);
-                        MapViewPage.canvas.Focus();
-                        e.Handled = true;
-                        break;
-                    }
-        }
-
-        protected void UpdateSettings()
-        {
-            SettingsManager.Save();
-        }
-
+        /// <summary>
+        /// Callback to Show the home page
+        /// </summary>
         protected void ShowHomePage()
         {
             ShowPage(HomePage);
         }
+        /// <summary>
+        /// Callback to Show the settings page
+        /// </summary>
         protected void ShowSettingsPage()
         {
             SettingsPage.LoadSettings();
             ShowPage(SettingsPage);
         }
+        /// <summary>
+        /// Callback to show the data viewer page
+        /// </summary>
         protected void ShowDataViewerPage()
         {
             DataViewerPage.UpdateTable();
             ShowPage(DataViewerPage);
         }
+        /// <summary>
+        /// Callback to show the previous page
+        /// </summary>
         protected void ShowPreviousPage()
         {
             ShowPage(PreviousPage);
         }
+        /// <summary>
+        /// Callback to show the map page
+        /// </summary>
         protected void ShowMapPage()
         {
             MapViewPage.LoadTables();
             ShowPage(MapViewPage);
         }
+        /// <summary>
+        /// Callback to show the raw data page
+        /// </summary>
         protected void ShowRawDataPage()
         {
             RawDataPage.LoadTables();
             ShowPage(RawDataPage);
         }
+        /// <summary>
+        /// Callback to show the analysis page
+        /// </summary>
         protected void ShowAnalysisPage()
         {
             ShowPage(AnalysisPage);
         }
+        /// <summary>
+        /// Show a given page
+        /// </summary>
+        /// <param name="page">The page to display on the main window</param>
         protected void ShowPage(Page page)
         {
+            // Log the current page as previous page
             PreviousPage = CurrentPage;
+            // Switch the content of the inner frame to the current page
             frame.Content = CurrentPage = page;
         }
     }

@@ -7,7 +7,7 @@
       Title="DataViewerPage">
 
     <Grid>
-        <DataGrid x:Name="dataFiles" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
+        <DataGrid x:Name="dataFilesDataGrid" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="*"></DataGridTextColumn>
