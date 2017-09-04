@@ -267,12 +267,6 @@
     <SplashScreen Include="Images\StartUp.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
-      <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
-      <Name>DatabaseManagerLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\cruise.ico" />
     <Content Include="Images\Deck4.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -298,6 +292,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseManager\DatabaseManagerLibrary.csproj">
+      <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
+      <Name>DatabaseManagerLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
