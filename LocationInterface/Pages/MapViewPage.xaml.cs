@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,7 +11,7 @@ using System.Threading;
 using System.IO;
 using DatabaseManagerLibrary;
 using LocationInterface.Utils;
-using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 
 namespace LocationInterface.Pages
 {
@@ -28,16 +27,24 @@ namespace LocationInterface.Pages
         protected Common Common { get; }
         protected bool LoadingPoints { get; private set; }
         protected KeyBind SKeyBind { get; set; }
-        protected ImageFile CurrentImageFile { get; set; }
-
-        public List<ImageFile> Tests { get; protected set; }
+        protected ImageFile SelectedImageFile { get; set; }
+        public List<ImageFile> ImageFiles { get; private set; }
+        public string SelectedMacAddress { get; set; }
+        public bool Polling { get; protected set; }
+        public bool PageLoaded { get { return Common.CurrentPage.GetType() == typeof(MapViewPage); } }
 
         public MapViewPage(Common common, Action ShowHomePage)
         {
+            InitializeComponent();
+            DataContext = this;
+
+            ImageFiles = App.ImageIndex.ImageFiles;
+            SelectedMacAddress = "00:19:94:32:fc:20";
+
             Common = common;
             this.ShowHomePage = ShowHomePage;
 
-            Tests = App.ImageIndex.ImageFiles;
+            ImageFiles = App.ImageIndex.ImageFiles;
 
             SKeyBind = new KeyBind(Key.S, SaveInfo);
 
@@ -45,22 +52,31 @@ namespace LocationInterface.Pages
             LoadingPoints = false;
             Camera = new Camera();
 
-            InitializeComponent();
-
             KeyDown += KeyPress;
+        }
 
-            Task.Run(() =>
+        public void StartPolling()
+        {
+            Polling = true;
+            new Thread(() =>
             {
-                while (true)
+                while (PageLoaded && Polling)
                 {
                     try
                     {
-                        Dispatcher.Invoke(Update);
-                        Thread.Sleep(1000 / 30);
+                        if (ApplicationIsActivated()) Dispatcher.Invoke(Update);
+                        Thread.Sleep(1000 / Constants.MAPUPS);
                     }
-                    catch (TaskCanceledException) { }
+                    catch (ThreadAbortException) { }
                 }
-            });
+                Polling = false;
+            })
+            { IsBackground = true, }.Start();
+        }
+
+        public void StopPolling()
+        {
+            Polling = false;
         }
 
         protected void SaveInfo()
@@ -68,18 +84,18 @@ namespace LocationInterface.Pages
             if (Keyboard.IsKeyDown(Key.LeftCtrl))
                 App.ImageIndex.SaveIndex();
         }
-
-        protected Key[] RefocusCanvasKeys = new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right };
+        
         protected void KeyPress(object sender, KeyEventArgs e)
         {
-            foreach (Key key in RefocusCanvasKeys)
-                if (e.Key == key)
-                {
-                    Keyboard.Focus(canvas);
-                    canvas.Focus();
-                    e.Handled = true;
-                    break;
-                }
+            if (ApplicationIsActivated() && PageLoaded)
+                foreach (Key key in new Key[] { Key.A, Key.D, Key.W, Key.S, Key.F, Key.G, Key.H, Key.T, Key.R, Key.Y, Key.Up, Key.Down, Key.Left, Key.Right })
+                    if (e.Key == key)
+                    {
+                        Keyboard.Focus(canvas);
+                        canvas.Focus();
+                        e.Handled = true;
+                        break;
+                    }
         }
 
         protected void Update()
@@ -97,7 +113,7 @@ namespace LocationInterface.Pages
             if (Keyboard.IsKeyDown(Key.G)) Translate(0, shiftDown ? +4 : +1);
             if (Keyboard.IsKeyDown(Key.H)) Translate(shiftDown ? +4 : +1, 0);
 
-            if (!LoadingPoints) foreach (Utils.Point point in Points) point.Update(Camera, CurrentImageFile.Offset, CurrentImageFile.Multiplier);
+            if (!LoadingPoints) foreach (Utils.Point point in Points) point.Update(Camera, SelectedImageFile.Offset, SelectedImageFile.Multiplier);
 
             if (CurrentImage != null) Canvas.SetLeft(CurrentImage, Camera.Position.X);
             if (CurrentImage != null) Canvas.SetTop(CurrentImage, Camera.Position.Y);
@@ -105,74 +121,65 @@ namespace LocationInterface.Pages
 
         protected void Scale(double change)
         {
-            CurrentImageFile.Multiplier += change;
+            SelectedImageFile.Multiplier += change;
         }
         protected void Translate(double x, double y)
         {
-            CurrentImageFile.Offset += new Vector2(x, y);
+            SelectedImageFile.Offset += new Vector2(x, y);
         }
 
-        public void LoadTables()
+        public void LoadTables(ImageFile imageFile)
         {
-            int currentDeck = deckSelectionComboBox.SelectedIndex + 1;
-            string macAddress = macAddressEntry.Text;
-            Task.Run(() => LoadTables(currentDeck, macAddress));
-        }
-        private void LoadTables(int deckNumber, string macAddress)
-        {
-            if (CurrentImageFile != null)
-                try
+            try
+            {
+                Stopwatch timer = Stopwatch.StartNew();
+                LoadingPoints = true;
+                Points = new List<Utils.Point>();
+                Console.WriteLine("Loading tables...");
+                foreach (Table table in Common.LoadedDataTables)
                 {
-                    CurrentImageFile = App.ImageIndex.GetDataFile($"Deck{ deckNumber }");
+                    Stopwatch tableTimer = Stopwatch.StartNew();
+                    Record[] records = table.GetRecords("MAC", SelectedMacAddress);
+                    tableTimer.Stop();
+                    Console.WriteLine($"Loaded { records.Length } records with MAC address '{ SelectedMacAddress }' of { table.RecordCount } records in { (tableTimer.ElapsedMilliseconds / 1000d).ToString("0.000") } seconds.");
+                    for (int i = 0; i < records.Length; i++)
+                        if (records[i].GetValue<string>("Deck") == SelectedImageFile.Identifier)
+                            Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")));
+                }
+                timer.Stop();
+                Console.WriteLine($"Added { Points.Count } points from { Common.LoadedDataTables.Length } table(s) in { (timer.ElapsedMilliseconds / 1000d).ToString("0.000") } seconds.");
 
-                    Stopwatch timer = Stopwatch.StartNew();
-                    LoadingPoints = true;
-                    Points = new List<Utils.Point>();
-                    Console.WriteLine("Loading tables...");
-                    foreach (Table table in Common.LoadedDataTables)
+                Dispatcher.Invoke(delegate
+                {
+                    ImageSource image = new BitmapImage(new Uri($"{ SettingsManager.Active.ImageFolder }\\{ SelectedImageFile.FileName }", UriKind.Relative));
+                    CurrentImage = new Image
                     {
-                        Stopwatch tableTimer = Stopwatch.StartNew();
-                        Record[] records = table.GetRecords("MAC", macAddress);
-                        tableTimer.Stop();
-                        Console.WriteLine("Loaded {0} of {1} records in {2:0.000} seconds.", records.Length, table.RecordCount, tableTimer.ElapsedMilliseconds / 1000d);
-                        for (int i = 0; i < records.Length; i++)
-                            if (records[i].GetValue<string>("Deck") == CurrentImageFile.Identifier)
-                                Points.Add(new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")));
+                        Width = image.Width,
+                        Height = image.Height,
+                        Name = "DeckImage",
+                        Source = image,
+                    };
+                    canvas.Children.Clear();
+                    canvas.Children.Add(CurrentImage);
+                    Canvas.SetLeft(CurrentImage, Camera.Position.X);
+                    Canvas.SetTop(CurrentImage, Camera.Position.Y);
+
+                    foreach (Utils.Point point in Points)
+                    {
+                        point.SetEllipse(new Ellipse() { Width = 5, Height = 5, Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)) });
+                        canvas.Children.Add(point.Ellipse);
                     }
-                    timer.Stop();
-                    Console.WriteLine("Added {0} points from {1} table(s) in {2:0.000} seconds.", Points.Count, Common.LoadedDataTables.Length, timer.ElapsedMilliseconds / 1000d);
-
-                    Dispatcher.Invoke(delegate
-                    {
-                        ImageSource image = new BitmapImage(new Uri($"{ SettingsManager.Active.ImageFolder }\\{ CurrentImageFile.FileName }", UriKind.Relative));
-                        CurrentImage = new Image
-                        {
-                            Width = image.Width,
-                            Height = image.Height,
-                            Name = "DeckImage",
-                            Source = image,
-                        };
-                        canvas.Children.Clear();
-                        canvas.Children.Add(CurrentImage);
-                        Canvas.SetLeft(CurrentImage, Camera.Position.X);
-                        Canvas.SetTop(CurrentImage, Camera.Position.Y);
-
-                        foreach (Utils.Point point in Points)
-                        {
-                            point.SetEllipse(new Ellipse() { Width = 5, Height = 5, Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)) });
-                            canvas.Children.Add(point.Ellipse);
-                        }
-                        Console.WriteLine("Added {0} points to the canvas.", Points.Count);
-                    });
-                }
-                catch (FileNotFoundException)
-                {
-                    MessageBox.Show("Deck image file could not be found.", "File Not Found");
-                }
-                finally
-                {
-                    LoadingPoints = false;
-                }
+                    Console.WriteLine("Added {0} points to the canvas.", Points.Count);
+                });
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("Deck image file could not be found.", "File Not Found");
+            }
+            finally
+            {
+                LoadingPoints = false;
+            }
         }
 
         private void BackButtonClick(object sender, RoutedEventArgs e)
@@ -181,12 +188,47 @@ namespace LocationInterface.Pages
         }
         private void MacAddressEntryTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (deckSelectionComboBox != null && macAddressEntry.Text.Length == 17)
-                LoadTables();
+            if (SelectedImageFile != null && SelectedMacAddress.Length == 17)
+                new Thread(() => LoadTables(SelectedImageFile)) { IsBackground = true }.Start();
         }
         private void DeckSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (macAddressEntry != null) LoadTables();
+            SelectedImageFile = (ImageFile)((ComboBox)sender).SelectedItem;
+            if (SelectedImageFile != null && SelectedMacAddress.Length == 17)
+                new Thread(() => LoadTables(SelectedImageFile)) { IsBackground = true }.Start();
         }
+
+        /// <summary>
+        /// Check if the application is focused
+        /// </summary>
+        /// <returns>true if the application is focused</returns>
+        public static bool ApplicationIsActivated()
+        {
+            IntPtr activatedHandle = GetForegroundWindow();
+            if (activatedHandle == IntPtr.Zero)
+                // No window is currently activated
+                return false;       
+
+            int procId = Process.GetCurrentProcess().Id;
+            GetWindowThreadProcessId(activatedHandle, out int activeProcId);
+
+            return activeProcId == procId;
+        }
+        
+        /// <summary>
+        /// Get the a pointer to the focused window
+        /// </summary>
+        /// <returns>an int pointer referencing the process id of the foreground window</returns>
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        private static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
+        /// Get the id of a process
+        /// </summary>
+        /// <param name="handle">An integer pointer to the process to id</param>
+        /// <param name="processId">A reference to the output id</param>
+        /// <returns>a number referencing the outcome of the operation</returns>
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
     }
 }
