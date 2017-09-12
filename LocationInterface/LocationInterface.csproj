@@ -293,7 +293,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseManager\DatabaseManagerLibrary.csproj">
+    <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
       <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
       <Name>DatabaseManagerLibrary</Name>
     </ProjectReference>

@@ -18,8 +18,6 @@ namespace LocationInterface
         protected MapViewPage MapViewPage { get; set; }
         protected RawDataPage RawDataPage { get; set; }
         protected AnalysisPage AnalysisPage { get; set; }
-        protected Page PreviousPage { get; set; }
-        protected Page CurrentPage { get; set; }
 
         /// <summary>
         /// Initialize the MainWindow
@@ -74,14 +72,14 @@ namespace LocationInterface
         /// </summary>
         protected void ShowPreviousPage()
         {
-            ShowPage(PreviousPage);
+            ShowPage(Common.PreviousPage);
         }
         /// <summary>
         /// Callback to show the map page
         /// </summary>
         protected void ShowMapPage()
         {
-            MapViewPage.LoadTables();
+            MapViewPage.StartPolling();
             ShowPage(MapViewPage);
         }
         /// <summary>
@@ -106,9 +104,9 @@ namespace LocationInterface
         protected void ShowPage(Page page)
         {
             // Log the current page as previous page
-            PreviousPage = CurrentPage;
+            Common.PreviousPage = Common.CurrentPage;
             // Switch the content of the inner frame to the current page
-            frame.Content = CurrentPage = page;
+            frame.Content = Common.CurrentPage = page;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LocationInterface.Utils
+﻿using Newtonsoft.Json;
+
+namespace LocationInterface.Utils
 {
     public class Vector2
     {
@@ -21,6 +23,7 @@
         /// <param name="y">The initial Y value</param>
         public Vector2(double x, double y) { X = x; Y = y; }
 
+        [JsonIgnore]
         public Vector2 Copy { get { return new Vector2(X, Y); } }
 
         /// <summary>
@@ -43,13 +46,24 @@
         {
             return new Vector2(left.X + right.X, left.Y + right.Y);
         }
+        [JsonIgnore]
         public static Vector2 Zero
         {
             get { return new Vector2(); }
         }
+        [JsonIgnore]
         public static Vector2 Unit
         {
             get { return new Vector2(1); }
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return $"Vector2({ X.ToString("0.00") }, { Y.ToString("0.00") })";
         }
     }
 }

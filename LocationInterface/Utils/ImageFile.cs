@@ -7,11 +7,7 @@ namespace LocationInterface.Utils
     {
         public string FileName { get; set; }
         public double Multiplier { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
-
-        [JsonIgnore]
-        public Vector2 Offset { get { return new Vector2(X, Y); } set { X = value.X; Y = value.Y; } }
+        public Vector2 Offset { get; set; }
 
         [JsonIgnore]
         public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
@@ -26,7 +22,11 @@ namespace LocationInterface.Utils
         public override int GetHashCode()
         {
             // Return the XOR of all the hash codes of the core class properties
-            return FileName.GetHashCode() ^ Multiplier.GetHashCode() ^ X.GetHashCode() ^ Y.GetHashCode();
+            return FileName.GetHashCode() ^ Multiplier.GetHashCode() ^ Offset.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return $"ImageFile('{ FileName }', { Multiplier.ToString("0.00") }, { Offset })";
         }
     }
 }

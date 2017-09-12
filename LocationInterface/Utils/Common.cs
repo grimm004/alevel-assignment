@@ -1,5 +1,6 @@
 ﻿using DatabaseManagerLibrary;
 using DatabaseManagerLibrary.BIN;
+using System.Windows.Controls;
 
 namespace LocationInterface.Utils
 {
@@ -7,6 +8,8 @@ namespace LocationInterface.Utils
     {
         public Database LocationDatabase { get; }
         public Table[] LoadedDataTables { get; protected set; }
+        public Page CurrentPage { get; set; }
+        public Page PreviousPage { get; set; }
 
         /// <summary>
         /// Initialise the common class
