@@ -47,51 +47,54 @@ namespace LocationInterface.Utils
 
         public void RunAnalysis(Table[] tables)
         {
-            if (TestConnection())
+            Console.WriteLine("Loading all MAC addresses.");
+            HashSet<string> uniqueMacAddresses = new HashSet<string>();
+            foreach (Table table in tables)
+                foreach (Record record in table.GetRecords())
+                    uniqueMacAddresses.Add((string)record.GetValue("MAC"));
+
+            Console.WriteLine("Number of unique MAC addresses: {0}", uniqueMacAddresses.Count);
+
+            int addressesCompleted = 0;
+            List<string> allVendors = new List<string>();
+            bool successful = false;
+            foreach (string vendorMACAddress in uniqueMacAddresses)
             {
-                Console.WriteLine("Loading all MAC addresses.");
-                HashSet<string> uniqueMacAddresses = new HashSet<string>();
-                foreach (Table table in tables)
-                    foreach (Record record in table.GetRecords())
-                        uniqueMacAddresses.Add((string)record.GetValue("MAC"));
-
-                Console.WriteLine("Number of unique MAC addresses: {0}", uniqueMacAddresses.Count);
-
-                int i = 0;
-                List<string> allVendors = new List<string>();
-                foreach (string vendorMACAddress in uniqueMacAddresses)
+                do
                     try
                     {
-                        CompletionRatio = i++ / uniqueMacAddresses.Count;
+                        CompletionRatio = addressesCompleted++ / (float)uniqueMacAddresses.Count;
                         RatioChangeCallback?.Invoke(CompletionRatio);
                         string responseFromServer = new WebClient().DownloadString($"http://{ Constants.MACVENDORAPISITE }/{ vendorMACAddress }");
                         allVendors.Add(responseFromServer);
                         Console.WriteLine($"{ vendorMACAddress } - { responseFromServer }");
+                        successful = true;
                     }
                     catch (WebException)
                     {
+                        successful = false;
                         Console.WriteLine($"{ vendorMACAddress } - WebException");
                     }
+                while (successful || MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes) ;
+            }
 
-                IEnumerable<Vendor> vendors = from x in allVendors
-                                              group x by x into g
-                                              let count = g.Count()
-                                              orderby count descending
-                                              select new Vendor { Name = g.Key, UserCount = count };
+            IEnumerable<Vendor> vendors = from vendor in allVendors
+                                            group vendor by vendor into vendorGroup
+                                            let count = vendorGroup.Count()
+                                            orderby count descending
+                                            select new Vendor { Name = vendorGroup.Key, UserCount = count };
 
-                using (FileStream stream = new FileStream($"Analysis\\{ OutputTableName }.csv", FileMode.Create))
+            using (FileStream stream = new FileStream($"Analysis\\{ OutputTableName }.csv", FileMode.Create))
+            {
+                byte[] data = Encoding.UTF8.GetBytes("Name:string,Count:integer" + Environment.NewLine);
+                stream.Write(data, 0, data.Length);
+                foreach (Vendor vendor in vendors)
                 {
-                    byte[] data = Encoding.UTF8.GetBytes("Name:string,Count:integer" + Environment.NewLine);
+                    data = Encoding.UTF8.GetBytes(vendor + Environment.NewLine);
                     stream.Write(data, 0, data.Length);
-                    foreach (Vendor vendor in vendors)
-                    {
-                        data = Encoding.UTF8.GetBytes(vendor + Environment.NewLine);
-                        stream.Write(data, 0, data.Length);
-                        Console.WriteLine($"{ vendor.Name } - { vendor.UserCount }");
-                    }
+                    Console.WriteLine($"{ vendor.Name } - { vendor.UserCount }");
                 }
             }
-            else if (MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes) RunAnalysis(tables);
         }
     }
 }

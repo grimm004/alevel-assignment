@@ -119,6 +119,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\AnalysisResult.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ImageFile.cs" />
     <Compile Include="Utils\ImageIndex.cs" />
@@ -141,6 +142,9 @@
     </Compile>
     <Compile Include="Pages\RawDataPage.xaml.cs">
       <DependentUpon>RawDataPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\InsertAnalysisWindow.xaml.cs">
+      <DependentUpon>InsertAnalysisWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\PresetNameWindow.xaml.cs">
       <DependentUpon>PresetNameWindow.xaml</DependentUpon>
@@ -208,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InsertAnalysisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,6 +9,20 @@ namespace LocationInterface.Utils
         public double Multiplier { get; set; }
         public Vector2 Offset { get; set; }
 
+        public ImageFile()
+        {
+            FileName = "";
+            Multiplier = 1;
+            Offset = Vector2.Zero;
+        }
+
+        public ImageFile(string fileName, double multiplier, Vector2 offset)
+        {
+            FileName = fileName;
+            Multiplier = multiplier;
+            Offset = offset;
+        }
+
         [JsonIgnore]
         public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Windows;
 using System.Threading;
@@ -14,9 +13,16 @@ namespace LocationInterface.Windows
     /// </summary>
     public partial class EmailWindow : Window
     {
+        protected EmailProcessor EmailProcessor { get; set; }
+
         public EmailWindow()
         {
             InitializeComponent();
+
+            EmailProcessor = new EmailProcessor()
+            {
+                BindableVariables = new Dictionary<string, AnalysisResult>() { { "VendorAnalysis", new VendorAnalysisResult("VendorCounts-19-09-2017-11-51-31") }, },
+            };
         }
 
         public void ManageContactsButtonClick(object sender, RoutedEventArgs e)
@@ -71,7 +77,7 @@ namespace LocationInterface.Windows
         {
             statusLabel.Dispatcher.Invoke(() => statusLabel.Content = "Sending Email");
             sendButton.Dispatcher.Invoke(() => sendButton.IsEnabled = false);
-            ((Email)email).Send();
+            ((Email)email).Send(EmailProcessor);
             statusLabel.Dispatcher.Invoke(() => statusLabel.Content = "Email Sent");
             sendButton.Dispatcher.Invoke(() => sendButton.IsEnabled = true);
         }
@@ -100,6 +106,14 @@ namespace LocationInterface.Windows
                 subjectEntryBox.Text = window.SelectedPreset.Subject;
                 emailBodyRichTextBox.Document = (FlowDocument)XamlReader.Parse(window.SelectedPreset.Body);
             }
+        }
+
+        private void InsertAnalysisButtonClick(object sender, RoutedEventArgs e)
+        {
+            InsertAnalysisWindow insertAnalysisWindow = new InsertAnalysisWindow(EmailProcessor);
+            insertAnalysisWindow.ShowDialog();
+            if (insertAnalysisWindow.Selected)
+                emailBodyRichTextBox.CaretPosition.InsertTextInRun(insertAnalysisWindow.AnalysisBindString);
         }
     }
 }

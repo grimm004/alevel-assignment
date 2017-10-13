@@ -48,6 +48,7 @@
 
             <Button x:Name="sendButton" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Content="Send" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="SendButtonClick"/>
             <Label x:Name="statusLabel" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Content="Ready" Width="100" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalContentAlignment="Center" Margin="75,-5,0,0"/>
+            <Button Content="Insert Analysis" Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="5" VerticalAlignment="Bottom" Width="85" Click="InsertAnalysisButtonClick"/>
             <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Content="Manage Contacts" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="ManageContactsButtonClick"/>
         </Grid>
     </Grid>

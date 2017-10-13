@@ -1,11 +1,65 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Windows;
 
 namespace LocationInterface.Utils
 {
-    // TODO: ADD BINDABLE VARIABLES TO SUBJECT AND BODY
+    public class EmailProcessor
+    {
+        public string PreProcessedBody { get; set; }
+        public Dictionary<string, AnalysisResult> BindableVariables { get; set; }
+
+        public EmailProcessor()
+        {
+            PreProcessedBody = "";
+            BindableVariables = new Dictionary<string, AnalysisResult>();
+        }
+
+        public string ProcessedBody
+        {
+            get
+            {
+                bool inVariable = false;
+                string currentVariable = "";
+                string processedString = "";
+                string variableType = "";
+                bool inVariableType = false;
+                for (int i = 0; i < PreProcessedBody.Length; i++)
+                    if (PreProcessedBody[i] == '{') inVariable = true;
+                    else if (PreProcessedBody[i] == '}')
+                    {
+                        inVariable = false;
+                        inVariableType = false;
+                        switch (variableType)
+                        {
+                            case "short":
+                                processedString += BindableVariables[currentVariable].ShortOutputString;
+                                break;
+                            case "full":
+                                processedString += BindableVariables[currentVariable].LongOutputString;
+                                break;
+                            default:
+                                processedString += BindableVariables[currentVariable].StandardOutputString;
+                                break;
+                        }
+                        variableType = "";
+                        currentVariable = "";
+                    }
+                    else if (inVariable && !inVariableType && PreProcessedBody[i] == ':')
+                    {
+                        inVariable = false;
+                        inVariableType = true;
+                    }
+                    else if (!inVariable && inVariableType && PreProcessedBody[i] != ' ') variableType += PreProcessedBody[i];
+                    else if (inVariable && !inVariableType && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
+                    else if ((inVariable || inVariableType) && PreProcessedBody[i] == ' ') continue;
+                    else processedString += PreProcessedBody[i];
+                return processedString;
+            }
+        }
+    }
 
     public class EmailPreset
     {
@@ -105,14 +159,16 @@ namespace LocationInterface.Utils
         /// <summary>
         /// Send the email
         /// </summary>
-        public void Send()
+        public void Send(EmailProcessor emailProcessor)
         {
+            emailProcessor.PreProcessedBody = Body;
+
             // Create a new MailMessage
             using (MailMessage message = new MailMessage()
             {
                 From = SenderAccount.MailAddress,
                 Subject = Subject,
-                Body = Body,
+                Body = emailProcessor.ProcessedBody,
             })
             {
                 // For each recipient in the recipients array add it to the message

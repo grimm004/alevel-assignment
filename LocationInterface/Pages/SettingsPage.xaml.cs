@@ -31,7 +31,6 @@ namespace LocationInterface.Pages
                     EmailDatabase = emailDatabaseFolder.Text,
                     ImageFolder = imageFolder.Text,
                     AnalysisFolder = analysisFolder.Text,
-
                     EmailServer = emailServerInput.Text,
                     EmailPort = Convert.ToInt32(emailPortInput.Text),
                     EmailAddress = emailAddressInput.Text,
@@ -50,7 +49,6 @@ namespace LocationInterface.Pages
                 emailDatabaseFolder.Text = value.EmailDatabase;
                 imageFolder.Text = value.ImageFolder;
                 analysisFolder.Text = value.AnalysisFolder;
-
                 emailServerInput.Text = value.EmailServer;
                 emailPortInput.Text = value.EmailPort.ToString();
                 emailAddressInput.Text = value.EmailAddress;
@@ -180,10 +178,8 @@ namespace LocationInterface.Pages
         {
             // If the datatype of the current sender is a string
             if (e.DataObject.GetDataPresent(typeof(String)))
-            {
                 // If the entered text is not numerical cancel the paste
                 if (!IsNumericalText((String)e.DataObject.GetData(typeof(String)))) e.CancelCommand();
-            }
             else e.CancelCommand();
         }
 
