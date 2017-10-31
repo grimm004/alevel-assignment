@@ -119,12 +119,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utils\AnalysisResult.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ImageFile.cs" />
     <Compile Include="Utils\ImageIndex.cs" />
     <Compile Include="Utils\KeyBind.cs" />
-    <Compile Include="Utils\VendorAnalysis.cs" />
+    <Compile Include="Utils\PluginManager.cs" />
     <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
     </Compile>
@@ -304,6 +303,10 @@
     <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
       <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
       <Name>DatabaseManagerLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalysisSDK\AnalysisSDK.csproj">
+      <Project>{95dd085e-556f-42e0-8f6d-421e06eb16ea}</Project>
+      <Name>AnalysisSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

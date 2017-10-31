@@ -6,9 +6,11 @@ using DatabaseManagerLibrary;
 using System.Net;
 using System.IO;
 using System.Net.NetworkInformation;
+using AnalysisSDK;
+using DatabaseManagerLibrary.CSV;
 using System.Windows;
 
-namespace LocationInterface.Utils
+namespace VendorAnalysis
 {
     class Vendor
     {
@@ -21,11 +23,48 @@ namespace LocationInterface.Utils
         }
     }
 
+    public class VendorAnalysisResult : AnalysisResult
+    {
+        public override string ShortOutputString
+        {
+            get
+            {
+                return $"{ ResultsTable.RecordCount } unique vendors.";
+            }
+        }
+        public override string StandardOutputString
+        {
+            get
+            {
+                string resultsString = "";
+                foreach (Record record in ResultsTable.GetRecords()) resultsString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
+                return resultsString;
+            }
+        }
+        public override string LongOutputString
+        {
+            get
+            {
+                string resultsString = "";
+                foreach (Record record in ResultsTable.GetRecords()) resultsString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
+                return resultsString;
+            }
+        }
+
+        protected Table ResultsTable { get; set; }
+
+        public VendorAnalysisResult(string folder, string tableName)
+        {
+            ResultsTable = new CSVDatabase(folder).GetTable(tableName);
+        }
+    }
+
     class VendorAnalysis
     {
         public string OutputTableName { get; }
         public double CompletionRatio { get; protected set; }
         public Action<double> RatioChangeCallback { get; protected set; }
+        public const string API = "api.macvendors.com";
 
         public VendorAnalysis(Action<double> RatioChangeCallback, string outputTableName)
         {
@@ -37,7 +76,7 @@ namespace LocationInterface.Utils
         {
             try
             {
-                return new Ping().Send(Constants.MACVENDORAPISITE).Status == IPStatus.Success;
+                return new Ping().Send(API).Status == IPStatus.Success;
             }
             catch (PingException)
             {
@@ -65,7 +104,7 @@ namespace LocationInterface.Utils
                     {
                         CompletionRatio = addressesCompleted++ / (float)uniqueMacAddresses.Count;
                         RatioChangeCallback?.Invoke(CompletionRatio);
-                        string responseFromServer = new WebClient().DownloadString($"http://{ Constants.MACVENDORAPISITE }/{ vendorMACAddress }");
+                        string responseFromServer = new WebClient().DownloadString($"http://{ API }/{ vendorMACAddress }");
                         allVendors.Add(responseFromServer);
                         Console.WriteLine($"{ vendorMACAddress } - { responseFromServer }");
                         successful = true;

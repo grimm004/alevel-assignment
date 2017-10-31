@@ -33,6 +33,8 @@ namespace LocationInterface
             if (!Directory.Exists(SettingsManager.Active.ImageFolder)) Directory.CreateDirectory(SettingsManager.Active.ImageFolder);
             if (!Directory.Exists(SettingsManager.Active.DataCacheFolder)) Directory.CreateDirectory(SettingsManager.Active.DataCacheFolder);
             if (!Directory.Exists(SettingsManager.Active.LocationDataFolder)) Directory.CreateDirectory(SettingsManager.Active.LocationDataFolder);
+            if (!Directory.Exists(Constants.PLUGINFOLDER)) Directory.CreateDirectory(Constants.PLUGINFOLDER);
+            PluginManager.Load();
             if (!File.Exists($"{ SettingsManager.Active.LocationDataFolder }\\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.LocationDataFolder }\\index.json").Close(); DataIndex = new DataIndex(); }
             else DataIndex.VerifyDataFiles();
             if (!File.Exists($"{ SettingsManager.Active.ImageFolder }\\index.json") || (ImageIndex = ImageIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.ImageFolder }\\index.json").Close(); ImageIndex = new ImageIndex(); }
