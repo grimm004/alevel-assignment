@@ -23,16 +23,16 @@ namespace VendorAnalysis
         }
     }
 
-    public class VendorAnalysisResult : AnalysisResult
+    public class VendorAnalysisResult : IAnalysisResult
     {
-        public override string ShortOutputString
+        public string ShortOutputString
         {
             get
             {
                 return $"{ ResultsTable.RecordCount } unique vendors.";
             }
         }
-        public override string StandardOutputString
+        public string StandardOutputString
         {
             get
             {
@@ -41,7 +41,7 @@ namespace VendorAnalysis
                 return resultsString;
             }
         }
-        public override string LongOutputString
+        public string LongOutputString
         {
             get
             {
@@ -57,6 +57,12 @@ namespace VendorAnalysis
         {
             ResultsTable = new CSVDatabase(folder).GetTable(tableName);
         }
+
+        public VendorAnalysisResult()
+        {
+            Database database = new CSVDatabase("Analysis");
+            ResultsTable = database.GetTable("VendorCounts-31-08-2017-18-32-10");
+        }
     }
 
     class VendorAnalysis
@@ -70,6 +76,11 @@ namespace VendorAnalysis
         {
             this.RatioChangeCallback = RatioChangeCallback;
             OutputTableName = outputTableName;
+        }
+
+        public VendorAnalysis()
+        {
+
         }
 
         public bool TestConnection()

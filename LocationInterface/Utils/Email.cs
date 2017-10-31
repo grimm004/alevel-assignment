@@ -10,12 +10,12 @@ namespace LocationInterface.Utils
     public class EmailProcessor
     {
         public string PreProcessedBody { get; set; }
-        public Dictionary<string, AnalysisResult> BindableVariables { get; set; }
+        public Dictionary<string, IAnalysisResult> BindableVariables { get; set; }
 
         public EmailProcessor()
         {
             PreProcessedBody = "";
-            BindableVariables = new Dictionary<string, AnalysisResult>();
+            BindableVariables = new Dictionary<string, IAnalysisResult>();
         }
 
         public string ProcessedBody

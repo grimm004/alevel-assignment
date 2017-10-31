@@ -20,12 +20,13 @@ namespace LocationInterface.Windows
         {
             InitializeComponent();
 
-            PluginManager.Load();
-
             EmailProcessor = new EmailProcessor()
             {
-                BindableVariables = new Dictionary<string, AnalysisResult>() { { "VendorAnalysis", new VendorAnalysisResult("VendorCounts-19-09-2017-11-51-31") } },
+                BindableVariables = new Dictionary<string, IAnalysisResult>(),
             };
+
+            foreach (AnalysisPlugin plugin in PluginManager.Plugins)
+                EmailProcessor.BindableVariables[plugin.Name] = plugin.AnalysisResult;
         }
 
         public void ManageContactsButtonClick(object sender, RoutedEventArgs e)

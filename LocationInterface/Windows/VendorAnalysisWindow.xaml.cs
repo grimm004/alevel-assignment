@@ -1,5 +1,4 @@
 ﻿using LocationInterface.Utils;
-using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
@@ -9,12 +8,12 @@ namespace LocationInterface.Windows
     /// <summary>
     /// Interaction logic for VendorAnalysisWindow.xaml
     /// </summary>
-    public partial class VendorAnalysisWindow : Window
+    public partial class AnalysisWindow : Window
     {
         protected bool Analysing { get; set; }
         protected Common Common { get; set; }
 
-        public VendorAnalysisWindow(Common common)
+        public AnalysisWindow(Common common)
         {
             Common = common;
             Analysing = false;
@@ -28,7 +27,6 @@ namespace LocationInterface.Windows
 
         protected void StartButtonClick(object sender, RoutedEventArgs e)
         {
-
             Analysing = true;
             startAnalysisButton.IsEnabled = false;
             startAnalysisButton.Content = "Running Analysis";
@@ -37,13 +35,13 @@ namespace LocationInterface.Windows
         
         protected void RunAnalysis()
         {
-            new VendorAnalysis((ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio), $"VendorCounts-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") }").RunAnalysis(Common.LoadedDataTables);
-            Analysing = false;
-            Dispatcher.Invoke(() =>
-            {
-                startAnalysisButton.IsEnabled = true;
-                startAnalysisButton.Content = "Start Analysis";
-            });
+            //new VendorAnalysis((ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio), $"VendorCounts-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") }").RunAnalysis(Common.LoadedDataTables);
+            //Analysing = false;
+            //Dispatcher.Invoke(() =>
+            //{
+            //    startAnalysisButton.IsEnabled = true;
+            //    startAnalysisButton.Content = "Start Analysis";
+            //});
         }
     }
 }

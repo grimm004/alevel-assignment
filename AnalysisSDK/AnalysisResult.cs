@@ -1,13 +1,9 @@
-﻿using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.CSV;
-using System;
-
-namespace AnalysisSDK
+﻿namespace AnalysisSDK
 {
-    public abstract class AnalysisResult
+    public interface IAnalysisResult
     {
-        public abstract string ShortOutputString { get; }
-        public abstract string StandardOutputString { get; }
-        public abstract string LongOutputString { get; }
+        string ShortOutputString { get; }
+        string StandardOutputString { get; }
+        string LongOutputString { get; }
     }
 }

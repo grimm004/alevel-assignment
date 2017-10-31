@@ -57,7 +57,7 @@ namespace LocationInterface.Pages
         private void VendorAnalysisButtonClick(object sender, RoutedEventArgs e)
         {
             // Create a new instance of the vendor analysis window and show it as a dialog
-            new VendorAnalysisWindow(Common).ShowDialog();
+            new AnalysisWindow(Common).ShowDialog();
         }
 
         /// <summary>
