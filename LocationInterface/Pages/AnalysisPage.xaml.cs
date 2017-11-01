@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
 using AnalysisSDK;
+using System.Collections.Generic;
 
 namespace LocationInterface.Pages
 {
@@ -16,7 +17,8 @@ namespace LocationInterface.Pages
         protected Common Common { get; }
         public bool AnalysisRunning { get; protected set; }
 
-        public IAnalysis SelectedAnalysis { get; set; }
+        public List<AnalysisPlugin> AnalysisOptions { get; set; }
+        public AnalysisPlugin SelectedAnalysis { get; set; }
 
         /// <summary>
         /// Initialise the Analysis Page
@@ -26,9 +28,10 @@ namespace LocationInterface.Pages
         public AnalysisPage(Common common, Action ShowPreviousPage)
         {
             InitializeComponent();
-
+            
             Common = common;
             this.ShowPreviousPage = ShowPreviousPage;
+            AnalysisOptions = PluginManager.Plugins;
         }
 
         /// <summary>
@@ -59,9 +62,8 @@ namespace LocationInterface.Pages
         /// <param name="e">Information about the event</param>
         private void OnAnalysisButtonClick(object sender, RoutedEventArgs e)
         {
-            IAnalysis analysisInstance = SelectedAnalysis;
             // Create a new instance of the vendor analysis window and show it as a dialog
-            new AnalysisWindow(Common, analysisInstance).ShowDialog();
+            if (SelectedAnalysis != null) new AnalysisWindow(Common, SelectedAnalysis.Analysis).ShowDialog();
         }
     }
 }

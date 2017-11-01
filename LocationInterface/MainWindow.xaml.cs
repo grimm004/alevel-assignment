@@ -106,7 +106,7 @@ namespace LocationInterface
             // Log the current page as previous page
             Common.PreviousPage = Common.CurrentPage;
             // Switch the content of the inner frame to the current page
-            frame.Content = Common.CurrentPage = page;
+            DataContext = frame.Content = Common.CurrentPage = page;
         }
     }
 }
