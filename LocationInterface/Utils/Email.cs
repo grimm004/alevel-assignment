@@ -33,17 +33,26 @@ namespace LocationInterface.Utils
                     {
                         inVariable = false;
                         inVariableType = false;
-                        switch (variableType)
+                        try
                         {
-                            case "short":
-                                processedString += BindableVariables[currentVariable].ShortOutputString;
-                                break;
-                            case "full":
-                                processedString += BindableVariables[currentVariable].LongOutputString;
-                                break;
-                            default:
-                                processedString += BindableVariables[currentVariable].StandardOutputString;
-                                break;
+
+                            switch (variableType)
+                            {
+                                case "short":
+                                    processedString += BindableVariables[currentVariable].ShortOutputString;
+                                    break;
+                                case "full":
+                                    processedString += BindableVariables[currentVariable].LongOutputString;
+                                    break;
+                                default:
+                                    processedString += BindableVariables[currentVariable].StandardOutputString;
+                                    break;
+                            }
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            // TODO: Cancel email send if error occurs
+                            Console.WriteLine($"Bind '{ currentVariable }' could not be found.");
                         }
                         variableType = "";
                         currentVariable = "";

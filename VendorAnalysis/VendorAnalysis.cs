@@ -65,24 +65,11 @@ namespace VendorAnalysis
         }
     }
 
-    class VendorAnalysis
+    class VendorAnalysis : IAnalysis
     {
-        public string OutputTableName { get; }
         public double CompletionRatio { get; protected set; }
-        public Action<double> RatioChangeCallback { get; protected set; }
         public const string API = "api.macvendors.com";
-
-        public VendorAnalysis(Action<double> RatioChangeCallback, string outputTableName)
-        {
-            this.RatioChangeCallback = RatioChangeCallback;
-            OutputTableName = outputTableName;
-        }
-
-        public VendorAnalysis()
-        {
-
-        }
-
+        
         public bool TestConnection()
         {
             try
@@ -95,7 +82,7 @@ namespace VendorAnalysis
             }
         }
 
-        public void RunAnalysis(Table[] tables)
+        public void Run(Table[] tables, Action<double> ratioChangeCallback)
         {
             Console.WriteLine("Loading all MAC addresses.");
             HashSet<string> uniqueMacAddresses = new HashSet<string>();
@@ -114,7 +101,7 @@ namespace VendorAnalysis
                     try
                     {
                         CompletionRatio = addressesCompleted++ / (float)uniqueMacAddresses.Count;
-                        RatioChangeCallback?.Invoke(CompletionRatio);
+                        ratioChangeCallback?.Invoke(CompletionRatio);
                         string responseFromServer = new WebClient().DownloadString($"http://{ API }/{ vendorMACAddress }");
                         allVendors.Add(responseFromServer);
                         Console.WriteLine($"{ vendorMACAddress } - { responseFromServer }");
@@ -125,16 +112,16 @@ namespace VendorAnalysis
                         successful = false;
                         Console.WriteLine($"{ vendorMACAddress } - WebException");
                     }
-                while (successful || MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes) ;
+                while (successful || MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes);
             }
 
             IEnumerable<Vendor> vendors = from vendor in allVendors
-                                            group vendor by vendor into vendorGroup
-                                            let count = vendorGroup.Count()
-                                            orderby count descending
-                                            select new Vendor { Name = vendorGroup.Key, UserCount = count };
+                                          group vendor by vendor into vendorGroup
+                                          let count = vendorGroup.Count()
+                                          orderby count descending
+                                          select new Vendor { Name = vendorGroup.Key, UserCount = count };
 
-            using (FileStream stream = new FileStream($"Analysis\\{ OutputTableName }.csv", FileMode.Create))
+            using (FileStream stream = new FileStream($"Analysis\\VendorAnalysis-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss.") }.csv", FileMode.Create))
             {
                 byte[] data = Encoding.UTF8.GetBytes("Name:string,Count:integer" + Environment.NewLine);
                 stream.Write(data, 0, data.Length);

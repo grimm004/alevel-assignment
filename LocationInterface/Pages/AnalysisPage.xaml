@@ -27,11 +27,11 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="Run Vendor Analysis" Width="120" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="VendorAnalysisButtonClick"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="Start Analysis" Width="120" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnAnalysisButtonClick"/>
         </Grid>
 
+        <ComboBox Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"/>
         <Button Grid.Row="1" Grid.Column="0" Content="Back" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="BackButtonClick"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="Send Email" Width="75" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="SendEmailButtonClick"/>
-        <Button Grid.Row="1" Grid.Column="2" Content="Export as PDF" Width="75" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="ExportPdfButtonClick"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="Send Email" Width="75" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="SendEmailButtonClick"/>
     </Grid>
 </Page>

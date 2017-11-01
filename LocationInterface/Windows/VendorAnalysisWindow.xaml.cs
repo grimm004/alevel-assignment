@@ -1,4 +1,5 @@
-﻿using LocationInterface.Utils;
+﻿using AnalysisSDK;
+using LocationInterface.Utils;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
@@ -12,10 +13,12 @@ namespace LocationInterface.Windows
     {
         protected bool Analysing { get; set; }
         protected Common Common { get; set; }
+        public IAnalysis Analysis { get; protected set; }
 
-        public AnalysisWindow(Common common)
+        public AnalysisWindow(Common common, IAnalysis analysis)
         {
             Common = common;
+            Analysis = analysis;
             Analysing = false;
             InitializeComponent();
         }
@@ -35,13 +38,13 @@ namespace LocationInterface.Windows
         
         protected void RunAnalysis()
         {
-            //new VendorAnalysis((ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio), $"VendorCounts-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") }").RunAnalysis(Common.LoadedDataTables);
-            //Analysing = false;
-            //Dispatcher.Invoke(() =>
-            //{
-            //    startAnalysisButton.IsEnabled = true;
-            //    startAnalysisButton.Content = "Start Analysis";
-            //});
+            Analysis.Run(Common.LoadedDataTables, (ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio));
+            Analysing = false;
+            Dispatcher.Invoke(() =>
+            {
+                startAnalysisButton.IsEnabled = true;
+                startAnalysisButton.Content = "Start Analysis";
+            });
         }
     }
 }

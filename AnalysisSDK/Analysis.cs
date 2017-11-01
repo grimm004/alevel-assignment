@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DatabaseManagerLibrary;
+using System;
 
 namespace AnalysisSDK
 {
-    abstract class Analysis
+    public interface IAnalysis
     {
-        public abstract void Run(Func<double> percentageCompletionChange);
+        void Run(Table[] tables, Action<double> percentageCompletionChange);
     }
 }

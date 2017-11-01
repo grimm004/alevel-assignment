@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
+using AnalysisSDK;
 
 namespace LocationInterface.Pages
 {
@@ -14,6 +15,8 @@ namespace LocationInterface.Pages
         protected Action ShowPreviousPage { get; set; }
         protected Common Common { get; }
         public bool AnalysisRunning { get; protected set; }
+
+        public IAnalysis SelectedAnalysis { get; set; }
 
         /// <summary>
         /// Initialise the Analysis Page
@@ -54,20 +57,11 @@ namespace LocationInterface.Pages
         /// </summary>
         /// <param name="sender">The instance of the object that triggered the event</param>
         /// <param name="e">Information about the event</param>
-        private void VendorAnalysisButtonClick(object sender, RoutedEventArgs e)
+        private void OnAnalysisButtonClick(object sender, RoutedEventArgs e)
         {
+            IAnalysis analysisInstance = SelectedAnalysis;
             // Create a new instance of the vendor analysis window and show it as a dialog
-            new AnalysisWindow(Common).ShowDialog();
-        }
-
-        /// <summary>
-        /// Show the export as PDF window
-        /// </summary>
-        /// <param name="sender">The instance of the object that triggered the event</param>
-        /// <param name="e">Information about the event</param>
-        private void ExportPdfButtonClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
+            new AnalysisWindow(Common, analysisInstance).ShowDialog();
         }
     }
 }
