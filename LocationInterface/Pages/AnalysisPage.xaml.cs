@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
-using AnalysisSDK;
 using System.Collections.Generic;
 
 namespace LocationInterface.Pages
