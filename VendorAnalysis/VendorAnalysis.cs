@@ -96,10 +96,8 @@ namespace VendorAnalysis
 
             int addressesCompleted = 0;
             List<string> allVendors = new List<string>();
-            //bool successful = false;
             foreach (string vendorMACAddress in uniqueMacAddresses)
             {
-                //do
                 try
                 {
                     CompletionRatio = addressesCompleted++ / (float)uniqueMacAddresses.Count;
@@ -107,14 +105,11 @@ namespace VendorAnalysis
                     string responseFromServer = new WebClient().DownloadString($"http://{ API }/{ vendorMACAddress }");
                     allVendors.Add(responseFromServer);
                     Console.WriteLine($"{ vendorMACAddress } - { responseFromServer }");
-                    //successful = true;
                 }
                 catch (WebException)
                 {
-                    //successful = false;
                     Console.WriteLine($"{ vendorMACAddress } - WebException");
                 }
-                //while (successful || MessageBox.Show("Could not connect to vendor API service. Retry?", "Connection Error", MessageBoxButton.YesNo) == MessageBoxResult.Yes);
             }
 
             IEnumerable<Vendor> vendors = from vendor in allVendors
