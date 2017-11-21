@@ -38,20 +38,21 @@ namespace LocationInterface.Windows
         
         protected void RunAnalysis()
         {
-            try
+            //try
+            //{
+            Analysis.Run(Common.LoadedDataTables, (ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio));
+            Dispatcher.Invoke(() =>
             {
-                Analysis.Run(Common.LoadedDataTables, (ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio));
-            }
-            catch (System.Threading.Tasks.TaskCanceledException) { }
-            finally
-            {
-                Analysing = false;
-                Dispatcher.Invoke(() =>
-                {
-                    startAnalysisButton.IsEnabled = true;
-                    startAnalysisButton.Content = "Start Analysis";
-                });
-            }
+                startAnalysisButton.IsEnabled = true;
+                startAnalysisButton.Content = "Start Analysis";
+            });
+            //}
+            //catch (System.Threading.Tasks.TaskCanceledException) { }
+            //finally
+            //{
+            //    Analysing = false;
+            //}
+            Analysing = false;
         }
     }
 }
