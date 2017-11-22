@@ -8,17 +8,30 @@
 
     <Grid>
         <Canvas x:Name="canvas" Margin="0,0,20,0" Focusable="True" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="backButton" Content="Back" Margin="0,0,0,0" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="BackButtonClick"/>
-        <ComboBox
-            ItemsSource="{Binding ImageFiles, Mode=OneWay}"
-            DisplayMemberPath="Identifier"
-            Margin="50,0,0,0" Width="100"
-            Height="20"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            SelectionChanged="DeckSelectionComboBoxSelectionChanged"/>
-        <TextBox Margin="150,0,0,0" Width="100" Height="20" Text="{Binding SelectedMacAddress}" TextChanged="MacAddressEntryTextChanged" HorizontalAlignment="Left" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="backButton" Grid.Column="0" Content="Back" Width="50" Height="20" Click="BackButtonClick"/>
+                <ComboBox
+                    ItemsSource="{Binding ImageFiles, Mode=OneWay}"
+                    DisplayMemberPath="Identifier"
+                    Width="100" Height="20"
+                    SelectionChanged="DeckSelectionComboBoxSelectionChanged" Grid.Column="1"/>
+                <TextBox Grid.Column="2" Width="100" Height="20" Text="{Binding SelectedMacAddress}" TextChanged="MacAddressEntryTextChanged"/>
+                <CheckBox Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TimeEnabled, Mode=OneWay}" Checked="TimeEnabledChecked"/>
+            </Grid>
+            <Slider Minimum="0" Maximum="1" Grid.Column="1" Margin="1,1,1,1" HorizontalAlignment="Stretch" ValueChanged="SliderValueChanged"/>
+        </Grid>
     </Grid>
 </Page>

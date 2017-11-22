@@ -119,6 +119,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\LocationPoint.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ImageFile.cs" />
     <Compile Include="Utils\ImageIndex.cs" />
