@@ -12,6 +12,7 @@ using System.IO;
 using DatabaseManagerLibrary;
 using LocationInterface.Utils;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace LocationInterface.Pages
 {
@@ -22,7 +23,7 @@ namespace LocationInterface.Pages
     {
         protected Image CurrentImage { get; set; }
         protected Action ShowHomePage { get; set; }
-        protected List<Utils.LocationPoint> LocationPoints { get; set; }
+        protected List<LocationPoint> LocationPoints { get; set; }
         protected List<Utils.Point> ActivePoints { get; set; }
         protected static Camera Camera { get; set; }
         protected Common Common { get; }
@@ -145,10 +146,10 @@ namespace LocationInterface.Pages
                     Console.WriteLine($"Loaded { records.Length } records with MAC address '{ SelectedMacAddress }' of { table.RecordCount } records in { (tableTimer.ElapsedMilliseconds / 1000d).ToString("0.000") } seconds.");
                     for (int i = 0; i < records.Length; i++)
                         if (records[i].GetValue<string>("Deck") == SelectedImageFile.Identifier)
-                            LocationPoints.Add(new LocationPoint() { Point = new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")), Time =  });
+                            LocationPoints.Add(new LocationPoint() { Point = new Utils.Point(records[i].GetValue<double>("X"), records[i].GetValue<double>("Y")), Time = records[i].GetValue<DateTime>("Date").TimeOfDay });
                 }
                 timer.Stop();
-                Console.WriteLine($"Added { DevicePoints.Count } points from { Common.LoadedDataTables.Length } table(s) in { (timer.ElapsedMilliseconds / 1000d).ToString("0.000") } seconds.");
+                Console.WriteLine($"Added { LocationPoints.Count } points from { Common.LoadedDataTables.Length } table(s) in { (timer.ElapsedMilliseconds / 1000d).ToString("0.000") } seconds.");
 
                 Dispatcher.Invoke(delegate
                 {
@@ -165,12 +166,12 @@ namespace LocationInterface.Pages
                     Canvas.SetLeft(CurrentImage, Camera.Position.X);
                     Canvas.SetTop(CurrentImage, Camera.Position.Y);
 
-                    foreach (Utils.Point point in DevicePoints)
+                    foreach (LocationPoint locationPoint in LocationPoints)
                     {
-                        point.SetEllipse(new Ellipse() { Width = 5, Height = 5, Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)) });
-                        canvas.Children.Add(point.Ellipse);
+                        locationPoint.Point.SetEllipse(new Ellipse() { Width = 5, Height = 5, Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)) });
+                        canvas.Children.Add(locationPoint.Point.Ellipse);
                     }
-                    Console.WriteLine("Added {0} points to the canvas.", DevicePoints.Count);
+                    Console.WriteLine("Added {0} points to the canvas.", LocationPoints.Count);
                 });
             }
             catch (FileNotFoundException)
@@ -241,26 +242,27 @@ namespace LocationInterface.Pages
         private void UpdateTimedPoints(double dayRatio)
         {
             double time = dayRatio * 24d;
+            Console.WriteLine(time);
             TimeSpan selectedTime = TimeSpan.FromHours(time);
             Utils.Point lastKnownPoint = null;
             foreach (LocationPoint locationPoint in LocationPoints)
             {
-                if (locationPoint.Time > selectedTime) lastKnownPoint = locationPoint.Point;
+                //Console.WriteLine(locationPoint.Time < selectedTime);
+                if (locationPoint.Time < selectedTime) { lastKnownPoint = locationPoint.Point; break; }
             }
             
-
             if (lastKnownPoint != null) ActivePoints = new List<Utils.Point>() { lastKnownPoint };
             else ActivePoints = new List<Utils.Point>();
         }
 
         private void TimeEnabledChecked(object sender, RoutedEventArgs e)
         {
-            ActivePoints = DevicePoints;
+            UpdateTimedPoints(0);
         }
 
         private void TimeEnabledUnchecked(object sender, RoutedEventArgs e)
         {
-            UpdateTimedPoints(0);
+            ActivePoints = LocationPoints.Select(locationPoint => locationPoint.Point).ToList();
         }
     }
 }

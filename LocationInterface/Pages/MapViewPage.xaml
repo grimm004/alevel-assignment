@@ -29,7 +29,7 @@
                     Width="100" Height="20"
                     SelectionChanged="DeckSelectionComboBoxSelectionChanged" Grid.Column="1"/>
                 <TextBox Grid.Column="2" Width="100" Height="20" Text="{Binding SelectedMacAddress}" TextChanged="MacAddressEntryTextChanged"/>
-                <CheckBox Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TimeEnabled, Mode=OneWay}" Checked="TimeEnabledChecked"/>
+                <CheckBox Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TimeEnabled, Mode=TwoWay}" Checked="TimeEnabledChecked" Unchecked="TimeEnabledUnchecked"/>
             </Grid>
             <Slider Minimum="0" Maximum="1" Grid.Column="1" Margin="1,1,1,1" HorizontalAlignment="Stretch" ValueChanged="SliderValueChanged"/>
         </Grid>
