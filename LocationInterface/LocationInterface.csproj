@@ -309,6 +309,10 @@
       <Project>{95dd085e-556f-42e0-8f6d-421e06eb16ea}</Project>
       <Name>AnalysisSDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PdfSharp\PdfSharp\PdfSharp.csproj">
+      <Project>{5384ce57-1f94-4d22-860d-2e9c1ac12ddf}</Project>
+      <Name>PdfSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
