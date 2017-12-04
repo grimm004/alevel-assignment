@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
 using System.Collections.Generic;
+using PdfSharp;
 
 namespace LocationInterface.Pages
 {
@@ -67,7 +68,7 @@ namespace LocationInterface.Pages
 
         private void PdfButtonClick(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

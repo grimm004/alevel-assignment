@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using LocationInterface.Utils;
 using System.Threading;
 using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.BIN;
 
 namespace LocationInterface.Pages
 {
