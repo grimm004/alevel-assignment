@@ -23,7 +23,17 @@
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="30" Content="Data Analysis" Margin="10,10,10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="1" Grid.Column="0" Margin="10,10,10,10" ItemsSource="{Binding Path=AnalysisOptions}" DisplayMemberPath="Name" SelectedItem="{Binding Path=SelectedAnalysis}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200"/>
         <Button Grid.Row="1" Grid.Column="1" Margin="10,10,10,10" Content="Start Analysis" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OnAnalysisButtonClick"/>
-        <Button Grid.Row="2" Grid.Column="0" Margin="10,10,10,10" Content="Back" Width="50" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Click="BackButtonClick"/>
-        <Button Grid.Row="2" Grid.Column="1" Margin="10,10,10,10" Content="Email Results" Width="75" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" Click="SendEmailButtonClick"/>
+
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Margin="10,10,10,10" Content="Back" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BackButtonClick"/>
+            <Button Grid.Row="0" Grid.Column="1" Margin="10,10,10,10" Content="Export PDF" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="PdfButtonClick"/>
+            <Button Grid.Row="0" Grid.Column="2" Margin="10,10,10,10" Content="Email Results" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="SendEmailButtonClick"/>
+        </Grid>
     </Grid>
 </Page>
