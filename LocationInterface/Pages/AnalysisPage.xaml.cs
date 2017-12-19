@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
@@ -12,7 +11,6 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class AnalysisPage : Page
     {
-        protected Action ShowPreviousPage { get; set; }
         protected Common Common { get; }
         public bool AnalysisRunning { get; protected set; }
 
@@ -23,13 +21,11 @@ namespace LocationInterface.Pages
         /// Initialise the Analysis Page
         /// </summary>
         /// <param name="common">The current instance of the common class</param>
-        /// <param name="ShowPreviousPage">A callback to show the previous page</param>
-        public AnalysisPage(Common common, Action ShowPreviousPage)
+        public AnalysisPage(Common common)
         {
             InitializeComponent();
             
             Common = common;
-            this.ShowPreviousPage = ShowPreviousPage;
             AnalysisOptions = PluginManager.Plugins;
         }
 
@@ -40,7 +36,7 @@ namespace LocationInterface.Pages
         /// <param name="e">Information about the event</param>
         public void BackButtonClick(object sender, RoutedEventArgs e)
         {
-            ShowPreviousPage?.Invoke();
+            Common.ShowPreviousPage();
         }
 
         /// <summary>

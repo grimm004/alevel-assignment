@@ -12,7 +12,8 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class SettingsPage : Page
     {
-        protected Action ShowPreviousPage { get; set; }
+        protected Common Common { get; }
+        
         /// <summary>
         /// A property that represents the entered settings.
         /// It sets and gets data directly to and from the wpf entry boxes
@@ -60,12 +61,11 @@ namespace LocationInterface.Pages
         /// <summary>
         /// Initialise the Settings Page
         /// </summary>
-        /// <param name="ShowPreviousPage">Callback to show the previous page</param>
-        public SettingsPage(Action ShowPreviousPage)
+        public SettingsPage(Common common)
         {
+            Common = common;
             InitializeComponent();
-
-            this.ShowPreviousPage = ShowPreviousPage;
+            
             applyButton.IsEnabled = loadDefaultsButton.IsEnabled = false;
         }
 
@@ -109,7 +109,7 @@ namespace LocationInterface.Pages
         private void BackButtonClick(object sender, RoutedEventArgs e)
         {
             // Run the callback to show the previous page
-            ShowPreviousPage?.Invoke();
+            Common.ShowPreviousPage();
         }
         /// <summary>
         /// Apply the changes to the settings

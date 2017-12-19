@@ -95,6 +95,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework.WpfInterop, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WpfInterop.1.5.2\lib\net45\MonoGame.Framework.WpfInterop.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -119,6 +125,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\LocationMap.cs" />
     <Compile Include="Utils\LocationPoint.cs" />
     <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\ImageFile.cs" />
@@ -154,9 +161,7 @@
     <Compile Include="Utils\Email.cs" />
     <Compile Include="Utils\LocationDataFile.cs" />
     <Compile Include="Utils\LocationRecord.cs" />
-    <Compile Include="Utils\Point.cs" />
     <Compile Include="Utils\Settings.cs" />
-    <Compile Include="Utils\Vector2.cs" />
     <Compile Include="Windows\SelectionInformationWindow.xaml.cs">
       <DependentUpon>SelectionInformationWindow.xaml</DependentUpon>
     </Compile>

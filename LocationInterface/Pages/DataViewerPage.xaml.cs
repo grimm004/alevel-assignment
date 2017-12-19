@@ -21,7 +21,6 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class DataViewerPage : Page
     {
-        protected Action ShowPreviousPage { get; }
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
         protected bool Importing { get; set; }
         protected Common Common { get; set; }
@@ -30,11 +29,9 @@ namespace LocationInterface.Pages
         /// Initialise the data viewer page
         /// </summary>
         /// <param name="common">Instance of the common class</param>
-        /// <param name="ShowPreviousPage">A callback to show the previous page</param>
-        public DataViewerPage(Common common, Action ShowPreviousPage)
+        public DataViewerPage(Common common)
         {
             Common = common;
-            this.ShowPreviousPage = ShowPreviousPage;
             Importing = false;
             SelectedDataFiles = new List<LocationDataFile>();
             InitializeComponent();
@@ -398,7 +395,7 @@ namespace LocationInterface.Pages
         private void BackButtonClick(object sender, RoutedEventArgs e)
         {
             // Run the callback to show the previous page
-            ShowPreviousPage?.Invoke();
+            Common.ShowPreviousPage();
         }
         /// <summary>
         /// Clear the datacache

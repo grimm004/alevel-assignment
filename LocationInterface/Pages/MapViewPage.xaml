@@ -3,12 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:utils="clr-namespace:LocationInterface.Utils"
       mc:Ignorable="d"
       Title="MapViewPage">
 
     <Grid>
-        <Canvas x:Name="canvas" Margin="0,0,20,0" Focusable="True" FocusVisualStyle="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
+        <utils:LocationMap x:Name="mapViewer" Width="800" Height="480"/>
+        
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

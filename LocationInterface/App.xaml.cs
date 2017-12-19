@@ -3,6 +3,7 @@ using System.IO;
 using LocationInterface.Utils;
 using DatabaseManagerLibrary;
 using DatabaseManagerLibrary.CSV;
+using Newtonsoft.Json;
 
 namespace LocationInterface
 {
@@ -35,10 +36,26 @@ namespace LocationInterface
             if (!Directory.Exists(SettingsManager.Active.LocationDataFolder)) Directory.CreateDirectory(SettingsManager.Active.LocationDataFolder);
             if (!Directory.Exists(Constants.PLUGINFOLDER)) Directory.CreateDirectory(Constants.PLUGINFOLDER);
             PluginManager.Load();
-            if (!File.Exists($"{ SettingsManager.Active.LocationDataFolder }\\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.LocationDataFolder }\\index.json").Close(); DataIndex = new DataIndex(); }
-            else DataIndex.VerifyDataFiles();
-            if (!File.Exists($"{ SettingsManager.Active.ImageFolder }\\index.json") || (ImageIndex = ImageIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.ImageFolder }\\index.json").Close(); ImageIndex = new ImageIndex(); }
-            else ImageIndex.VerifyImageFiles();
+            try
+            {
+                if (!File.Exists($"{ SettingsManager.Active.LocationDataFolder }\\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.LocationDataFolder }\\index.json").Close(); DataIndex = new DataIndex(); }
+                else DataIndex.VerifyDataFiles();
+            }
+            catch (JsonSerializationException)
+            {
+                File.Create($"{ SettingsManager.Active.LocationDataFolder }\\index.json").Close();
+                DataIndex = new DataIndex();
+            }
+            try
+            {
+                if (!File.Exists($"{ SettingsManager.Active.ImageFolder }\\index.json") || (ImageIndex = ImageIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.ImageFolder }\\index.json").Close(); ImageIndex = new ImageIndex(); }
+                else ImageIndex.VerifyImageFiles();
+            }
+            catch (JsonSerializationException)
+            {
+                File.Create($"{ SettingsManager.Active.ImageFolder }\\index.json").Close();
+                ImageIndex = new ImageIndex();
+            }
         }
 
         /// <summary>

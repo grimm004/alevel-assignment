@@ -1,11 +1,11 @@
-﻿using System;
-using System.Windows.Input;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace LocationInterface.Utils
 {
-    public class KeyBind
+    public class KeyListener
     {
-        public Key Key { get; set; }
+        public Keys Key { get; set; }
         public bool ExecuteOnce { get; protected set; }
         public Action Command { get; set; }
 
@@ -16,7 +16,7 @@ namespace LocationInterface.Utils
         /// </summary>
         /// <param name="key">The key to bind to</param>
         /// <param name="command">The command to run on key press</param>
-        public KeyBind(Key key, Action command)
+        public KeyListener(Keys key, Action command)
         {
             Key = key;
             Command = command;
@@ -29,7 +29,7 @@ namespace LocationInterface.Utils
         /// <param name="key">The key to bind to</param>
         /// <param name="command">The command to run on key press</param>
         /// <param name="executeOnce">If true, execute the command only once when held down.</param>
-        public KeyBind(Key key, Action command, bool executeOnce)
+        public KeyListener(Keys key, Action command, bool executeOnce)
         {
             Key = key;
             Command = command;
@@ -40,10 +40,10 @@ namespace LocationInterface.Utils
         /// <summary>
         /// Update the keybind state (poll to check if the key is down)
         /// </summary>
-        public void Update()
+        public void Update(KeyboardState keyboardState)
         {
             // If the key is down and the key has not been down or execute once is not enabled
-            if (Keyboard.IsKeyDown(Key) && !(KeyDown && ExecuteOnce))
+            if (keyboardState.IsKeyDown(Key) && !(KeyDown && ExecuteOnce))
             {
                 // Invoke the command if it is not null
                 Command?.Invoke();
@@ -51,7 +51,7 @@ namespace LocationInterface.Utils
                 KeyDown = true;
             }
             // Else if the key is not down and the key has been down
-            else if (!Keyboard.IsKeyDown(Key) && KeyDown)
+            else if (!keyboardState.IsKeyDown(Key) && KeyDown)
                 // Set the key as not having been down
                 KeyDown = false;
         }

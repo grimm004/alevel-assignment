@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using LocationInterface.Utils;
 using System.Threading;
 using DatabaseManagerLibrary;
-using DatabaseManagerLibrary.BIN;
 
 namespace LocationInterface.Pages
 {
@@ -14,20 +12,17 @@ namespace LocationInterface.Pages
     /// </summary>
     public partial class RawDataPage : Page
     {
-        protected Action ShowPreviousPage { get; }
         protected Common Common { get; }
 
         /// <summary>
         /// Initialise the raw data viewer page
         /// </summary>
         /// <param name="common">Instance of the common calss</param>
-        /// <param name="ShowPreviousPage">Callback the show the previous page</param>
-        public RawDataPage(Common common, Action ShowPreviousPage)
+        public RawDataPage(Common common)
         {
             InitializeComponent();
 
             Common = common;
-            this.ShowPreviousPage = ShowPreviousPage;
         }
 
         /// <summary>
@@ -84,7 +79,7 @@ namespace LocationInterface.Pages
         private void BackButtonClick(object sender, RoutedEventArgs e)
         {
             // Run the callback to show the previous page
-            ShowPreviousPage?.Invoke();
+            Common.ShowPreviousPage();
         }
     }
 }
