@@ -5,7 +5,7 @@ namespace LocationInterface.Utils
 {
     public class LocationPoint
     {
-        public Point Point { get; set; }
+        public Vector2 Point { get; set; }
         public TimeSpan Time { get; set; }
     }
 }

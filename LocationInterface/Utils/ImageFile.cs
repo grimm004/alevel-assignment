@@ -7,7 +7,7 @@ namespace LocationInterface.Utils
     public class ImageFile
     {
         public string FileName { get; set; }
-        public double Multiplier { get; set; }
+        public float Multiplier { get; set; }
         public Vector2 Offset { get; set; }
 
         public ImageFile()
@@ -17,7 +17,7 @@ namespace LocationInterface.Utils
             Offset = Vector2.Zero;
         }
 
-        public ImageFile(string fileName, double multiplier, Vector2 offset)
+        public ImageFile(string fileName, float multiplier, Vector2 offset)
         {
             FileName = fileName;
             Multiplier = multiplier;

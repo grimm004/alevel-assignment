@@ -5,6 +5,7 @@ using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LocationInterface.Utils
 {
@@ -18,6 +19,7 @@ namespace LocationInterface.Utils
 
     public class LocationMap : WpfGame
     {
+        private ImageFile _selectedImageFile;
         private SpriteBatch _spriteBatch;
         private IGraphicsDeviceService _graphicsDeviceManager;
         private WpfKeyboard _keyboard;
@@ -27,11 +29,11 @@ namespace LocationInterface.Utils
         private Random _random;
         private PointColour _currentColour;
         private Camera _camera;
-        protected KeyListener _sKeyBind;
+        private KeyListener _sKeyBind;
+        private Texture2D _mapTexture;
 
         protected override void Initialize()
         {
-            // must be initialized. required by Content loading and rendering (will add itself to the Services)
             _graphicsDeviceManager = new WpfGraphicsDeviceService(this);
 
             // wpf and keyboard need reference to the host control in order to receive input
@@ -39,7 +41,9 @@ namespace LocationInterface.Utils
             _keyboard = new WpfKeyboard(this);
             _mouse = new WpfMouse(this);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _camera = new Camera(0, 0);
+            _camera = new Camera();
+
+            _selectedImageFile = new ImageFile();
 
             // must be called after the WpfGraphicsDeviceService instance was created
             base.Initialize();
@@ -73,15 +77,29 @@ namespace LocationInterface.Utils
             }
 
             _random = new Random();
-            _circlePositions = new Vector2[10];
-            for (int i = 0; i < _circlePositions.Length; i++)
-                _circlePositions[i] = new Vector2(_random.Next(500), _random.Next(500));
+            _circlePositions = new Vector2[0];
+            //for (int i = 0; i < _circlePositions.Length; i++)
+            //    _circlePositions[i] = new Vector2(_random.Next(500), _random.Next(500));
 
             _sKeyBind = new KeyListener(Keys.S, SaveInfo);
         }
 
+        public void LoadPoints(Vector2[] points)
+        {
+            _circlePositions = points;
+        }
+
+        public void LoadMap(ImageFile selectedImageFile)
+        {
+            _selectedImageFile = selectedImageFile;
+            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
+            _mapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            fileStream.Dispose();
+        }
+
         protected void SaveInfo()
         {
+            Console.WriteLine("Saving point translation information...");
             if (_keyboard.GetState().IsKeyDown(Keys.LeftControl))
                 App.ImageIndex.SaveIndex();
         }
@@ -105,31 +123,32 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.D)) _camera.Move(-5, 0);
             if (keyboardState.IsKeyDown(Keys.W)) _camera.Move(0, 5);
             if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl)) _camera.Move(0, -5);
-            if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(shiftDown ? -.05 : -.001);
-            if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(shiftDown ? +.05 : +.001);
+            if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(shiftDown ? -.05f : -.001f);
+            if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(shiftDown ? +.05f : +.001f);
             if (keyboardState.IsKeyDown(Keys.T)) TranslatePoints(0, shiftDown ? -4 : -1);
             if (keyboardState.IsKeyDown(Keys.F)) TranslatePoints(shiftDown ? -4 : -1, 0);
             if (keyboardState.IsKeyDown(Keys.G)) TranslatePoints(0, shiftDown ? +4 : +1);
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
         }
 
-        public void ScalePoints(double factor)
+        public void ScalePoints(float change)
         {
-
+            _selectedImageFile.Multiplier += change;
         }
 
         public void TranslatePoints(float x, float y)
         {
-
+            _selectedImageFile.Offset += new Vector2((float)x, (float)y);
         }
 
         protected override void Draw(GameTime time)
         {
             GraphicsDevice.Clear(Color.White);
-
-            _spriteBatch.Begin();
+            
+            _spriteBatch.Begin(transformMatrix: _camera.Transformation);
+            if (_mapTexture != null) _spriteBatch.Draw(_mapTexture, Vector2.Zero);
             for (int i = 0; i < _circlePositions.Length; i++)
-                _spriteBatch.Draw(_pointTextures[_currentColour], _circlePositions[i]);
+                _spriteBatch.Draw(_pointTextures[_currentColour], _selectedImageFile.Offset + (_selectedImageFile.Multiplier * _circlePositions[i]), null, Color.White, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
             _spriteBatch.End();
         }
     }
