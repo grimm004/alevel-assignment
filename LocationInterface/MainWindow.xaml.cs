@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using LocationInterface.Utils;
 
@@ -38,6 +39,12 @@ namespace LocationInterface
             Common.PreviousPage = Common.CurrentPage;
             // Switch the content of the inner frame to the current page
             DataContext = frame.Content = Common.CurrentPage = page;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Common.OnClose();
+            base.OnClosing(e);
         }
     }
 }

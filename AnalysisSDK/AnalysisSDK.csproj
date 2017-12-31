@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Analysis.cs" />
     <Compile Include="AnalysisResult.cs" />
+    <Compile Include="LocationRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

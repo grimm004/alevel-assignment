@@ -42,6 +42,11 @@ namespace LocationInterface.Utils
             DataViewerPage = new DataViewerPage(this);
         }
 
+        public void OnClose()
+        {
+            MapViewPage.OnClose();
+        }
+
         /// <summary>
         /// Load the selected tables from a LocationDataFile array
         /// </summary>

@@ -106,6 +106,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -131,6 +132,7 @@
     <Compile Include="Utils\ImageFile.cs" />
     <Compile Include="Utils\ImageIndex.cs" />
     <Compile Include="Utils\KeyBind.cs" />
+    <Compile Include="Utils\MacPointCollection.cs" />
     <Compile Include="Utils\PluginManager.cs" />
     <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
@@ -164,6 +166,12 @@
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Windows\SelectionInformationWindow.xaml.cs">
       <DependentUpon>SelectionInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectionManagerWindow.xaml.cs">
+      <DependentUpon>SelectionManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TimeManagerWindow.xaml.cs">
+      <DependentUpon>TimeManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\VendorAnalysisWindow.xaml.cs">
       <DependentUpon>VendorAnalysisWindow.xaml</DependentUpon>
@@ -229,6 +237,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SelectionInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SelectionManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TimeManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

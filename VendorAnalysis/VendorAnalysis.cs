@@ -118,7 +118,7 @@ namespace VendorAnalysis
                                           orderby count descending
                                           select new Vendor { Name = vendorGroup.Key, UserCount = count };
 
-            using (FileStream stream = new FileStream($"Analysis\\VendorAnalysis-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss.") }.csv", FileMode.Create))
+            using (FileStream stream = new FileStream($"Analysis\\VendorAnalysis-{ DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") }.csv", FileMode.Create))
             {
                 byte[] data = Encoding.UTF8.GetBytes("Name:string,Count:integer" + Environment.NewLine);
                 stream.Write(data, 0, data.Length);

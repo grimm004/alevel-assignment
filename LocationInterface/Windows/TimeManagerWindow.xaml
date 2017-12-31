@@ -1,0 +1,24 @@
+﻿<Window x:Class="LocationInterface.Windows.TimeManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface.Windows"
+        mc:Ignorable="d"
+        Title="TimeManager" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label x:Name="SelectedTimeLabel" Content="00:00:00" Grid.Row="0"/>
+        <Label x:Name="DisplayedTimeLabel" Content="00:00:00" Grid.Row="1"/>
+        <CheckBox x:Name="AutoTimeCheckbox" Grid.Row="2" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" VerticalAlignment="Center" Checked="AutomaticTimeEnabled" Unchecked="AutomaticTimeDisabled"/>
+        <Slider Grid.Column="3" IsEnabled="{Binding ElementName=AutoTimeCheckbox, Path=IsChecked}" Width="100" Minimum="0" Maximum="24" Value="{Binding AutoTimeSpeed}" Margin="1,1,1,1"/>
+
+        <Slider x:Name="TimeSlider" Grid.Column="4" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" Minimum="0" Maximum="24" Margin="1,1,1,1" HorizontalAlignment="Stretch" ValueChanged="SliderValueChanged"/>
+    </Grid>
+</Window>

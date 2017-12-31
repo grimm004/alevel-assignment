@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
 using LocationInterface.Utils;
-using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using DatabaseManagerLibrary;
+using LocationInterface.Windows;
 
 namespace LocationInterface.Pages
 {
@@ -19,25 +18,53 @@ namespace LocationInterface.Pages
         protected Common Common { get; }
         protected ImageFile SelectedImageFile { get; set; }
         public List<ImageFile> ImageFiles { get; private set; }
-        protected List<LocationPoint> Points { get; set; }
-        public string SelectedMacAddress { get; set; }
+        protected MacPointCollection[] MacPointCollections { get; set; }
         public bool TimeEnabled { get; set; }
         public bool Polling { get; protected set; }
-        public bool PageLoaded { get { return Common.CurrentPage.GetType() == typeof(MapViewPage); } }
+        protected bool TimeAutomation { get; set; }
+        private SelectionManagerWindow SelectionManagerWindow { get; }
+        private TimeManagerWindow TimeManagerWindow { get; }
 
         public MapViewPage(Common common)
         {
             InitializeComponent();
             DataContext = this;
-            
-            SelectedMacAddress = "00:19:94:32:fc:20";
 
-            Points = new List<LocationPoint>();
+            MacPointCollections = new MacPointCollection[0];
 
             Common = common;
             TimeEnabled = false;
+            TimeAutomation = false;
 
             ImageFiles = App.ImageIndex.ImageFiles;
+
+            SelectionManagerWindow = new SelectionManagerWindow(UpdatePoints);
+            TimeManagerWindow = new TimeManagerWindow(UpdateTimedPoints);
+        }
+
+        public void OnClose()
+        {
+            SelectionManagerWindow.Close();
+            TimeManagerWindow.Close();
+        }
+
+        private void UpdatePoints()
+        {
+            Console.WriteLine("Updating points");
+            if (SelectedImageFile != null)
+            {
+                MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
+
+                foreach (MacPointCollection macPointCollection in MacPointCollections)
+                    foreach (Table table in Common.LoadedDataTables)
+                        foreach (Record record in table.GetRecords("MAC", macPointCollection.Address))
+                            if (record.GetValue<string>("Deck") == SelectedImageFile.Identifier)
+                                macPointCollection.MacPoints.Add(new LocationPoint { Point = new Vector2((float)record.GetValue<double>("X"), (float)record.GetValue<double>("Y")), Time = record.GetValue<DateTime>("Date").TimeOfDay });
+
+                foreach (MacPointCollection collection in MacPointCollections)
+                    Console.WriteLine(collection.MacPoints.Count);
+                MapViewer.LoadPoints(MacPointCollections);
+            }
         }
 
         private void BackButtonClick(object sender, RoutedEventArgs e)
@@ -51,81 +78,41 @@ namespace LocationInterface.Pages
             MapViewer.LoadMap(SelectedImageFile);
         }
 
-        private void SliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void UpdateTimedPoints(double hours)
         {
             if (TimeEnabled)
-                UpdateTimedPoints(((Slider)sender).Value);
-        }
-
-        private void UpdateTimedPoints(double dayRatio)
-        {
-            TimeSpan selectedTime = TimeSpan.FromHours(dayRatio * 24d);
-            SelectedTimeLabel.Content = selectedTime.ToString();
-
-            LocationPoint[] activePoints = Points.Where(point => point.Time > selectedTime).ToArray();
-            if (activePoints.Length > 0)
             {
-                DisplayedTimeLabel.Content = activePoints[0].Time.ToString();
-                MapViewer.LoadPoints(new Vector2[] { activePoints[0].Point });
-            }
-            else DisplayedTimeLabel.Content = "No Points";
-        }
+                //TimeSpan selectedTime = TimeSpan.FromHours(hours);
+                //TimeManagerWindow.SelectedTimeLabel.Content = selectedTime.ToString(@"hh\:mm\:ss");
 
-        private void UpdateButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (SelectedImageFile != null)
-            {
-                Points.Clear();
-                foreach (Table table in Common.LoadedDataTables)
-                    foreach (Record record in table.GetRecords("MAC", SelectedMacAddress))
-                        if (record.GetValue<string>("Deck") == SelectedImageFile.Identifier)
-                            Points.Add(new LocationPoint { Point = new Vector2((float)record.GetValue<double>("X"), (float)record.GetValue<double>("Y")), Time = record.GetValue<DateTime>("Date").TimeOfDay });
-                if (!TimeEnabled) MapViewer.LoadPoints(Points.Select(point => point.Point).ToArray());
+                //LocationPoint[] activePoints = MacPointCollections.Where(point => point.Time > selectedTime).ToArray();
+                //if (activePoints.Length > 0)
+                //{
+                //    TimeManagerWindow.DisplayedTimeLabel.Content = activePoints[0].Time.ToString(@"hh\:mm\:ss");
+                //    MapViewer.LoadPoints(new Vector2[] { activePoints[0].Point });
+                //}
+                //else TimeManagerWindow.DisplayedTimeLabel.Content = "No Points";
             }
         }
 
-        private void TimeEnabledChecked(object sender, RoutedEventArgs e)
+        private void TimeDisabled(object sender, RoutedEventArgs e)
         {
-            TimeEnabled = true;
+            MapViewer.LoadPoints(MacPointCollections.ToArray());
         }
 
-        private void TimeEnabledUnchecked(object sender, RoutedEventArgs e)
+        private void UpdatePointsClick(object sender, RoutedEventArgs e)
         {
-            TimeEnabled = false;
-            MapViewer.LoadPoints(Points.Select(point => point.Point).ToArray());
+            UpdatePoints();
+        }
+
+        private void SelectDataClick(object sender, RoutedEventArgs e)
+        {
+            SelectionManagerWindow.Show();
+        }
+
+        private void SelectTimeClick(object sender, RoutedEventArgs e)
+        {
+            TimeManagerWindow.Show();
         }
     }
 }
-
-///// <summary>
-///// Check if the application is focused
-///// </summary>
-///// <returns>true if the application is focused</returns>
-//public static bool ApplicationIsActivated()
-//{
-//    IntPtr activatedHandle = GetForegroundWindow();
-//    if (activatedHandle == IntPtr.Zero)
-//        // No window is currently activated
-//        return false;
-
-//    int procId = Process.GetCurrentProcess().Id;
-//    GetWindowThreadProcessId(activatedHandle, out int activeProcId);
-
-//    return activeProcId == procId;
-//}
-
-///// <summary>
-///// Get the a pointer to the focused window
-///// </summary>
-///// <returns>an int pointer referencing the process id of the foreground window</returns>
-//[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-//private static extern IntPtr GetForegroundWindow();
-
-///// <summary>
-///// Get the id of a process
-///// </summary>
-///// <param name="handle">An integer pointer to the process to id</param>
-///// <param name="processId">A reference to the output id</param>
-///// <returns>a number referencing the outcome of the operation</returns>
-//[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-//private static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);

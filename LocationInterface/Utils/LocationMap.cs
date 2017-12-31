@@ -9,120 +9,90 @@ using System.IO;
 
 namespace LocationInterface.Utils
 {
-    public enum PointColour
-    {
-        Red,
-        Green,
-        Blue,
-        Black
-    }
-
     public class LocationMap : WpfGame
     {
-        private ImageFile _selectedImageFile;
-        private SpriteBatch _spriteBatch;
-        private IGraphicsDeviceService _graphicsDeviceManager;
-        private WpfKeyboard _keyboard;
-        private WpfMouse _mouse;
-        private Vector2[] _circlePositions = new Vector2[0];
-        private Dictionary<PointColour, Texture2D> _pointTextures;
-        private Random _random;
-        private PointColour _currentColour;
-        private Camera _camera;
-        private KeyListener _sKeyBind;
-        private Texture2D _mapTexture;
+        private ImageFile SelectedImageFile { get; set; }
+        private SpriteBatch SpriteBatch { get; set; }
+        private IGraphicsDeviceService GraphicsDeviceManager { get; set; }
+        private WpfKeyboard WpfKeyboard { get; set; }
+        private WpfMouse WpfMouse { get; set; }
+
+        private MacPointCollection[] MacPointCollections { get; set; } = new MacPointCollection[0];
+
+        private Texture2D PointTexture { get; set; }
+        private Random Random { get; set; }
+        private Camera Camera { get; set; }
+        private KeyListener SKeyBind { get; set; }
+        private Texture2D MapTexture { get; set; }
+
+        private SpriteFont Font { get; set; }
 
         protected override void Initialize()
         {
-            _graphicsDeviceManager = new WpfGraphicsDeviceService(this);
+            GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
 
-            // wpf and keyboard need reference to the host control in order to receive input
-            // this means every WpfGame control will have it's own keyboard & mouse manager which will only react if the mouse is in the control
-            _keyboard = new WpfKeyboard(this);
-            _mouse = new WpfMouse(this);
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _camera = new Camera();
+            WpfKeyboard = new WpfKeyboard(this);
+            WpfMouse = new WpfMouse(this);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Camera = new Camera();
 
-            _selectedImageFile = new ImageFile();
-
-            // must be called after the WpfGraphicsDeviceService instance was created
+            SelectedImageFile = new ImageFile();
+            
             base.Initialize();
 
-            Dictionary<PointColour, Color> pointColours = new Dictionary<PointColour, Color>
-            {
-                [PointColour.Red] = Color.Red,
-                [PointColour.Green] = Color.Green,
-                [PointColour.Blue] = Color.Blue,
-                [PointColour.Black] = Color.Black
-            };
-
             int radius = 5, diameter = radius * 2;
+            
+            PointTexture = new Texture2D(GraphicsDevice, diameter, diameter);
+            Color[] circleData = new Color[diameter * diameter];
+            int i = 0;
+            for (int x = -radius; x < radius; x++)
+                for (int y = -radius; y < radius; y++)
+                {
+                    if ((x * x) + (y * y) < radius * radius) circleData[i] = Color.White;
+                    else circleData[i] = new Color(0, 0, 0, 0);
+                    i++;
+                }
+            PointTexture.SetData(circleData);
 
-            _pointTextures = new Dictionary<PointColour, Texture2D>();
-            foreach (PointColour pointColour in Enum.GetValues(typeof(PointColour)))
-            {
-                _pointTextures[pointColour] = new Texture2D(GraphicsDevice, diameter, diameter);
+            Random = new Random();
+            MacPointCollections = new MacPointCollection[0];
 
-                Color[] circleData = new Color[diameter * diameter];
-                int i = 0;
-                for (int x = -radius; x < radius; x++)
-                    for (int y = -radius; y < radius; y++)
-                    {
-                        if ((x * x) + (y * y) < radius * radius) circleData[i] = pointColours[pointColour];
-                        else circleData[i] = new Color(0, 0, 0, 0);
-                        i++;
-                    }
+            Font = Content.Load<SpriteFont>("Font");
 
-                _pointTextures[pointColour].SetData(circleData);
-            }
-
-            _random = new Random();
-            _circlePositions = new Vector2[0];
-            //for (int i = 0; i < _circlePositions.Length; i++)
-            //    _circlePositions[i] = new Vector2(_random.Next(500), _random.Next(500));
-
-            _sKeyBind = new KeyListener(Keys.S, SaveInfo);
+            SKeyBind = new KeyListener(Keys.S, SaveInfo);
         }
 
-        public void LoadPoints(Vector2[] points)
+        public void LoadPoints(MacPointCollection[] points)
         {
-            _circlePositions = points;
+            MacPointCollections = points;
         }
 
         public void LoadMap(ImageFile selectedImageFile)
         {
-            _selectedImageFile = selectedImageFile;
+            SelectedImageFile = selectedImageFile;
             FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
-            _mapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
             fileStream.Dispose();
         }
 
         protected void SaveInfo()
         {
             Console.WriteLine("Saving point translation information...");
-            if (_keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            if (WpfKeyboard.GetState().IsKeyDown(Keys.LeftControl))
                 App.ImageIndex.SaveIndex();
         }
-
-        double colourTimer = 0;
+        
         protected override void Update(GameTime time)
         {
-            var mouseState = _mouse.GetState();
-            var keyboardState = _keyboard.GetState();
+            var mouseState = WpfMouse.GetState();
+            var keyboardState = WpfKeyboard.GetState();
 
-            colourTimer += time.ElapsedGameTime.TotalMilliseconds;
-            if (colourTimer > 250)
-            {
-                _currentColour = (PointColour)_random.Next(4);
-                colourTimer = 0;
-            }
-
-            _sKeyBind.Update(keyboardState);
+            SKeyBind.Update(keyboardState);
             bool shiftDown = keyboardState.IsKeyDown(Keys.LeftShift);
-            if (keyboardState.IsKeyDown(Keys.A)) _camera.Move(5, 0);
-            if (keyboardState.IsKeyDown(Keys.D)) _camera.Move(-5, 0);
-            if (keyboardState.IsKeyDown(Keys.W)) _camera.Move(0, 5);
-            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl)) _camera.Move(0, -5);
+            if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(5, 0);
+            if (keyboardState.IsKeyDown(Keys.D)) Camera.Move(-5, 0);
+            if (keyboardState.IsKeyDown(Keys.W)) Camera.Move(0, 5);
+            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl)) Camera.Move(0, -5);
             if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(shiftDown ? -.05f : -.001f);
             if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(shiftDown ? +.05f : +.001f);
             if (keyboardState.IsKeyDown(Keys.T)) TranslatePoints(0, shiftDown ? -4 : -1);
@@ -133,23 +103,44 @@ namespace LocationInterface.Utils
 
         public void ScalePoints(float change)
         {
-            _selectedImageFile.Multiplier += change;
+            SelectedImageFile.Multiplier += change;
         }
 
         public void TranslatePoints(float x, float y)
         {
-            _selectedImageFile.Offset += new Vector2((float)x, (float)y);
+            SelectedImageFile.Offset += new Vector2((float)x, (float)y);
         }
 
         protected override void Draw(GameTime time)
         {
             GraphicsDevice.Clear(Color.White);
-            
-            _spriteBatch.Begin(transformMatrix: _camera.Transformation);
-            if (_mapTexture != null) _spriteBatch.Draw(_mapTexture, Vector2.Zero);
-            for (int i = 0; i < _circlePositions.Length; i++)
-                _spriteBatch.Draw(_pointTextures[_currentColour], _selectedImageFile.Offset + (_selectedImageFile.Multiplier * _circlePositions[i]), null, Color.White, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
-            _spriteBatch.End();
+
+            SpriteBatch.Begin(transformMatrix: Camera.Transformation);
+            DrawPoints();
+            SpriteBatch.End();
+
+            SpriteBatch.Begin();
+            DrawKey();
+            SpriteBatch.End();
+        }
+
+        protected void DrawPoints()
+        {
+            if (MapTexture != null) SpriteBatch.Draw(MapTexture, Vector2.Zero);
+            foreach (MacPointCollection macPointCollection in MacPointCollections)
+                foreach (Vector2 macPoint in macPointCollection.MacPoints)
+                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset + (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
+        }
+
+        protected void DrawKey()
+        {
+            Vector2 position = new Vector2(20, 20);
+            for (int i = 0; i < MacPointCollections.Length; i++)
+            {
+                SpriteBatch.Draw(PointTexture, position, null, MacPointCollections[i].Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
+                SpriteBatch.DrawString(Font, MacPointCollections[i].Address, position + new Vector2(10, -5), Color.Black);
+                position.Y += 20;
+            }
         }
     }
 }
