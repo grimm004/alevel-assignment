@@ -12,13 +12,30 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label x:Name="SelectedTimeLabel" Content="00:00:00" Grid.Row="0"/>
-        <Label x:Name="DisplayedTimeLabel" Content="00:00:00" Grid.Row="1"/>
-        <CheckBox x:Name="AutoTimeCheckbox" Grid.Row="2" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" VerticalAlignment="Center" Checked="AutomaticTimeEnabled" Unchecked="AutomaticTimeDisabled"/>
-        <Slider Grid.Column="3" IsEnabled="{Binding ElementName=AutoTimeCheckbox, Path=IsChecked}" Width="100" Minimum="0" Maximum="24" Value="{Binding AutoTimeSpeed}" Margin="1,1,1,1"/>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <Slider x:Name="TimeSlider" Grid.Column="4" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" Minimum="0" Maximum="24" Margin="1,1,1,1" HorizontalAlignment="Stretch" ValueChanged="SliderValueChanged"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Enable Timed Locations" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <CheckBox x:Name="TimeEnabledCheckbox" Grid.Row="0" Grid.Column="1" ToolTip="Enable time-basted locations." IsChecked="{Binding TimeEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="TimeEnabledEvent" Unchecked="TimeDisabledEvent"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Selected Time" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Label x:Name="SelectedTimeLabel" Grid.Row="1" Grid.Column="1" Content="00:00:00" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Enable Automated Time" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <CheckBox x:Name="AutoTimeCheckbox" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding ElementName=TimeEnabledCheckbox, Path=IsChecked}" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="AutomaticTimeEnabled" Unchecked="AutomaticTimeDisabled"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Automated Time Speed" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Slider x:Name="SpeedSlider" Grid.Row="0" IsEnabled="{Binding ElementName=AutoTimeCheckbox, Path=IsChecked}" HorizontalAlignment="Stretch" VerticalAlignment="Center"  Minimum="0" Maximum="24" Value="{Binding AutoTimeSpeed}"/>
+            <TextBox Grid.Row="1" Text="{Binding ElementName=SpeedSlider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=AutoTimeCheckbox, Path=IsChecked}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>

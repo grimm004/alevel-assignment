@@ -25,6 +25,8 @@ namespace LocationInterface.Utils
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
 
+        public bool TimeBased { get; set; }
+
         private SpriteFont Font { get; set; }
 
         protected override void Initialize()
@@ -53,6 +55,7 @@ namespace LocationInterface.Utils
                     i++;
                 }
             PointTexture.SetData(circleData);
+            TimeBased = false;
 
             Random = new Random();
             MacPointCollections = new MacPointCollection[0];
@@ -77,7 +80,6 @@ namespace LocationInterface.Utils
 
         protected void SaveInfo()
         {
-            Console.WriteLine("Saving point translation information...");
             if (WpfKeyboard.GetState().IsKeyDown(Keys.LeftControl))
                 App.ImageIndex.SaveIndex();
         }
@@ -139,6 +141,7 @@ namespace LocationInterface.Utils
             {
                 SpriteBatch.Draw(PointTexture, position, null, MacPointCollections[i].Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
                 SpriteBatch.DrawString(Font, MacPointCollections[i].Address, position + new Vector2(10, -5), Color.Black);
+                if (TimeBased) SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0 ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") : "No Points", position + new Vector2(150, -5), Color.Black);
                 position.Y += 20;
             }
         }

@@ -176,6 +176,9 @@
     <Compile Include="Windows\TimeManagerWindow.xaml.cs">
       <DependentUpon>TimeManagerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TimeSetterWindow.xaml.cs">
+      <DependentUpon>TimeSetterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VendorAnalysisWindow.xaml.cs">
       <DependentUpon>VendorAnalysisWindow.xaml</DependentUpon>
     </Compile>
@@ -252,6 +255,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\TimeManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TimeSetterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

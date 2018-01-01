@@ -18,17 +18,17 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Back" Width="50" Height="20" Click="BackButtonClick"/>
+            <Button Grid.Column="0" Content="Back" Click="BackButtonClick"/>
             <ComboBox
                     ItemsSource="{Binding ImageFiles, Mode=OneWay}"
                     DisplayMemberPath="Identifier"
-                    Width="100" Height="20"
                     SelectionChanged="DeckSelectionComboBoxSelectionChanged" Grid.Column="1"/>
-            <Button Grid.Column="2" Content="Select Data" Width="80" Height="20" Click="SelectDataClick"/>
-            <Button Grid.Column="3" Content="Select Time" Width="80" Height="20" Click="SelectTimeClick"/>
-            <Button Grid.Column="4" Content="Update Points" Width="80" Height="20" Click="UpdatePointsClick"/>
-            <CheckBox ToolTip="Enable time-basted locations." x:Name="TimeEnabledCheckbox" Grid.Column="5" IsChecked="{Binding TimeEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center" Unchecked="TimeDisabled"/>
+            <Button Grid.Column="2" Content="Select Data" Click="SelectDataClick"/>
+            <Button Grid.Column="3" Content="Update Points" Click="UpdatePointsClick"/>
+            <Label Content="Toggle Time Controls" Grid.Column="4"/>
+            <CheckBox ToolTip="Show/hide the time-based location controls." Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="ShowTimeManager" Unchecked="HideTimeManager"/>
         </Grid>
     </Grid>
 </Page>

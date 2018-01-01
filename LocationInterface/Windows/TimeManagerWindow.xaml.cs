@@ -13,13 +13,20 @@ namespace LocationInterface.Windows
     {
         private double AutoTimeCount { get; set; } = 0;
         public double AutoTimeSpeed { get; set; } = 1d / 60d;
-        protected DispatcherTimer AutomationTimer { get; set; }
-        protected Action<double> TimeChangedCallback { get; }
+        public bool TimeEnabled { get; set; }
+        protected DispatcherTimer AutomationTimer { get; }
+        protected Action<double> AutoTimeChangeCallback { get; }
+        protected Action<object, RoutedEventArgs> TimeEnabledEvent { get; }
+        protected Action<object, RoutedEventArgs> TimeDisabledEvent { get; }
 
-        public TimeManagerWindow(Action<double> TimeChangedCallback)
+        public TimeManagerWindow(Action<double> AutoTimeChangeCallback, Action<object, RoutedEventArgs> TimeEnabledEvent, Action<object, RoutedEventArgs> TimeDisabledEvent)
         {
-            this.TimeChangedCallback = TimeChangedCallback;
+            this.AutoTimeChangeCallback = AutoTimeChangeCallback;
+            this.TimeEnabledEvent = TimeEnabledEvent;
+            this.TimeDisabledEvent = TimeDisabledEvent;
             InitializeComponent();
+            DataContext = this;
+            TimeEnabled = false;
 
             AutomationTimer = new DispatcherTimer();
             AutomationTimer.Tick += DispatchAutomationTimer;
@@ -35,11 +42,6 @@ namespace LocationInterface.Windows
                         return null;
                     }), null);
             };
-        }
-
-        private void SliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            TimeChangedCallback?.Invoke(((Slider)sender).Value);
         }
 
         private void AutomaticTimeEnabled(object sender, RoutedEventArgs e)
@@ -58,7 +60,7 @@ namespace LocationInterface.Windows
             {
                 AutoTimeCount += AutoTimeSpeed / 60d;
                 if (AutoTimeCount > 24) AutoTimeCount = 0;
-                TimeSlider.Value = AutoTimeCount;
+                AutoTimeChangeCallback?.Invoke(AutoTimeCount);
             }
         }
     }

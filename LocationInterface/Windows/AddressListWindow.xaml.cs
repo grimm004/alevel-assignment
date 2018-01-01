@@ -63,10 +63,10 @@ namespace LocationInterface.Windows
             SelectedMacAddresses = new string[MacSelectionDataGrid.SelectedItems.Count];
             for (int i = 0; i < SelectedMacAddresses.Length; i++) SelectedMacAddresses[i] = ((Mac)MacSelectionDataGrid.SelectedItems[i]).Address;
         }
-    }
 
-    class Mac
-    {
-        public string Address { get; set; }
+        private class Mac
+        {
+            public string Address { get; set; }
+        }
     }
 }
