@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace LocationInterface.Windows
 {
@@ -16,9 +17,11 @@ namespace LocationInterface.Windows
     {
         public List<MacPointCollection> Addresses { get; set; }
         public Action MacChangeCallback { get; }
+        public Common Common { get; }
 
-        public SelectionManagerWindow(Action MacChangeCallback)
+        public SelectionManagerWindow(Common common, Action MacChangeCallback)
         {
+            Common = common;
             this.MacChangeCallback = MacChangeCallback;
             InitializeComponent();
             DataContext = this;
@@ -60,6 +63,11 @@ namespace LocationInterface.Windows
 
         private void AddMacButtonPress(object sender, RoutedEventArgs e)
         {
+            AddMac();
+        }
+
+        public void AddMac()
+        {
             if (string.IsNullOrWhiteSpace(MacEntry.Text))
             {
                 System.Windows.MessageBox.Show("Please enter a MAC address...", "Invalid MAC", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -77,10 +85,9 @@ namespace LocationInterface.Windows
             if ((colorDialog = new ColorDialog()).ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Addresses.Add(new MacPointCollection { Address = MacEntry.Text, Colour = new Color { R = colorDialog.Color.R, G = colorDialog.Color.G, B = colorDialog.Color.B, A = colorDialog.Color.A }, MacPoints = new List<LocationPoint>() });
-                MacChangeCallback?.Invoke();
-                UpdateTable();
-
                 MacEntry.Text = "";
+                UpdateTable();
+                MacChangeCallback?.Invoke();
             }
         }
 
@@ -88,8 +95,8 @@ namespace LocationInterface.Windows
         {
             foreach (MacPointCollection pointCollection in MacSelectionDataGrid.SelectedItems)
                 Addresses.Remove(pointCollection);
-            MacChangeCallback?.Invoke();
             UpdateTable();
+            MacChangeCallback?.Invoke();
         }
 
         public void UpdateTable()
@@ -97,6 +104,26 @@ namespace LocationInterface.Windows
             MacSelectionDataGrid.Items.Clear();
             foreach (MacPointCollection address in Addresses)
                 MacSelectionDataGrid.Items.Add(address);
+        }
+
+        private void AddressListButtonPress(object sender, RoutedEventArgs e)
+        {
+            Random random = new Random();
+            AddressListWindow addressListWindow = new AddressListWindow(Common, Addresses.Select(macPointCollection => macPointCollection.Address).ToArray());
+            addressListWindow.ShowDialog();
+            if (addressListWindow.Selected)
+            {
+                string[] newAddresses = addressListWindow.SelectedMacAddresses.Where(newMacAddress => !Addresses.Any(macExistingCollection => macExistingCollection.Address == newMacAddress)).ToArray();
+                foreach (string macAddress in newAddresses)
+                    Addresses.Add(new MacPointCollection() { Address = macAddress, Colour = new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()) });
+            }
+            UpdateTable();
+            MacChangeCallback?.Invoke();
+        }
+
+        private void OnMacEntryKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Return) AddMac();
         }
     }
 }

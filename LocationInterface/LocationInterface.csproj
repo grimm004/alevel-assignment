@@ -134,6 +134,9 @@
     <Compile Include="Utils\KeyBind.cs" />
     <Compile Include="Utils\MacPointCollection.cs" />
     <Compile Include="Utils\PluginManager.cs" />
+    <Compile Include="Windows\AddressListWindow.xaml.cs">
+      <DependentUpon>AddressListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ContactSelectorWindow.xaml.cs">
       <DependentUpon>ContactSelectorWindow.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,10 @@
     <Compile Include="Windows\VendorAnalysisWindow.xaml.cs">
       <DependentUpon>VendorAnalysisWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Windows\AddressListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ContactSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

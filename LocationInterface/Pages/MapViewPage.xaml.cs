@@ -38,7 +38,7 @@ namespace LocationInterface.Pages
 
             ImageFiles = App.ImageIndex.ImageFiles;
 
-            SelectionManagerWindow = new SelectionManagerWindow(UpdatePoints);
+            SelectionManagerWindow = new SelectionManagerWindow(Common, UpdatePoints);
             TimeManagerWindow = new TimeManagerWindow(UpdateTimedPoints);
         }
 
@@ -50,7 +50,6 @@ namespace LocationInterface.Pages
 
         private void UpdatePoints()
         {
-            Console.WriteLine("Updating points");
             if (SelectedImageFile != null)
             {
                 MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
@@ -60,9 +59,7 @@ namespace LocationInterface.Pages
                         foreach (Record record in table.GetRecords("MAC", macPointCollection.Address))
                             if (record.GetValue<string>("Deck") == SelectedImageFile.Identifier)
                                 macPointCollection.MacPoints.Add(new LocationPoint { Point = new Vector2((float)record.GetValue<double>("X"), (float)record.GetValue<double>("Y")), Time = record.GetValue<DateTime>("Date").TimeOfDay });
-
-                foreach (MacPointCollection collection in MacPointCollections)
-                    Console.WriteLine(collection.MacPoints.Count);
+                
                 MapViewer.LoadPoints(MacPointCollections);
             }
         }
