@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using DatabaseManagerLibrary;
 using LocationInterface.Windows;
-using System.Windows.Controls.Primitives;
 
 namespace LocationInterface.Pages
 {

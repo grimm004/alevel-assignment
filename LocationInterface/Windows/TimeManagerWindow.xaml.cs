@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace LocationInterface.Windows
@@ -30,7 +29,7 @@ namespace LocationInterface.Windows
 
             AutomationTimer = new DispatcherTimer();
             AutomationTimer.Tick += DispatchAutomationTimer;
-            AutomationTimer.Interval = TimeSpan.FromMilliseconds(1000d / 60d);
+            AutomationTimer.Interval = TimeSpan.FromMilliseconds(1000d / 30d);
 
             Closing += delegate(object sender, CancelEventArgs e)
             {
@@ -58,7 +57,7 @@ namespace LocationInterface.Windows
         {
             if (AutoTimeCheckbox.IsEnabled)
             {
-                AutoTimeCount += AutoTimeSpeed / 60d;
+                AutoTimeCount += AutoTimeSpeed / 30d;
                 if (AutoTimeCount > 24) AutoTimeCount = 0;
                 AutoTimeChangeCallback?.Invoke(AutoTimeCount);
             }
