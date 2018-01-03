@@ -60,11 +60,13 @@ namespace LocationInterface.Pages
                         foreach (MacPointCollection macPointCollection in MacPointCollections)
                             if (record.GetValue<string>("MAC") == macPointCollection.Address)
                             {
+                                LocationRecord locationRecord = record.ToObject<LocationRecord>();
                                 macPointCollection.MacPoints.Add(
                                     new LocationPoint
                                     {
-                                        Point = new Vector2((float)record.GetValue<double>("X"), (float)record.GetValue<double>("Y")),
-                                        Time = record.GetValue<DateTime>("Date").TimeOfDay
+                                        Point = locationRecord,
+                                        Time = locationRecord.Date.TimeOfDay,
+                                        Node = locationRecord.Location,
                                     });
                                 break;
                             }

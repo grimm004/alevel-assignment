@@ -49,11 +49,8 @@ namespace LocationInterface.Utils
             int i = 0;
             for (int x = -radius; x < radius; x++)
                 for (int y = -radius; y < radius; y++)
-                {
-                    if ((x * x) + (y * y) < radius * radius) circleData[i] = Color.White;
-                    else circleData[i] = new Color(0, 0, 0, 0);
-                    i++;
-                }
+                    if ((x * x) + (y * y) < radius * radius) circleData[i++] = Color.White;
+                    else circleData[i++] = new Color(0, 0, 0, 0);
             PointTexture.SetData(circleData);
             TimeBased = false;
 
@@ -141,7 +138,11 @@ namespace LocationInterface.Utils
             {
                 SpriteBatch.Draw(PointTexture, position, null, MacPointCollections[i].Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
                 SpriteBatch.DrawString(Font, MacPointCollections[i].Address, position + new Vector2(10, -5), Color.Black);
-                if (TimeBased) SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0 ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") : "No Points", position + new Vector2(150, -5), Color.Black);
+                if (TimeBased)
+                {
+                    SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0 ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") : "No Points", position + new Vector2(125, -5), Color.Black);
+                    if (MacPointCollections[i].MacPoints.Count > 0) SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints[0].Node, position + new Vector2(180, -5), Color.Black);
+                }
                 position.Y += 20;
             }
         }

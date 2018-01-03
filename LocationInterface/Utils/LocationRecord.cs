@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace LocationInterface.Utils
 {
@@ -10,5 +11,10 @@ namespace LocationInterface.Utils
         public string Deck { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
+
+        public static implicit operator Vector2(LocationRecord record)
+        {
+            return new Vector2((float)record.X, (float)record.Y);
+        }
     }
 }

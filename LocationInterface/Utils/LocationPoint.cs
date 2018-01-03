@@ -7,6 +7,7 @@ namespace LocationInterface.Utils
     {
         public Vector2 Point { get; set; }
         public TimeSpan Time { get; set; }
+        public string Node { get; set; }
 
         public static implicit operator Vector2(LocationPoint point)
         {
