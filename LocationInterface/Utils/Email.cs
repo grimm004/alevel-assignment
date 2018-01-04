@@ -30,15 +30,28 @@ namespace LocationInterface.Utils
             BindableVariables = new Dictionary<string, IAnalysis>();
         }
 
+        private enum VariableParameter
+        {
+            AnalysisReference,
+            PropertyReference,
+            Metadata,
+        }
+
         public ProcessedBody ProcessedBody
         {
             get
             {
+                string processedBody = "";
                 bool inVariable = false;
                 string currentVariable = "";
-                string processedBody = "";
-                string variableType = "";
-                bool inVariableType = false;
+
+                string currentAnalysisReference = "";
+                string currentPropertyReference = "";
+                string currentMetadata = "";
+
+                VariableParameter parameterSwtich = VariableParameter.AnalysisReference;
+                bool inParameter = false;
+
                 int lineNumber = 1, linePosition = 0;
                 for (int i = 0; i < PreProcessedBody.Length; i++)
                 {
@@ -47,11 +60,11 @@ namespace LocationInterface.Utils
                     else if (PreProcessedBody[i] == '}')
                     {
                         inVariable = false;
-                        inVariableType = false;
+                        inParameter = false;
 
                         if (BindableVariables.ContainsKey(currentVariable))
                         {
-                            AnalysisResult result = BindableVariables[currentVariable].FetchResult(analysisReference, propertyReference, metadata);
+                            AnalysisResult result = BindableVariables[currentVariable].FetchResult(currentAnalysisReference, currentPropertyReference, currentMetadata);
                             if (result.Outcome == ResultRequestOutcome.OK)
                                 processedBody += result.Content;
                             else
@@ -65,17 +78,51 @@ namespace LocationInterface.Utils
                             Console.WriteLine($"Bind '{ currentVariable }' could not be found.");
                             return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
                         }
-                        variableType = "";
                         currentVariable = "";
+                        parameterSwtich = VariableParameter.AnalysisReference;
+                        currentAnalysisReference = "";
+                        currentPropertyReference = "";
+                        currentMetadata = "";
                     }
-                    else if (inVariable && !inVariableType && PreProcessedBody[i] == ':')
+                    else if (inVariable && !inParameter && PreProcessedBody[i] == ':')
                     {
                         inVariable = false;
-                        inVariableType = true;
+                        inParameter = true;
+                        parameterSwtich = VariableParameter.AnalysisReference;
                     }
-                    else if (!inVariable && inVariableType && PreProcessedBody[i] != ' ') variableType += PreProcessedBody[i];
-                    else if (inVariable && !inVariableType && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
-                    else if ((inVariable || inVariableType) && PreProcessedBody[i] == ' ') continue;
+                    else if (!inVariable && inParameter && PreProcessedBody[i] == ':')
+                    {
+                        switch (parameterSwtich)
+                        {
+                            case VariableParameter.AnalysisReference:
+                                parameterSwtich = VariableParameter.PropertyReference;
+                                break;
+                            case VariableParameter.PropertyReference:
+                                parameterSwtich = VariableParameter.Metadata;
+                                break;
+                            case VariableParameter.Metadata:
+                                parameterSwtich = VariableParameter.AnalysisReference;
+                                inParameter = false;
+                                break;
+                        }
+                    }
+                    else if (!inVariable && inParameter && PreProcessedBody[i] != ' ')
+                    {
+                        switch (parameterSwtich)
+                        {
+                            case VariableParameter.AnalysisReference:
+                                currentAnalysisReference += PreProcessedBody[i];
+                                break;
+                            case VariableParameter.PropertyReference:
+                                currentPropertyReference += PreProcessedBody[i];
+                                break;
+                            case VariableParameter.Metadata:
+                                currentMetadata += PreProcessedBody[i];
+                                break;
+                        }
+                    }
+                    else if (inVariable && !inParameter && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
+                    else if ((inVariable || inParameter) && PreProcessedBody[i] == ' ') continue;
                     else processedBody += PreProcessedBody[i];
                     linePosition++;
                 }
