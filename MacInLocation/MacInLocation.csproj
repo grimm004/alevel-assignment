@@ -47,10 +47,12 @@
     <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
       <Project>{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}</Project>
       <Name>DatabaseManagerLibrary</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AnalysisSDK\AnalysisSDK.csproj">
       <Project>{95dd085e-556f-42e0-8f6d-421e06eb16ea}</Project>
       <Name>AnalysisSDK</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

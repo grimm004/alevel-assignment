@@ -4,6 +4,7 @@ using LocationInterface.Utils;
 using LocationInterface.Windows;
 using System.Collections.Generic;
 using PdfSharp;
+using System.Diagnostics;
 
 namespace LocationInterface.Pages
 {
@@ -61,10 +62,10 @@ namespace LocationInterface.Pages
             // Create a new instance of the vendor analysis window and show it as a dialog
             if (SelectedAnalysis != null) new AnalysisWindow(Common, SelectedAnalysis.Analysis).ShowDialog();
         }
-
-        private void PdfButtonClick(object sender, RoutedEventArgs e)
+        
+        private void OpenPluginFolderButtonClick(object sender, RoutedEventArgs e)
         {
-            
+            Process.Start(Constants.PLUGINFOLDER);
         }
     }
 }
