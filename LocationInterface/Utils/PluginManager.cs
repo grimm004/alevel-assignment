@@ -22,25 +22,22 @@ namespace LocationInterface.Utils
             foreach (string pluginFile in pluginFiles)
             {
                 Assembly assembly = Assembly.LoadFrom(pluginFile);
-
-                IAnalysisResult analysisResults = null;
+                
                 IAnalysis analysis = null;
-
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
-                    if (typeof(IAnalysisResult).IsAssignableFrom(type))
-                        analysisResults = (IAnalysisResult)Activator.CreateInstance(type);
-                    else if (typeof(IAnalysis).IsAssignableFrom(type))
-                        analysis = (IAnalysis)Activator.CreateInstance(type);
-
-                if (analysisResults != null && analysis != null)
-                    Plugins.Add(new AnalysisPlugin()
+                    if (typeof(IAnalysis).IsAssignableFrom(type))
                     {
-                        Name = Path.GetFileNameWithoutExtension(pluginFile),
-                        Assembly = assembly,
-                        AnalysisResult = analysisResults,
-                        Analysis = analysis,
-                    });
+                        analysis = (IAnalysis)Activator.CreateInstance(type);
+                        return;
+                    }
+
+                Plugins.Add(new AnalysisPlugin()
+                {
+                    Name = Path.GetFileNameWithoutExtension(pluginFile),
+                    Assembly = assembly,
+                    Analysis = analysis,
+                });
             }
         }
     }
@@ -49,7 +46,6 @@ namespace LocationInterface.Utils
     {
         public string Name { get; set; }
         public Assembly Assembly { get; set; }
-        public IAnalysisResult AnalysisResult { get; set; }
         public IAnalysis Analysis { get; set; }
     }
 }

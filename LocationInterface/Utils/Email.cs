@@ -7,52 +7,63 @@ using System.Windows;
 
 namespace LocationInterface.Utils
 {
+    public enum ProcessResult
+    {
+        OK,
+        ERROR,
+    }
+
+    public class ProcessedBody
+    {
+        public ProcessResult ProcessResult { get; set; }
+        public string Body { get; set; }
+    }
+
     public class EmailProcessor
     {
         public string PreProcessedBody { get; set; }
-        public Dictionary<string, IAnalysisResult> BindableVariables { get; set; }
+        public Dictionary<string, IAnalysis> BindableVariables { get; set; }
 
         public EmailProcessor()
         {
             PreProcessedBody = "";
-            BindableVariables = new Dictionary<string, IAnalysisResult>();
+            BindableVariables = new Dictionary<string, IAnalysis>();
         }
 
-        public string ProcessedBody
+        public ProcessedBody ProcessedBody
         {
             get
             {
                 bool inVariable = false;
                 string currentVariable = "";
-                string processedString = "";
+                string processedBody = "";
                 string variableType = "";
                 bool inVariableType = false;
+                int lineNumber = 1, linePosition = 0;
                 for (int i = 0; i < PreProcessedBody.Length; i++)
+                {
+                    if (PreProcessedBody[i] == '\n') { linePosition = 0; lineNumber++; }
                     if (PreProcessedBody[i] == '{') inVariable = true;
                     else if (PreProcessedBody[i] == '}')
                     {
                         inVariable = false;
                         inVariableType = false;
-                        try
-                        {
 
-                            switch (variableType)
+                        if (BindableVariables.ContainsKey(currentVariable))
+                        {
+                            AnalysisResult result = BindableVariables[currentVariable].FetchResult(analysisReference, propertyReference, metadata);
+                            if (result.Outcome == ResultRequestOutcome.OK)
+                                processedBody += result.Content;
+                            else
                             {
-                                case "short":
-                                    processedString += BindableVariables[currentVariable].ShortOutputString;
-                                    break;
-                                case "full":
-                                    processedString += BindableVariables[currentVariable].LongOutputString;
-                                    break;
-                                default:
-                                    processedString += BindableVariables[currentVariable].StandardOutputString;
-                                    break;
+                                MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }.", "Preprocessing Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
                             }
                         }
-                        catch (KeyNotFoundException)
+                        else
                         {
-                            // TODO: Cancel email send if error occurs
                             Console.WriteLine($"Bind '{ currentVariable }' could not be found.");
+                            return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
                         }
                         variableType = "";
                         currentVariable = "";
@@ -65,8 +76,10 @@ namespace LocationInterface.Utils
                     else if (!inVariable && inVariableType && PreProcessedBody[i] != ' ') variableType += PreProcessedBody[i];
                     else if (inVariable && !inVariableType && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
                     else if ((inVariable || inVariableType) && PreProcessedBody[i] == ' ') continue;
-                    else processedString += PreProcessedBody[i];
-                return processedString;
+                    else processedBody += PreProcessedBody[i];
+                    linePosition++;
+                }
+                return new ProcessedBody { ProcessResult = ProcessResult.OK, Body = processedBody };
             }
         }
     }
@@ -178,7 +191,7 @@ namespace LocationInterface.Utils
             {
                 From = SenderAccount.MailAddress,
                 Subject = Subject,
-                Body = emailProcessor.ProcessedBody,
+                Body = emailProcessor.ProcessedBody.Body,
             })
             {
                 // For each recipient in the recipients array add it to the message
@@ -190,13 +203,13 @@ namespace LocationInterface.Utils
                 try
                 {
                     // Try to instanciate an smtpclient and send the message
-                    new SmtpClient(SettingsManager.Active.EmailServer, SettingsManager.Active.EmailPort)
-                    {
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential(SenderAccount.MailAddress.Address, SenderAccount.Password)
-                    }.Send(message);
+                    //new SmtpClient(SettingsManager.Active.EmailServer, SettingsManager.Active.EmailPort)
+                    //{
+                    //    EnableSsl = true,
+                    //    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    //    UseDefaultCredentials = false,
+                    //    Credentials = new NetworkCredential(SenderAccount.MailAddress.Address, SenderAccount.Password)
+                    //}.Send(message);
                 }
                 catch (SmtpException e)
                 {

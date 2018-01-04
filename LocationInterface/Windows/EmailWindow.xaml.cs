@@ -22,11 +22,11 @@ namespace LocationInterface.Windows
 
             EmailProcessor = new EmailProcessor()
             {
-                BindableVariables = new Dictionary<string, IAnalysisResult>(),
+                BindableVariables = new Dictionary<string, IAnalysis>(),
             };
 
             foreach (AnalysisPlugin plugin in PluginManager.Plugins)
-                EmailProcessor.BindableVariables[plugin.Name] = plugin.AnalysisResult;
+                EmailProcessor.BindableVariables[plugin.Name] = plugin.Analysis;
         }
 
         public void ManageContactsButtonClick(object sender, RoutedEventArgs e)

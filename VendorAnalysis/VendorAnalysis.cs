@@ -8,7 +8,6 @@ using System.IO;
 using System.Net.NetworkInformation;
 using AnalysisSDK;
 using DatabaseManagerLibrary.CSV;
-using System.Windows;
 
 namespace VendorAnalysis
 {
@@ -22,54 +21,15 @@ namespace VendorAnalysis
             return string.Format("\"{0}\",{1}", Name, UserCount);
         }
     }
-
-    public class VendorAnalysisResult : IAnalysisResult
-    {
-        public string ShortOutputString
-        {
-            get
-            {
-                return $"{ ResultsTable.RecordCount } unique vendors.";
-            }
-        }
-        public string StandardOutputString
-        {
-            get
-            {
-                string resultsString = "";
-                foreach (Record record in ResultsTable.GetRecords()) resultsString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
-                return resultsString;
-            }
-        }
-        public string LongOutputString
-        {
-            get
-            {
-                string resultsString = "";
-                foreach (Record record in ResultsTable.GetRecords()) resultsString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
-                return resultsString;
-            }
-        }
-
-        protected Table ResultsTable { get; set; }
-
-        public VendorAnalysisResult(string folder, string tableName)
-        {
-            ResultsTable = new CSVDatabase(folder).GetTable(tableName);
-        }
-
-        public VendorAnalysisResult()
-        {
-            Database database = new CSVDatabase("Analysis");
-            ResultsTable = database.GetTable("VendorCounts-31-08-2017-18-32-10");
-        }
-    }
-
+    
     class VendorAnalysis : IAnalysis
     {
         public double CompletionRatio { get; protected set; }
+
+        public string Description { get { return "Analyse the MAC addresses for their vendors."; } }
+
         public const string API = "api.macvendors.com";
-        
+
         public bool TestConnection()
         {
             try
@@ -129,6 +89,25 @@ namespace VendorAnalysis
                     Console.WriteLine($"{ vendor.Name } - { vendor.UserCount }");
                 }
             }
+        }
+
+        public AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata)
+        {
+            Table resultsTable = new CSVDatabase("Analysis").GetTable($"VendorAnalysis-{ analysisReference }");
+
+            if (resultsTable == null) return AnalysisResult.InvalidAnalysisReference;
+
+            string resultString = "";
+            switch (analysisReference.ToLower())
+            {
+                case "count":
+                    resultString = $"{ resultsTable.RecordCount } unique vendors.";
+                    break;
+                default:
+                    foreach (Record record in resultsTable.GetRecords()) resultString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
+                    break;
+            }
+            return new AnalysisResult(resultString);
         }
     }
 }

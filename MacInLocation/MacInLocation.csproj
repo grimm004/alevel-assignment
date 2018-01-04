@@ -4,20 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95DD085E-556F-42E0-8F6D-421E06EB16EA}</ProjectGuid>
+    <ProjectGuid>{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnalysisSDK</RootNamespace>
-    <AssemblyName>AnalysisSDK</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>MacInLocation</RootNamespace>
+    <AssemblyName>MacInLocation</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\LocationInterface\bin\Debug\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,14 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis.cs" />
-    <Compile Include="LocationRecord.cs" />
+    <Compile Include="MacInLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DatabaseManager\DatabaseManagerLibrary.csproj">
-      <Project>{39effd9a-84d2-4ad0-9842-60e5ee7ff419}</Project>
+      <Project>{39EFFD9A-84D2-4AD0-9842-60E5EE7FF419}</Project>
       <Name>DatabaseManagerLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalysisSDK\AnalysisSDK.csproj">
+      <Project>{95dd085e-556f-42e0-8f6d-421e06eb16ea}</Project>
+      <Name>AnalysisSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

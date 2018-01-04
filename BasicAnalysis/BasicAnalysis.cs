@@ -17,41 +17,11 @@ namespace BasicAnalysis
         }
     }
 
-    public class BasicAnalysisResult : IAnalysisResult
-    {
-        public string ShortOutputString
-        {
-            get
-            {
-                return StandardOutputString;
-            }
-        }
-
-        public string StandardOutputString
-        {
-            get
-            {
-                Database database = new CSVDatabase("Analysis");
-                Table table = database.GetTable("BasicAnalysis");
-
-                string output = "";
-                foreach (DeckCountPair pair in table.GetRecords<DeckCountPair>()) output += pair.ToString() + Environment.NewLine;
-                return output;
-            }
-        }
-
-        public string LongOutputString
-        {
-            get
-            {
-                return StandardOutputString;
-            }
-        }
-    }
-
     public class BasicAnalysis : IAnalysis
     {
         public Dictionary<string, int> DeckCounts { get; set; }
+
+        public string Description { get { return "Analyse the number of records from each deck."; } }
 
         public void Run(Table[] tables, Action<double> PercentageCompletionChange)
         {
@@ -80,6 +50,18 @@ namespace BasicAnalysis
             LocationRecord locationRecord = record.ToObject<LocationRecord>();
             if (DeckCounts.ContainsKey(locationRecord.Deck)) DeckCounts[locationRecord.Deck]++;
             else DeckCounts[locationRecord.Deck] = 1;
+        }
+
+        public AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata)
+        {
+            Database database = new CSVDatabase("Analysis");
+            Table table = database.GetTable("BasicAnalysis");
+
+            string output = "";
+            foreach (DeckCountPair pair in table.GetRecords<DeckCountPair>())
+                output += pair.ToString() + Environment.NewLine;
+
+            return new AnalysisResult { Content = output, Outcome = ResultRequestOutcome.OK };
         }
     }
 }
