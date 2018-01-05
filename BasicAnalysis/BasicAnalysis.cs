@@ -33,11 +33,12 @@ namespace BasicAnalysis
                 PercentageCompletionChange?.Invoke(i / (double)tables.Length);
             }
 
-            Database database = new CSVDatabase("Analysis");
+            CSVDatabase database = new CSVDatabase("Analysis");
             if (database.GetTable("BasicAnalysis") != null) database.DeleteTable("BasicAnalysis");
             database.SaveChanges();
 
             Table basicAnalysisTable = database.CreateTable("BasicAnalysis", new CSVTableFields("Deck:STRING,Count:INTEGER"));
+            database.SaveChanges();
             foreach (KeyValuePair<string, int> item in DeckCounts)
                 basicAnalysisTable.AddRecord(new object[] { item.Key, item.Value });
             database.SaveChanges();
@@ -57,11 +58,15 @@ namespace BasicAnalysis
             Database database = new CSVDatabase("Analysis");
             Table table = database.GetTable("BasicAnalysis");
 
-            string output = "";
-            foreach (DeckCountPair pair in table.GetRecords<DeckCountPair>())
-                output += pair.ToString() + Environment.NewLine;
+            if (table != null)
+            {
+                string output = "";
+                foreach (DeckCountPair pair in table.GetRecords<DeckCountPair>())
+                    output += pair.ToString() + Environment.NewLine;
 
-            return new AnalysisResult { Content = output, Outcome = ResultRequestOutcome.OK };
+                return new AnalysisResult { Content = output, Outcome = ResultRequestOutcome.OK };
+            }
+            return AnalysisResult.PluginError("Could not find recent analysis.");
         }
     }
 }

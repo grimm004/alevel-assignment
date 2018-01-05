@@ -29,15 +29,16 @@ namespace LocationInterface.Utils
                     if (typeof(IAnalysis).IsAssignableFrom(type))
                     {
                         analysis = (IAnalysis)Activator.CreateInstance(type);
-                        return;
+                        break;
                     }
 
-                Plugins.Add(new AnalysisPlugin()
-                {
-                    Name = Path.GetFileNameWithoutExtension(pluginFile),
-                    Assembly = assembly,
-                    Analysis = analysis,
-                });
+                if (analysis != null)
+                    Plugins.Add(new AnalysisPlugin()
+                    {
+                        Name = Path.GetFileNameWithoutExtension(pluginFile),
+                        Assembly = assembly,
+                        Analysis = analysis,
+                    });
             }
         }
     }

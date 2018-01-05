@@ -35,6 +35,11 @@ namespace AnalysisSDK
         public static AnalysisResult InvalidAnalysisReference { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidAnalysisReference); } }
         public static AnalysisResult InvalidPropertyReference { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidPropertyReference); } }
         public static AnalysisResult InvalidMetadata { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidMetadata); } }
+
+        public static AnalysisResult PluginError(string message)
+        {
+            return new AnalysisResult { Outcome = ResultRequestOutcome.ErrPluginInternal, Content = message };
+        }
     }
 
     public enum ResultRequestOutcome
@@ -46,6 +51,8 @@ namespace AnalysisSDK
         ErrInvalidPropertyReference,
         [Description("Invalid Metadata Error")]
         ErrInvalidMetadata,
+        [Description("Internal Plugin Error")]
+        ErrPluginInternal,
         [Description("Unknown Error")]
         ErrUnknown,
     }

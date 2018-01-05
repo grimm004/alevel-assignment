@@ -69,7 +69,7 @@ namespace LocationInterface.Utils
                                 processedBody += result.Content;
                             else
                             {
-                                MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }.", "Preprocessing Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }. { (!string.IsNullOrWhiteSpace(result.Content) ? $" Message: { result.Content }" : "") }", "Preprocessing Error", MessageBoxButton.OK, MessageBoxImage.Error);
                                 return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
                             }
                         }
@@ -250,13 +250,13 @@ namespace LocationInterface.Utils
                 try
                 {
                     // Try to instanciate an smtpclient and send the message
-                    //new SmtpClient(SettingsManager.Active.EmailServer, SettingsManager.Active.EmailPort)
-                    //{
-                    //    EnableSsl = true,
-                    //    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    //    UseDefaultCredentials = false,
-                    //    Credentials = new NetworkCredential(SenderAccount.MailAddress.Address, SenderAccount.Password)
-                    //}.Send(message);
+                    new SmtpClient(SettingsManager.Active.EmailServer, SettingsManager.Active.EmailPort)
+                    {
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(SenderAccount.MailAddress.Address, SenderAccount.Password)
+                    }.Send(message);
                 }
                 catch (SmtpException e)
                 {

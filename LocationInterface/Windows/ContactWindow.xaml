@@ -13,7 +13,7 @@
     <Grid>
         <DataGrid x:Name="contactsDataGrid" Margin="0,0,0,20" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Path=Name}" Width="*"/>
+                <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Path=Name}" Width="*"/>
                 <DataGridTextColumn Header="Email Address" IsReadOnly="True"  Binding="{Binding Path=EmailAddress}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
