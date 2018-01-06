@@ -1,17 +1,6 @@
 ﻿using LocationInterface.Utils;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LocationInterface.Windows
 {
@@ -31,6 +20,10 @@ namespace LocationInterface.Windows
         public string AnalysisBindString { get { return $"{{ { SelectedAnalysis }{ (string.IsNullOrWhiteSpace(AnalysisMetadata) ? "" : ":") }{ AnalysisMetadata } }}"; } }
         public bool Selected { get; set; }
 
+        /// <summary>
+        /// Initialze the insert analysis window
+        /// </summary>
+        /// <param name="emailProcessor"></param>
         public InsertAnalysisWindow(EmailProcessor emailProcessor)
         {
             InitializeComponent();
@@ -39,12 +32,22 @@ namespace LocationInterface.Windows
             AnalysisSelectionBox.ItemsSource = emailProcessor.BindableVariables.Keys.ToArray();
         }
 
+        /// <summary>
+        /// Submit the selection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SubmitButtonClick(object sender, RoutedEventArgs e)
         {
             Selected = true;
             Close();
         }
 
+        /// <summary>
+        /// Cancel the selection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CancelButtonClick(object sender, RoutedEventArgs e)
         {
             Selected = false;
