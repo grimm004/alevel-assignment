@@ -13,7 +13,7 @@ namespace MacInLocation
 
         }
 
-        public AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata)
+        public AnalysisResult FetchResult(string metadata)
         {
             return new AnalysisResult();
         }

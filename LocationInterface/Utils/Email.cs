@@ -5,129 +5,100 @@ using System.Net;
 using System.Net.Mail;
 using System.Windows;
 
+// TODO: MAKE FINITE STATE MACHINE FOR PRE-PROCESSOR
+
 namespace LocationInterface.Utils
 {
-    public enum ProcessResult
-    {
-        OK,
-        ERROR,
-    }
-
-    public class ProcessedBody
-    {
-        public ProcessResult ProcessResult { get; set; }
-        public string Body { get; set; }
-    }
-
     public class EmailProcessor
     {
         public string PreProcessedBody { get; set; }
         public Dictionary<string, IAnalysis> BindableVariables { get; set; }
 
+        /// <summary>
+        /// Initialize the emailprocessor type
+        /// </summary>
         public EmailProcessor()
         {
             PreProcessedBody = "";
             BindableVariables = new Dictionary<string, IAnalysis>();
         }
 
-        private enum VariableParameter
+        /// <summary>
+        /// Pre-process an email body to insert analysis results
+        /// </summary>
+        /// <param name="processedBody">The output processed body</param>
+        /// <returns>true if the processing is successful</returns>
+        public bool ProcessedBody(out string processedBody)
         {
-            AnalysisReference,
-            PropertyReference,
-            Metadata,
-        }
+            // Define the processed body
+            processedBody = "";
 
-        public ProcessedBody ProcessedBody
-        {
-            get
+            // Define control and storage variables for detected variables
+            bool inVariable = false;
+            string currentVariable = "";
+
+            // Define control and storage variables for detected metadata
+            bool inMetadata = false;
+            string currentMetadata = "";
+
+            // Define information variables for the position of the pre-processor
+            int lineNumber = 1, linePosition = 0;
+            // Loop through each character in the pre-processed data
+            for (int i = 0; i < PreProcessedBody.Length; i++)
             {
-                string processedBody = "";
-                bool inVariable = false;
-                string currentVariable = "";
-
-                string currentAnalysisReference = "";
-                string currentPropertyReference = "";
-                string currentMetadata = "";
-
-                VariableParameter parameterSwtich = VariableParameter.AnalysisReference;
-                bool inParameter = false;
-
-                int lineNumber = 1, linePosition = 0;
-                for (int i = 0; i < PreProcessedBody.Length; i++)
+                // If there is a new line, reset the line position and increment the line number
+                if (PreProcessedBody[i] == '\n') { linePosition = 0; lineNumber++; }
+                // If the current character is an opener, mark the state as being in-variable
+                if (PreProcessedBody[i] == '{') inVariable = true;
+                // Else if the current character was a closer
+                else if (PreProcessedBody[i] == '}')
                 {
-                    if (PreProcessedBody[i] == '\n') { linePosition = 0; lineNumber++; }
-                    if (PreProcessedBody[i] == '{') inVariable = true;
-                    else if (PreProcessedBody[i] == '}')
+                    // If the bindable variables has a definition for the selected variable reference name
+                    if (BindableVariables.ContainsKey(currentVariable))
                     {
-                        inVariable = false;
-                        inParameter = false;
-
-                        if (BindableVariables.ContainsKey(currentVariable))
-                        {
-                            AnalysisResult result = BindableVariables[currentVariable].FetchResult(currentAnalysisReference, currentPropertyReference, currentMetadata);
-                            if (result.Outcome == ResultRequestOutcome.OK)
-                                processedBody += result.Content;
-                            else
-                            {
-                                MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }. { (!string.IsNullOrWhiteSpace(result.Content) ? $" Message: { result.Content }" : "") }", "Preprocessing Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                                return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
-                            }
-                        }
+                        // Fetch the result from the AnalysisSDK plugin
+                        AnalysisResult result = BindableVariables[currentVariable].FetchResult(currentMetadata);
+                        // If the outcome is valid, add the analysis content to the processed body
+                        if (result.Outcome == ResultRequestOutcome.OK) processedBody += result.Content;
                         else
                         {
-                            Console.WriteLine($"Bind '{ currentVariable }' could not be found.");
-                            return new ProcessedBody { ProcessResult = ProcessResult.ERROR, Body = "" };
-                        }
-                        currentVariable = "";
-                        parameterSwtich = VariableParameter.AnalysisReference;
-                        currentAnalysisReference = "";
-                        currentPropertyReference = "";
-                        currentMetadata = "";
-                    }
-                    else if (inVariable && !inParameter && PreProcessedBody[i] == ':')
-                    {
-                        inVariable = false;
-                        inParameter = true;
-                        parameterSwtich = VariableParameter.AnalysisReference;
-                    }
-                    else if (!inVariable && inParameter && PreProcessedBody[i] == ':')
-                    {
-                        switch (parameterSwtich)
-                        {
-                            case VariableParameter.AnalysisReference:
-                                parameterSwtich = VariableParameter.PropertyReference;
-                                break;
-                            case VariableParameter.PropertyReference:
-                                parameterSwtich = VariableParameter.Metadata;
-                                break;
-                            case VariableParameter.Metadata:
-                                parameterSwtich = VariableParameter.AnalysisReference;
-                                inParameter = false;
-                                break;
+                            // Else show an error message (along with line position, etc) and return false
+                            MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }. { (!string.IsNullOrWhiteSpace(result.Content) ? $" Message: { result.Content }" : "") }", "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return false;
                         }
                     }
-                    else if (!inVariable && inParameter && PreProcessedBody[i] != ' ')
+                    else
                     {
-                        switch (parameterSwtich)
-                        {
-                            case VariableParameter.AnalysisReference:
-                                currentAnalysisReference += PreProcessedBody[i];
-                                break;
-                            case VariableParameter.PropertyReference:
-                                currentPropertyReference += PreProcessedBody[i];
-                                break;
-                            case VariableParameter.Metadata:
-                                currentMetadata += PreProcessedBody[i];
-                                break;
-                        }
+                        // Else show an error message and return false
+                        MessageBox.Show($"Could not find plugin '{ currentVariable }' at line { lineNumber }, pos { linePosition }.", "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return false;
                     }
-                    else if (inVariable && !inParameter && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
-                    else if ((inVariable || inParameter) && PreProcessedBody[i] == ' ') continue;
-                    else processedBody += PreProcessedBody[i];
-                    linePosition++;
+
+                    // Re-set the control and storage variables
+                    currentVariable = "";
+                    inVariable = false;
+                    currentMetadata = "";
+                    inMetadata = false;
                 }
-                return new ProcessedBody { ProcessResult = ProcessResult.OK, Body = processedBody };
+                // Else if the pre-processor is recording a variable and a colon is found, switch to being int the metadata
+                else if (inVariable && !inMetadata && PreProcessedBody[i] == ':')
+                {
+                    inVariable = false;
+                    inMetadata = true;
+                }
+                // Else if pre-processor is recording a variable, not recording metadata and the current characer is not a space, add the current character to the current variable storage
+                else if (inVariable && !inMetadata && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
+                // Else if pre-processor is not recording a variable, recording metadata and the current characer is not a space, add the current character to the current metadata storage
+                else if (!inVariable && inMetadata && PreProcessedBody[i] != ' ') currentMetadata += PreProcessedBody[i];
+                // Else if the pre-processor is either recording a variable or metadata and the current character is a space, move over to the next iteration of the loop
+                else if ((inVariable || inMetadata) && PreProcessedBody[i] == ' ') continue;
+                // Else add the current character to the processed body
+                else processedBody += PreProcessedBody[i];
+                // Increment the line position
+                linePosition++;
             }
+            // Return true (as if it has reached this point without return the processed value is assumed to be valid)
+            return true;
         }
     }
 
@@ -229,16 +200,21 @@ namespace LocationInterface.Utils
         /// <summary>
         /// Send the email
         /// </summary>
-        public void Send(EmailProcessor emailProcessor)
+        /// <param name="emailProcessor">The email processor to use</param>
+        /// <returns>true if the email is sent, false if not</returns>
+        public bool Send(EmailProcessor emailProcessor)
         {
+            // Set the pre-processed body in the email processor to the raw entered body
             emailProcessor.PreProcessedBody = Body;
+            // If the processed body is not valid return false (and dont send the email), and output the processed body
+            if (!emailProcessor.ProcessedBody(out string body)) return false;
 
             // Create a new MailMessage
             using (MailMessage message = new MailMessage()
             {
                 From = SenderAccount.MailAddress,
                 Subject = Subject,
-                Body = emailProcessor.ProcessedBody.Body,
+                Body = body,
             })
             {
                 // For each recipient in the recipients array add it to the message
@@ -262,12 +238,15 @@ namespace LocationInterface.Utils
                 {
                     // If an smtpexception occurrs output the error message
                     MessageBox.Show($"An SMTP error occurred. Message from server: { e.Message }", "SMTP Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
                 }
                 catch (InvalidOperationException e)
                 {
                     // If an invalidoperationexception occurrs output the error message
                     MessageBox.Show(e.Message, "Email Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
                 }
+                return true;
             }
         }
     }

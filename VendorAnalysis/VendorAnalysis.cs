@@ -91,22 +91,13 @@ namespace VendorAnalysis
             }
         }
 
-        public AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata)
+        public AnalysisResult FetchResult(string metadata)
         {
-            Table resultsTable = new CSVDatabase("Analysis").GetTable($"VendorAnalysis-{ analysisReference }");
-
-            if (resultsTable == null) return AnalysisResult.InvalidAnalysisReference;
+            Table resultsTable = new CSVDatabase("Analysis").GetTable($"VendorAnalysis-{ metadata }");
+            if (resultsTable == null) return new AnalysisResult { Outcome = ResultRequestOutcome.ErrInvalidMetadata, Content = "Metadata should be the date reference to the Vendor Analysis." };
 
             string resultString = "";
-            switch (analysisReference.ToLower())
-            {
-                case "count":
-                    resultString = $"{ resultsTable.RecordCount } unique vendors.";
-                    break;
-                default:
-                    foreach (Record record in resultsTable.GetRecords()) resultString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
-                    break;
-            }
+            foreach (Record record in resultsTable.GetRecords()) resultString += $"{ record.GetValue<string>("Name") } - { record.GetValue<int>("Count") }{ Environment.NewLine }";
             return new AnalysisResult(resultString);
         }
     }

@@ -10,6 +10,7 @@ namespace LocationInterface.Utils
         {
             get
             {
+                // Fetch the translation matrix for the camera's position
                 return Matrix.CreateTranslation(
                     Position.X,
                     Position.Y, 0);
@@ -18,6 +19,7 @@ namespace LocationInterface.Utils
 
         public void Move(int x, int y)
         {
+            // Move the camera's position
             Position += new Vector2(x, y);
         }
     }

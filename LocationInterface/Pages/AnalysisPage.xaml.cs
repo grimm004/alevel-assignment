@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using LocationInterface.Utils;
 using LocationInterface.Windows;
 using System.Collections.Generic;
-using PdfSharp;
 using System.Diagnostics;
 
 namespace LocationInterface.Pages
@@ -63,8 +62,14 @@ namespace LocationInterface.Pages
             if (SelectedAnalysis != null) new AnalysisWindow(Common, SelectedAnalysis.Analysis).ShowDialog();
         }
         
+        /// <summary>
+        /// Open the analysis folder
+        /// </summary>
+        /// <param name="sender">The control that activated the action</param>
+        /// <param name="e">Information about the event</param>
         private void OpenPluginFolderButtonClick(object sender, RoutedEventArgs e)
         {
+            // Open the plugin folder in windows explorer
             Process.Start(Constants.PLUGINFOLDER);
         }
     }

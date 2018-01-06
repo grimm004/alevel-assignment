@@ -27,27 +27,16 @@ namespace LocationInterface.Windows
     public partial class InsertAnalysisWindow : Window
     {
         public string SelectedAnalysis { get; set; }
-        public string SelectedAnalysisType { get; set; }
-        public string AnalysisBindString { get { return string.Format("{{ {0}:{1} }}", SelectedAnalysis, SelectedAnalysisType); } }
+        public string AnalysisMetadata { get; set; }
+        public string AnalysisBindString { get { return $"{{ { SelectedAnalysis }{ (string.IsNullOrWhiteSpace(AnalysisMetadata) ? "" : ":") }{ AnalysisMetadata } }}"; } }
         public bool Selected { get; set; }
-        public string[] SelectableAnalysis { get; set; }
 
         public InsertAnalysisWindow(EmailProcessor emailProcessor)
         {
             InitializeComponent();
             DataContext = this;
             Selected = false;
-            analysisSelectionBox.ItemsSource = emailProcessor.BindableVariables.Keys.ToArray();
-
-            List<AnalysisTypeBind> listData = new List<AnalysisTypeBind>();
-            listData.Add(new AnalysisTypeBind { ID = "short", Name = "Short" });
-            listData.Add(new AnalysisTypeBind { ID = "standard", Name = "Standard" });
-            listData.Add(new AnalysisTypeBind { ID = "long", Name = "Long" });
-
-            analysisTypeSelectionBox.ItemsSource = listData;
-            analysisTypeSelectionBox.DisplayMemberPath = "Name";
-            analysisTypeSelectionBox.SelectedValuePath = "ID";
-            analysisTypeSelectionBox.SelectedValue = "standard";
+            AnalysisSelectionBox.ItemsSource = emailProcessor.BindableVariables.Keys.ToArray();
         }
 
         private void SubmitButtonClick(object sender, RoutedEventArgs e)
