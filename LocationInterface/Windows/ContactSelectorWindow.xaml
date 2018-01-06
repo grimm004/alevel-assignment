@@ -10,7 +10,7 @@
         Height="300"
         Title="Select From Contacts">
     <Grid>
-        <DataGrid x:Name="contactsDataGrid" IsReadOnly="True" SelectionChanged="ContactsDataGridSelectionChanged">
+        <DataGrid x:Name="ContactsDataGrid" IsReadOnly="True" SelectionChanged="ContactsDataGridSelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Path=Name}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Email Address" IsReadOnly="True"  Binding="{Binding Path=EmailAddress}" Width="*"></DataGridTextColumn>
