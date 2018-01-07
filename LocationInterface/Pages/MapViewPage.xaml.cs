@@ -38,7 +38,7 @@ namespace LocationInterface.Pages
 
             SelectionManagerWindow = new SelectionManagerWindow(Common, UpdatePoints);
             TimeSetterWindow = new TimeSetterWindow(UpdateTimedPoints);
-            TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.AutoTimeChange, TimeEnabledEvent, TimeDisabledEvent);
+            TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
         }
 
         /// <summary>

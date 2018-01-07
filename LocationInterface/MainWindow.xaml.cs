@@ -41,6 +41,10 @@ namespace LocationInterface
             DataContext = frame.Content = Common.CurrentPage = page;
         }
 
+        /// <summary>
+        /// Action when the window is closing
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(CancelEventArgs e)
         {
             Common.OnClose();

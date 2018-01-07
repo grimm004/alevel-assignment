@@ -9,7 +9,7 @@
         Title="Vendor Analysis">
     
     <Grid>
-        <Button x:Name="startAnalysisButton" Content="Start Analysis" HorizontalAlignment="Stretch" Margin="10,10,10,10" VerticalAlignment="Top" Click="StartButtonClick"/>
+        <Button x:Name="StartAnalysisButton" Content="Start Analysis" HorizontalAlignment="Stretch" Margin="10,10,10,10" VerticalAlignment="Top" Click="StartButtonClick"/>
         <ProgressBar x:Name="analysisProgressBar" HorizontalAlignment="Stretch" Height="10" Margin="10,35,10,10" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
