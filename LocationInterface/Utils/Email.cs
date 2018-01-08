@@ -229,16 +229,19 @@ namespace LocationInterface.Utils
         /// <summary>
         /// Send the email
         /// </summary>
-        public void Send(EmailProcessor emailProcessor)
+        public bool Send(EmailProcessor emailProcessor)
         {
             emailProcessor.PreProcessedBody = Body;
+            ProcessedBody processedBody = emailProcessor.ProcessedBody;
+
+            if (processedBody.ProcessResult == ProcessResult.ERROR) return false;
 
             // Create a new MailMessage
             using (MailMessage message = new MailMessage()
             {
                 From = SenderAccount.MailAddress,
                 Subject = Subject,
-                Body = emailProcessor.ProcessedBody.Body,
+                Body = processedBody.Body,
             })
             {
                 // For each recipient in the recipients array add it to the message
@@ -262,12 +265,15 @@ namespace LocationInterface.Utils
                 {
                     // If an smtpexception occurrs output the error message
                     MessageBox.Show($"An SMTP error occurred. Message from server: { e.Message }", "SMTP Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
                 }
                 catch (InvalidOperationException e)
                 {
                     // If an invalidoperationexception occurrs output the error message
                     MessageBox.Show(e.Message, "Email Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
                 }
+                return true;
             }
         }
     }

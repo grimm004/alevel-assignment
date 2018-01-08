@@ -81,8 +81,8 @@ namespace LocationInterface.Windows
         {
             statusLabel.Dispatcher.Invoke(() => statusLabel.Content = "Sending Email");
             sendButton.Dispatcher.Invoke(() => sendButton.IsEnabled = false);
-            ((Email)email).Send(EmailProcessor);
-            statusLabel.Dispatcher.Invoke(() => statusLabel.Content = "Email Sent");
+            bool emailSent = ((Email)email).Send(EmailProcessor);
+            statusLabel.Dispatcher.Invoke(() => statusLabel.Content = emailSent ? "Email Sent" : "Email Not Sent");
             sendButton.Dispatcher.Invoke(() => sendButton.IsEnabled = true);
         }
 
