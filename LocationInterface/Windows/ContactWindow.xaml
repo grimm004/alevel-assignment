@@ -11,7 +11,7 @@
         Title="Contacts">
     
     <Grid>
-        <DataGrid x:Name="contactsDataGrid" Margin="0,0,0,20" IsReadOnly="True">
+        <DataGrid x:Name="ContactsDataGrid" Margin="0,0,0,20" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Path=Name}" Width="*"/>
                 <DataGridTextColumn Header="Email Address" IsReadOnly="True"  Binding="{Binding Path=EmailAddress}" Width="*"/>
@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <TextBox x:Name="nameEntry" Grid.Column="0" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center">
+            <TextBox x:Name="NameEntry" Grid.Column="0" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Style.Resources>
@@ -48,7 +48,7 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <TextBox x:Name="emailEntry" Grid.Column="1" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center">
+            <TextBox x:Name="EmailEntry" Grid.Column="1" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center">
                 <TextBox.Style>
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                         <Style.Resources>

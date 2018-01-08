@@ -8,7 +8,7 @@ namespace AnalysisSDK
     {
         string Description { get; }
         void Run(Table[] tables, Action<double> percentageCompletionChange);
-        AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata);
+        AnalysisResult FetchResult(string metadata);
     }
 
     public class AnalysisResult
@@ -29,11 +29,9 @@ namespace AnalysisSDK
         public AnalysisResult(string content)
         {
             Outcome = ResultRequestOutcome.OK;
-            Content = "";
+            Content = content;
         }
-
-        public static AnalysisResult InvalidAnalysisReference { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidAnalysisReference); } }
-        public static AnalysisResult InvalidPropertyReference { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidPropertyReference); } }
+        
         public static AnalysisResult InvalidMetadata { get { return new AnalysisResult(ResultRequestOutcome.ErrInvalidMetadata); } }
 
         public static AnalysisResult PluginError(string message)
@@ -45,10 +43,6 @@ namespace AnalysisSDK
     public enum ResultRequestOutcome
     {
         OK,
-        [Description("Invalid Analysis Reference Error")]
-        ErrInvalidAnalysisReference,
-        [Description("Invalid Property Reference Error")]
-        ErrInvalidPropertyReference,
         [Description("Invalid Metadata Error")]
         ErrInvalidMetadata,
         [Description("Internal Plugin Error")]

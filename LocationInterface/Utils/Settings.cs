@@ -14,6 +14,7 @@ namespace LocationInterface.Utils
         {
             get
             {
+                // Load the default settings using the empty contructor for Settings
                 return new Settings();
             }
         }

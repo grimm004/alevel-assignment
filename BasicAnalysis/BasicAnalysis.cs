@@ -53,7 +53,7 @@ namespace BasicAnalysis
             else DeckCounts[locationRecord.Deck] = 1;
         }
 
-        public AnalysisResult FetchResult(string analysisReference, string propertyReference, string metadata)
+        public AnalysisResult FetchResult(string metadata)
         {
             Database database = new CSVDatabase("Analysis");
             Table table = database.GetTable("BasicAnalysis");
