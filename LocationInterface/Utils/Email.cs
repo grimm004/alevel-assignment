@@ -209,8 +209,6 @@ namespace LocationInterface.Utils
             // If the processed body is not valid return false (and dont send the email), and output the processed body
             if (!emailProcessor.ProcessedBody(out string body)) return false;
 
-            if (processedBody.ProcessResult == ProcessResult.ERROR) return false;
-
             // Create a new MailMessage
             using (MailMessage message = new MailMessage()
             {
