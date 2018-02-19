@@ -139,8 +139,10 @@ namespace LocationInterface.Utils
             MouseState mouseState = WpfMouse.GetState();
             KeyboardState keyboardState = WpfKeyboard.GetState();
 
-            // Update the bind
+            // Update the binds
             SKeyBind.Update(keyboardState);
+            DecreasePointSizeListener.Update(keyboardState);
+            IncreasePointSizeListener.Update(keyboardState);
             // Update the controls
             bool shiftDown = keyboardState.IsKeyDown(Keys.LeftShift);
             if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(5, 0);
@@ -153,9 +155,6 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.F)) TranslatePoints(shiftDown ? -4 : -1, 0);
             if (keyboardState.IsKeyDown(Keys.G)) TranslatePoints(0, shiftDown ? +4 : +1);
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
-
-            DecreasePointSizeListener.Update(keyboardState);
-            IncreasePointSizeListener.Update(keyboardState);
         }
 
         /// <summary>
