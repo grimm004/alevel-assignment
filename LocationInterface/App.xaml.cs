@@ -17,9 +17,12 @@ namespace LocationInterface
 
         public App()
         {
+            // Validate the required folders exist
             ValidateFolders();
+            // Validate the required database tables exist
             ValidateDatabaseTables();
 
+            // Save all the indexes
             DataIndex.SaveIndex();
             ImageIndex.ScanForFiles();
             ImageIndex.SaveIndex();
@@ -30,12 +33,15 @@ namespace LocationInterface
         /// </summary>
         public void ValidateFolders()
         {
+            // If desired directories do not exist, create them
             if (!Directory.Exists(SettingsManager.Active.AnalysisFolder)) Directory.CreateDirectory(SettingsManager.Active.AnalysisFolder);
             if (!Directory.Exists(SettingsManager.Active.ImageFolder)) Directory.CreateDirectory(SettingsManager.Active.ImageFolder);
             if (!Directory.Exists(SettingsManager.Active.DataCacheFolder)) Directory.CreateDirectory(SettingsManager.Active.DataCacheFolder);
             if (!Directory.Exists(SettingsManager.Active.LocationDataFolder)) Directory.CreateDirectory(SettingsManager.Active.LocationDataFolder);
             if (!Directory.Exists(Constants.PLUGINFOLDER)) Directory.CreateDirectory(Constants.PLUGINFOLDER);
+            // Load the plugins
             PluginManager.Load();
+            // Try to load the data indexes
             try
             {
                 if (!File.Exists($"{ SettingsManager.Active.LocationDataFolder }\\index.json") || (DataIndex = DataIndex.LoadIndex()) == null) { File.Create($"{ SettingsManager.Active.LocationDataFolder }\\index.json").Close(); DataIndex = new DataIndex(); }
@@ -63,9 +69,11 @@ namespace LocationInterface
         /// </summary>
         public void ValidateDatabaseTables()
         {
+            // Load or create the email database and its tables if they dont exist
             Database database = new CSVDatabase(SettingsManager.Active.EmailDatabase);
             if (database.GetTable("Contacts") == null) database.CreateTable("Contacts", new CSVTableFields("Name:string,EmailAddress:string"));
             if (database.GetTable("Presets") == null) database.CreateTable("Presets", new CSVTableFields("Name:string,Subject:string,Body:string"));
+            // Save any changes to the database
             database.SaveChanges();
         }
     }

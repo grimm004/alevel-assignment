@@ -23,10 +23,47 @@ namespace LocationInterface.Utils
         private Camera Camera { get; set; }
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
+        private int pointRadius;
+        private int PointRadius
+        {
+            get
+            {
+                return pointRadius;
+            }
+            set
+            {
+                pointRadius = value;
+                // Check the radius is within the desired bounds
+                if (pointRadius < 1) pointRadius = 1;
+                if (pointRadius > 10) pointRadius = 10;
+
+                int diameter = 2 * pointRadius;
+                // Create an instance of the texture
+                PointTexture = new Texture2D(GraphicsDevice, diameter, diameter);
+                // Deine and initialize the array that will store the texture data
+                Color[] circleData = new Color[diameter * diameter];
+                int i = 0;
+                // Loop through each x-value between the negitive radius and positive radius
+                for (int x = -pointRadius; x < pointRadius; x++)
+                    // Loop through each y-value between the negitive radius and positive radius
+                    for (int y = -pointRadius; y < pointRadius; y++)
+                        // If the sum of the squares of the current x and y values is less than the square of the radius (pythagoras)
+                        if ((x * x) + (y * y) < pointRadius * pointRadius)
+                            // Set the current pixel to be white (points are tinted a colour during runtime)
+                            circleData[i++] = Color.White;
+                        // Else set the colour of the position to not have an alpha (is transparent)
+                        else circleData[i++] = new Color(0, 0, 0, 0);
+                // Set the data in the texture instance
+                PointTexture.SetData(circleData);
+            }
+        }
 
         public bool TimeBased { get; set; }
 
         private SpriteFont Font { get; set; }
+
+        private KeyListener DecreasePointSizeListener { get; set; }
+        private KeyListener IncreasePointSizeListener { get; set; }
 
         /// <summary>
         /// Initialze the WpfGame instance along with import LocationMap items
@@ -44,26 +81,10 @@ namespace LocationInterface.Utils
             
             base.Initialize();
 
-            // Mathematically create a circle texture of the defined radius
-            int radius = 5, diameter = radius * 2;
-            
-            // Create an instance of the texture
-            PointTexture = new Texture2D(GraphicsDevice, diameter, diameter);
-            // Deine and initialize the array that will store the texture data
-            Color[] circleData = new Color[diameter * diameter];
-            int i = 0;
-            // Loop through each x-value between the negitive radius and positive radius
-            for (int x = -radius; x < radius; x++)
-                // Loop through each y-value between the negitive radius and positive radius
-                for (int y = -radius; y < radius; y++)
-                    // If the sum of the squares of the current x and y values is less than the square of the radius (pythagoras)
-                    if ((x * x) + (y * y) < radius * radius)
-                        // Set the current pixel to be white (points are tinted a colour during runtime)
-                        circleData[i++] = Color.White;
-                    // Else set the colour of the position to not have an alpha (is transparent)
-                    else circleData[i++] = new Color(0, 0, 0, 0);
-            // Set the data in the texture instance
-            PointTexture.SetData(circleData);
+            PointRadius = 5;
+            DecreasePointSizeListener = new KeyListener(Keys.Z, () => PointRadius--);
+            IncreasePointSizeListener = new KeyListener(Keys.X, () => PointRadius++);
+
             TimeBased = false;
 
             Random = new Random();
@@ -115,11 +136,13 @@ namespace LocationInterface.Utils
         protected override void Update(GameTime time)
         {
             // Fetch the mouse and keyboard states
-            var mouseState = WpfMouse.GetState();
-            var keyboardState = WpfKeyboard.GetState();
+            MouseState mouseState = WpfMouse.GetState();
+            KeyboardState keyboardState = WpfKeyboard.GetState();
 
-            // Update the bind
+            // Update the binds
             SKeyBind.Update(keyboardState);
+            DecreasePointSizeListener.Update(keyboardState);
+            IncreasePointSizeListener.Update(keyboardState);
             // Update the controls
             bool shiftDown = keyboardState.IsKeyDown(Keys.LeftShift);
             if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(5, 0);
@@ -189,7 +212,7 @@ namespace LocationInterface.Utils
                 // Loop through each macpoint in the current macpointcollection
                 foreach (Vector2 macPoint in macPointCollection.MacPoints)
                     // Draw the point with the desired colour with its offset and multiplier
-                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset + (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
+                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset + (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour, 0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
         /// <summary>

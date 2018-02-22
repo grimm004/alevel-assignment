@@ -25,36 +25,36 @@ namespace LocationInterface.Pages
                 // Create and return a new settings object with all the entered data
                 return new Settings
                 {
-                    PercentagePerUpdate = Convert.ToDouble(percentagePerUpdateInput.Text),
-                    RawDataRecordBuffer = Convert.ToInt32(rawDataRecordBufferInput.Text),
-                    DataCacheFolder = dataCacheFolderInput.Text,
-                    LocationDataFolder = locationDataFolderInput.Text,
-                    EmailDatabase = emailDatabaseFolder.Text,
-                    ImageFolder = imageFolder.Text,
-                    AnalysisFolder = analysisFolder.Text,
-                    EmailServer = emailServerInput.Text,
-                    EmailPort = Convert.ToInt32(emailPortInput.Text),
-                    EmailAddress = emailAddressInput.Text,
-                    DisplayName = emailNameInput.Text,
-                    Password = emailPasswordInput.Password
+                    PercentagePerUpdate = Convert.ToDouble(PercentagePerUpdateInput.Text),
+                    RawDataRecordBuffer = Convert.ToInt32(RawDataRecordBufferInput.Text),
+                    DataCacheFolder = DataCacheFolderInput.Text,
+                    LocationDataFolder = LocationDataFolderInput.Text,
+                    EmailDatabase = EmailDatabaseFolder.Text,
+                    ImageFolder = ImageFolder.Text,
+                    AnalysisFolder = AnalysisFolder.Text,
+                    EmailServer = EmailServerInput.Text,
+                    EmailPort = Convert.ToInt32(EmailPortInput.Text),
+                    EmailAddress = EmailAddressInput.Text,
+                    DisplayName = EmailNameInput.Text,
+                    Password = EmailPasswordInput.Password
                 };
             }
             set
             {
                 // Set the values of each entry box from the supplied settings object
 
-                percentagePerUpdateInput.Text = value.PercentagePerUpdate.ToString();
-                rawDataRecordBufferInput.Text = value.RawDataRecordBuffer.ToString();
-                dataCacheFolderInput.Text = value.DataCacheFolder;
-                locationDataFolderInput.Text = value.LocationDataFolder;
-                emailDatabaseFolder.Text = value.EmailDatabase;
-                imageFolder.Text = value.ImageFolder;
-                analysisFolder.Text = value.AnalysisFolder;
-                emailServerInput.Text = value.EmailServer;
-                emailPortInput.Text = value.EmailPort.ToString();
-                emailAddressInput.Text = value.EmailAddress;
-                emailNameInput.Text = value.DisplayName;
-                emailPasswordInput.Password = value.Password;
+                PercentagePerUpdateInput.Text = value.PercentagePerUpdate.ToString();
+                RawDataRecordBufferInput.Text = value.RawDataRecordBuffer.ToString();
+                DataCacheFolderInput.Text = value.DataCacheFolder;
+                LocationDataFolderInput.Text = value.LocationDataFolder;
+                EmailDatabaseFolder.Text = value.EmailDatabase;
+                ImageFolder.Text = value.ImageFolder;
+                AnalysisFolder.Text = value.AnalysisFolder;
+                EmailServerInput.Text = value.EmailServer;
+                EmailPortInput.Text = value.EmailPort.ToString();
+                EmailAddressInput.Text = value.EmailAddress;
+                EmailNameInput.Text = value.DisplayName;
+                EmailPasswordInput.Password = value.Password;
             }
         }
 
@@ -66,7 +66,7 @@ namespace LocationInterface.Pages
             Common = common;
             InitializeComponent();
             
-            applyButton.IsEnabled = loadDefaultsButton.IsEnabled = false;
+            ApplyButton.IsEnabled = LoadDefaultsButton.IsEnabled = false;
         }
 
         /// <summary>
@@ -90,14 +90,14 @@ namespace LocationInterface.Pages
                 try
                 {
                     // If the hash code of the entered settings is equal to the hash code of the default settings disable the load defaults button
-                    loadDefaultsButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Defaults.GetHashCode();
+                    LoadDefaultsButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Defaults.GetHashCode();
                     // If the hash code of the entered settings is equal to the hash code of the active settings disable the apply button
-                    applyButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Active.GetHashCode();
+                    ApplyButton.IsEnabled = EnteredSettings.GetHashCode() != SettingsManager.Active.GetHashCode();
                 } catch (FormatException)
                 {
                     // If a formatexception occurrs enable both buttons
-                    loadDefaultsButton.IsEnabled = true;
-                    applyButton.IsEnabled = false;
+                    LoadDefaultsButton.IsEnabled = true;
+                    ApplyButton.IsEnabled = false;
                 }
         }
 
@@ -190,10 +190,8 @@ namespace LocationInterface.Pages
         /// <returns>true if the text entered is numerical</returns>
         private bool IsNumericalText(string text)
         {
-            // Define a regular expression object to check if text is not numerical
-            Regex regex = new Regex("[^0-9.-]+");
-            // Return true if the text is not a match
-            return !regex.IsMatch(text);
+            // Return true if the text is not a match to a regular expression that check if text is not numerical
+            return !new Regex("[^0-9.-]+").IsMatch(text);
         }
     }
 }

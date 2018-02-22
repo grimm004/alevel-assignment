@@ -42,6 +42,9 @@ namespace LocationInterface.Utils
             DataViewerPage = new DataViewerPage(this);
         }
 
+        /// <summary>
+        /// Clean up anytrhing on close
+        /// </summary>
         public void OnClose()
         {
             MapViewPage.OnClose();

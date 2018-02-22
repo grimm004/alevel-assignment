@@ -18,6 +18,12 @@ namespace LocationInterface.Windows
         protected Action<object, RoutedEventArgs> TimeEnabledEvent { get; }
         protected Action<object, RoutedEventArgs> TimeDisabledEvent { get; }
 
+        /// <summary>
+        /// Initialze the TimeManagerWindow
+        /// </summary>
+        /// <param name="AutoTimeChangeCallback">Callback for a change in the automatic timer</param>
+        /// <param name="TimeEnabledEvent">Callback for when timing is enabled</param>
+        /// <param name="TimeDisabledEvent">Callback for when timing is disabled</param>
         public TimeManagerWindow(Action<double> AutoTimeChangeCallback, Action<object, RoutedEventArgs> TimeEnabledEvent, Action<object, RoutedEventArgs> TimeDisabledEvent)
         {
             this.AutoTimeChangeCallback = AutoTimeChangeCallback;
@@ -27,10 +33,14 @@ namespace LocationInterface.Windows
             DataContext = this;
             TimeEnabled = false;
 
+            // Instanciate the automation timer
             AutomationTimer = new DispatcherTimer();
+            // Add the dispatch callback to the automation timer
             AutomationTimer.Tick += DispatchAutomationTimer;
+            // Set the interval between calls to be 1000 / 30 ms (30 calls per second)
             AutomationTimer.Interval = TimeSpan.FromMilliseconds(1000d / 30d);
 
+            // Change the closing behaviour to hide the window
             Closing += delegate(object sender, CancelEventArgs e)
             {
                 e.Cancel = true;
@@ -43,22 +53,43 @@ namespace LocationInterface.Windows
             };
         }
 
+        /// <summary>
+        /// Action when the automatic time is enabled
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AutomaticTimeEnabled(object sender, RoutedEventArgs e)
         {
+            // Star the automation timer
             AutomationTimer.Start();
         }
 
+        /// <summary>
+        /// Action when the automatic time is disabled
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AutomaticTimeDisabled(object sender, RoutedEventArgs e)
         {
+            // Stop the automation timer
             AutomationTimer.Stop();
         }
 
+        /// <summary>
+        /// Callback for each automatic time update
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DispatchAutomationTimer(object sender, EventArgs e)
         {
+            // Check if the automatic time is enabled
             if (AutoTimeCheckbox.IsEnabled)
             {
+                // Increment the automatic time count
                 AutoTimeCount += AutoTimeSpeed / 30d;
+                // If the automatic time count is past 24 (hours), reset the count
                 if (AutoTimeCount > 24) AutoTimeCount = 0;
+                // Run the automatic time callback with the current time position
                 AutoTimeChangeCallback?.Invoke(AutoTimeCount);
             }
         }

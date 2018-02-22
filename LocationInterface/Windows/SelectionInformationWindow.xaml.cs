@@ -26,6 +26,10 @@ namespace LocationInterface.Windows
             }
         }
 
+        /// <summary>
+        /// Initialize the selection information window
+        /// </summary>
+        /// <param name="selectedDataFiles">The selected location data files</param>
         public SelectionInformationWindow(LocationDataFile[] selectedDataFiles)
         {
             SelectedDataFiles = selectedDataFiles;
