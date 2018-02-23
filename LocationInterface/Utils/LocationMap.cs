@@ -225,28 +225,30 @@ namespace LocationInterface.Utils
         protected void DrawKey()
         {
             // Define a position storage vector
-            Vector2 position = new Vector2(20, 20);
+            Vector2 position = new Vector2(20);
             // Loop through each macpointcollection
             for (int i = 0; i < MacPointCollections.Length; i++)
             {
                 // Draw a point in the desired colour
                 SpriteBatch.Draw(PointTexture, position, null,
-                    MacPointCollections[i].Colour, 0f, new Vector2(5),
+                    MacPointCollections[i].Colour, 0f, new Vector2(PointRadius / 2),
                     1f, SpriteEffects.None, 0);
                 // Draw the MAC address
                 SpriteBatch.DrawString(Font, MacPointCollections[i].Address,
-                    position + new Vector2(10, -5), Color.Black);
+                    position + new Vector2(PointRadius * 2, PointRadius / -2), Color.Black);
                 // If in time based mode
                 if (TimeBased)
                 {
                     // Draw the time of the point being displayed
                     SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0
                         ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") :
-                        "No Points", position + new Vector2(125, -5), Color.Black);
+                        "No Points", position + new Vector2(120 + (PointRadius * 2),
+                        PointRadius / -2), Color.Black);
                     // If there is a point being played, draw its location node
                     if (MacPointCollections[i].MacPoints.Count > 0)
                         SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints[0].Node,
-                            position + new Vector2(180, -5), Color.Black);
+                            position + new Vector2(175 + (PointRadius * 2),
+                            PointRadius / -2), Color.Black);
                 }
                 // Increment the y position
                 position.Y += 20;
