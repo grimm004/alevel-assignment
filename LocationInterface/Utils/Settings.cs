@@ -36,7 +36,8 @@ namespace LocationInterface.Utils
         public static void Save()
         {
             // Create a file and XML serialise the active settings instance to it
-            using (FileStream writer = new FileStream(Constants.CONFIGFILE, FileMode.Create)) Serializer.Serialize(writer, Active);
+            using (FileStream writer = new FileStream(Constants.CONFIGFILE, FileMode.Create))
+                Serializer.Serialize(writer, Active);
         }
 
         /// <summary>
@@ -45,7 +46,8 @@ namespace LocationInterface.Utils
         public static void Load()
         {
             // Open the config file and XML deserialise the contents to the active settings instance
-            using (StreamReader reader = new StreamReader(Constants.CONFIGFILE)) Active = (Settings)Serializer.Deserialize(reader);
+            using (StreamReader reader = new StreamReader(Constants.CONFIGFILE))
+                Active = (Settings)Serializer.Deserialize(reader);
         }
     }
 
@@ -94,7 +96,8 @@ namespace LocationInterface.Utils
         {
             // Loop through each property in the settings
             foreach (PropertyInfo property in typeof(Settings).GetProperties())
-                // If the current property does not equal the corresponding property of the supplied instance, return false
+                // If the current property does not equal the corresponding property of
+                // the supplied instance, return false
                 if (property.GetValue(settings) != property.GetValue(this)) return false;
             // Return true
             return true;
@@ -116,8 +119,15 @@ namespace LocationInterface.Utils
     {
         public const string CONFIGFILE = "config.xml";
         public const string PLUGINFOLDER = "Plugins";
-        public const string EMAILREGEX = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
-        public const string DATAFILEHEADER = "MAC:string,Unknown1:string,Date:datetime,Unknown2:string,Location:string,Vendor:string,Ship:string,Deck:string,X:number,Y:number";
+        public const string EMAILREGEX =
+            @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0"
+            + @"-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9]" +
+            @"(?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]" +
+            @"(?:[a-z0-9-]*[a-z0-9])?)\Z";
+        public const string DATAFILEHEADER =
+            "MAC:string,Unknown1:string,Date:datetime," +
+            "Unknown2:string,Location:string,Vendor:string," +
+            "Ship:string,Deck:string,X:number,Y:number";
         public const int MAPUPS = 30;
     }
 }

@@ -65,18 +65,22 @@ namespace LocationInterface.Pages
 
                 // Loop through each selected table
                 foreach (Table table in Common.LoadedDataTables)
-                    // Loop through each record in the current selected table where the deck is equal to the current deck map's ID
+                    // Loop through each record in the current selected table where the deck
+                    // is equal to the current deck map's ID
                     foreach (Record record in table.GetRecords("Deck", SelectedImageFile.Identifier))
                         // Loop through each selected MAC address
                         foreach (MacPointCollection macPointCollection in MacPointCollections)
-                            // If the current deck MAC address is equal to the current selected MAC address
+                            // If the current deck MAC address is equal to the current selected
+                            // MAC address
                             if (record.GetValue<string>("MAC") == macPointCollection.Address)
                             {
                                 // Get the location record representation of the location point
                                 LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                                // Implicitly cast this to a LocationPoint and add it to the list of active macPointCollection
+                                // Implicitly cast this to a LocationPoint and add it to the list
+                                // of active macPointCollection
                                 macPointCollection.MacPoints.Add(locationRecord);
-                                // Break out of the loop as there is no need to continue searching the MAC addresses
+                                // Break out of the loop as there is no need to continue searching
+                                // the MAC addresses
                                 break;
                             }
                 // If the map viewer is not in timed mode, show all loaded points
