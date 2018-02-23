@@ -13,7 +13,7 @@ namespace LocationInterface.Windows
     /// </summary>
     public partial class ContactWindow : Window
     {
-        protected Database Database { get; set; }
+        protected Database Database { get; private set; }
         protected EmailContact[] Contacts { get; set; }
 
         /// <summary>

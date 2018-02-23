@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Windows;
 
-// TODO: MAKE FINITE STATE MACHINE FOR PRE-PROCESSOR
-
 namespace LocationInterface.Utils
 {
     public class EmailProcessor
@@ -46,31 +44,44 @@ namespace LocationInterface.Utils
             // Loop through each character in the pre-processed data
             for (int i = 0; i < PreProcessedBody.Length; i++)
             {
-                // If there is a new line, reset the line position and increment the line number
+                // If there is a new line, reset the line position and increment the
+                // line number
                 if (PreProcessedBody[i] == '\n') { linePosition = 0; lineNumber++; }
-                // If the current character is an opener, mark the state as being in-variable
+                // If the current character is an opener, mark the state as being
+                // in-variable
                 if (PreProcessedBody[i] == '{') inVariable = true;
                 // Else if the current character was a closer
                 else if (PreProcessedBody[i] == '}')
                 {
-                    // If the bindable variables has a definition for the selected variable reference name
+                    // If the bindable variables has a definition for the selected
+                    // variable reference name
                     if (BindableVariables.ContainsKey(currentVariable))
                     {
                         // Fetch the result from the AnalysisSDK plugin
-                        AnalysisResult result = BindableVariables[currentVariable].FetchResult(currentMetadata);
-                        // If the outcome is valid, add the analysis content to the processed body
-                        if (result.Outcome == ResultRequestOutcome.OK) processedBody += result.Content;
+                        AnalysisResult result = BindableVariables[currentVariable]
+                            .FetchResult(currentMetadata);
+                        // If the outcome is valid, add the analysis content to the 
+                        // processed body
+                        if (result.Outcome == ResultRequestOutcome.OK)
+                            processedBody += result.Content;
                         else
                         {
-                            // Else show an error message (along with line position, etc) and return false
-                            MessageBox.Show($"{ currentVariable } returned an error { result.Outcome.ToString() } at line { lineNumber }, pos { linePosition }. { (!string.IsNullOrWhiteSpace(result.Content) ? $" Message: { result.Content }" : "") }", "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            // Else show an error message (along with line position, etc)
+                            // and return false
+                            MessageBox.Show($"{ currentVariable } returned an error " +
+                                $"{ result.Outcome.ToString() } at line { lineNumber }, " +
+                                $"pos { linePosition }. " +
+                                $"{ ((!string.IsNullOrWhiteSpace(result.Content) ?$" Message: { result.Content }" : "")) }",
+                                "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return false;
                         }
                     }
                     else
                     {
                         // Else show an error message and return false
-                        MessageBox.Show($"Could not find plugin '{ currentVariable }' at line { lineNumber }, pos { linePosition }.", "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Could not find plugin '{ currentVariable }'" +
+                            $" at line { lineNumber }, pos { linePosition }.",
+                            "Preprocessor Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return false;
                     }
 
@@ -80,24 +91,35 @@ namespace LocationInterface.Utils
                     currentMetadata = "";
                     inMetadata = false;
                 }
-                // Else if the pre-processor is recording a variable and a colon is found, switch to being int the metadata
+                // Else if the pre-processor is recording a variable and a colon
+                // is found, switch to being int the metadata
                 else if (inVariable && !inMetadata && PreProcessedBody[i] == ':')
                 {
                     inVariable = false;
                     inMetadata = true;
                 }
-                // Else if pre-processor is recording a variable, not recording metadata and the current characer is not a space, add the current character to the current variable storage
-                else if (inVariable && !inMetadata && PreProcessedBody[i] != ' ') currentVariable += PreProcessedBody[i];
-                // Else if pre-processor is not recording a variable, recording metadata and the current characer is not a space, add the current character to the current metadata storage
-                else if (!inVariable && inMetadata && PreProcessedBody[i] != ' ') currentMetadata += PreProcessedBody[i];
-                // Else if the pre-processor is either recording a variable or metadata and the current character is a space, move over to the next iteration of the loop
-                else if ((inVariable || inMetadata) && PreProcessedBody[i] == ' ') continue;
+                // Else if pre-processor is recording a variable, not recording
+                // metadata and the current characer is not a space, add the
+                // current character to the current variable storage
+                else if (inVariable && !inMetadata && PreProcessedBody[i] != ' ')
+                    currentVariable += PreProcessedBody[i];
+                // Else if pre-processor is not recording a variable, recording
+                // metadata and the current characer is not a space, add the
+                // current character to the current metadata storage
+                else if (!inVariable && inMetadata && PreProcessedBody[i] != ' ')
+                    currentMetadata += PreProcessedBody[i];
+                // Else if the pre-processor is either recording a variable or
+                // metadata and the current character is a space, move over to
+                // the next iteration of the loop
+                else if ((inVariable || inMetadata) && PreProcessedBody[i] == ' ')
+                    continue;
                 // Else add the current character to the processed body
                 else processedBody += PreProcessedBody[i];
                 // Increment the line position
                 linePosition++;
             }
-            // Return true (as if it has reached this point without return the processed value is assumed to be valid)
+            // Return true (as if it has reached this point without
+            // return the processed value is assumed to be valid)
             return true;
         }
     }
@@ -130,6 +152,7 @@ namespace LocationInterface.Utils
             Body = body;
         }
     }
+
     public class EmailAccount
     {
         public MailAddress MailAddress { get; }

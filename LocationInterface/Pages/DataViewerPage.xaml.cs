@@ -241,7 +241,8 @@ namespace LocationInterface.Pages
             }
 
             // Loop through each table and set the record buffer sizes
-            for (int i = 0; i < database.TableCount; i++) recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / SettingsManager.Active.PercentagePerUpdate)));
+            for (int i = 0; i < database.TableCount; i++)
+                recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / SettingsManager.Active.PercentagePerUpdate)));
 
             Console.WriteLine("Converting files...");
             // Convert the CSVDatabase to a BINDatabase with the configured location, pre-calculated string sizes and buffer sizes, along with a callback to update the status bar and label
@@ -292,7 +293,8 @@ namespace LocationInterface.Pages
                 // If the datatype of the current field is VarChar (string)
                 if (currentFields.Fields[i].DataType == Datatype.VarChar)
                     // If the size of the current value's string length is greater than the largest known size, set the largest known size to the current size
-                    if (Encoding.UTF8.GetByteCount(((string)values[i])) > currentFieldSizes[i]) currentFieldSizes[i] = (ushort)Encoding.UTF8.GetByteCount(((string)values[i]));
+                    if (Encoding.UTF8.GetByteCount(((string)values[i])) > currentFieldSizes[i])
+                        currentFieldSizes[i] = (ushort)Encoding.UTF8.GetByteCount(((string)values[i]));
         }
 
         /// <summary>

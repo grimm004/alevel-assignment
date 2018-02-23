@@ -113,7 +113,8 @@ namespace LocationInterface.Utils
         public void LoadMap(ImageFile selectedImageFile)
         {
             SelectedImageFile = selectedImageFile;
-            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
+            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\" +
+                $"{ selectedImageFile.FileName }", FileMode.Open);
             // Dynamically produce the map texture to be rendered in the background
             MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
             fileStream.Dispose();
@@ -148,7 +149,8 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(5, 0);
             if (keyboardState.IsKeyDown(Keys.D)) Camera.Move(-5, 0);
             if (keyboardState.IsKeyDown(Keys.W)) Camera.Move(0, 5);
-            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl)) Camera.Move(0, -5);
+            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl))
+                Camera.Move(0, -5);
             if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(shiftDown ? -.05f : -.001f);
             if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(shiftDown ? +.05f : +.001f);
             if (keyboardState.IsKeyDown(Keys.T)) TranslatePoints(0, shiftDown ? -4 : -1);
@@ -212,7 +214,9 @@ namespace LocationInterface.Utils
                 // Loop through each macpoint in the current macpointcollection
                 foreach (Vector2 macPoint in macPointCollection.MacPoints)
                     // Draw the point with the desired colour with its offset and multiplier
-                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset + (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour, 0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
+                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset +
+                        (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour,
+                        0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
         /// <summary>
@@ -226,16 +230,23 @@ namespace LocationInterface.Utils
             for (int i = 0; i < MacPointCollections.Length; i++)
             {
                 // Draw a point in the desired colour
-                SpriteBatch.Draw(PointTexture, position, null, MacPointCollections[i].Colour, 0f, new Vector2(5), 1f, SpriteEffects.None, 0);
+                SpriteBatch.Draw(PointTexture, position, null,
+                    MacPointCollections[i].Colour, 0f, new Vector2(5),
+                    1f, SpriteEffects.None, 0);
                 // Draw the MAC address
-                SpriteBatch.DrawString(Font, MacPointCollections[i].Address, position + new Vector2(10, -5), Color.Black);
+                SpriteBatch.DrawString(Font, MacPointCollections[i].Address,
+                    position + new Vector2(10, -5), Color.Black);
                 // If in time based mode
                 if (TimeBased)
                 {
                     // Draw the time of the point being displayed
-                    SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0 ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") : "No Points", position + new Vector2(125, -5), Color.Black);
+                    SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0
+                        ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") :
+                        "No Points", position + new Vector2(125, -5), Color.Black);
                     // If there is a point being played, draw its location node
-                    if (MacPointCollections[i].MacPoints.Count > 0) SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints[0].Node, position + new Vector2(180, -5), Color.Black);
+                    if (MacPointCollections[i].MacPoints.Count > 0)
+                        SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints[0].Node,
+                            position + new Vector2(180, -5), Color.Black);
                 }
                 // Increment the y position
                 position.Y += 20;
