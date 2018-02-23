@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationInterface", "LocationInterface\LocationInterface.csproj", "{0FF223D7-9D24-4C32-A3AF-D02685DC697F}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnalysisPlugins", "AnalysisPlugins", "{244E15DD-1731-4E6D-8922-A9D3574D01F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MacInLocation", "MacInLocation\MacInLocation.csproj", "{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{3DD0ABD6-B104-4D8E-9864-771817F19EB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,18 @@ Global
 		{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC}.Release|x64.Build.0 = Release|Any CPU
 		{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC}.Release|x86.Build.0 = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Debug|x86.Build.0 = Debug|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|x64.Build.0 = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|x86.ActiveCfg = Release|Any CPU
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +121,7 @@ Global
 		{042BA425-A119-4AA3-9AD3-686D82BD47B3} = {244E15DD-1731-4E6D-8922-A9D3574D01F0}
 		{81E39CF5-88D6-4C9A-9818-F157F87DBF7F} = {244E15DD-1731-4E6D-8922-A9D3574D01F0}
 		{CC481CAB-EAE3-433C-A3D5-D1DE456CCFFC} = {244E15DD-1731-4E6D-8922-A9D3574D01F0}
+		{3DD0ABD6-B104-4D8E-9864-771817F19EB4} = {244E15DD-1731-4E6D-8922-A9D3574D01F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69C90A4A-C3D4-484A-A77C-C201E7F6F947}
