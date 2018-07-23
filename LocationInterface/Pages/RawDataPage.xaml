@@ -19,6 +19,6 @@
                 <DataGridTextColumn Header="Y" IsReadOnly="True" Binding="{Binding Path=Y}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!--<Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="BackButtonClick"/>-->
+        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="RefreshTable"/>
     </Grid>
 </Page>

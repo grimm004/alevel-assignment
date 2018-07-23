@@ -228,10 +228,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\HomePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\MapViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -276,9 +272,6 @@
   <ItemGroup>
     <Compile Include="Pages\DataViewerPage.xaml.cs">
       <DependentUpon>DataViewerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MapViewPage.xaml.cs">
       <DependentUpon>MapViewPage.xaml</DependentUpon>

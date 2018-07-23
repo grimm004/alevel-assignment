@@ -12,8 +12,7 @@ namespace LocationInterface
     public partial class MainWindow : Window
     {
         protected Common Common { get; set; }
-
-        protected HomePage HomePage { get; }
+        
         protected FileManagerPage FileManagerPage { get; }
         protected SettingsPage SettingsPage { get; }
         protected MapViewPage MapViewPage { get; }
@@ -34,8 +33,6 @@ namespace LocationInterface
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             // Load all the application's pages
-            //HomePage = new HomePage(Common);
-            
             SettingsPage = new SettingsPage(Common);
             SettingsPageFrame.Content = SettingsPage;
             MapViewPage = new MapViewPage(Common);
@@ -46,9 +43,6 @@ namespace LocationInterface
             AnalysisPageFrame.Content = AnalysisPage;
             FileManagerPage = new FileManagerPage(Common);
             FileManagerPageFrame.Content = FileManagerPage;
-
-            //// Show the hompage (as the first page when the application opens)
-            //Common.ShowHomePage();
         }
 
         ///// <summary>
@@ -72,10 +66,22 @@ namespace LocationInterface
             Common.OnClose();
             base.OnClosing(e);
         }
-
+        
         private void PageChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (PageSelector.SelectedContent as Frame != null && e.Source is TabControl)
+                switch ((PageSelector.SelectedContent as Frame).Content)
+                {
+                    case SettingsPage page:
+                        page.LoadSettings();
+                        break;
+                    case FileManagerPage page:
+                        page.UpdateTable();
+                        break;
+                    default:
+                        break;
+                }
+            e.Handled = true;
         }
     }
 }
