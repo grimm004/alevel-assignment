@@ -33,30 +33,15 @@ namespace LocationInterface
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             // Load all the application's pages
-            SettingsPage = new SettingsPage(Common);
-            SettingsPageFrame.Content = SettingsPage;
-            MapViewPage = new MapViewPage(Common);
-            MapViewerPageFrame.Content = MapViewPage;
-            RawDataPage = new RawDataPage(Common);
-            RawDataPageFrame.Content = RawDataPage;
-            AnalysisPage = new AnalysisPage(Common);
-            AnalysisPageFrame.Content = AnalysisPage;
-            FileManagerPage = new FileManagerPage(Common);
-            FileManagerPageFrame.Content = FileManagerPage;
+            FileManagerPageFrame.Content = FileManagerPage = new FileManagerPage(Common);
+            SettingsPageFrame.Content = SettingsPage = new SettingsPage(Common);
+            MapViewerPageFrame.Content = MapViewPage = new MapViewPage(Common);
+            RawDataPageFrame.Content = RawDataPage = new RawDataPage(Common);
+            AnalysisPageFrame.Content = AnalysisPage = new AnalysisPage(Common);
+
+            //DataContext = this;
         }
-
-        ///// <summary>
-        ///// Show a given page
-        ///// </summary>
-        ///// <param name="page">The page to display on the main window</param>
-        //protected void ShowPage(Page page)
-        //{
-        //    // Log the current page as previous page
-        //    Common.PreviousPage = Common.CurrentPage;
-        //    // Switch the content of the inner frame to the current page
-        //    DataContext = frame.Content = Common.CurrentPage = page;
-        //}
-
+        
         /// <summary>
         /// Action when the window is closing
         /// </summary>
@@ -70,17 +55,22 @@ namespace LocationInterface
         private void PageChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PageSelector.SelectedContent as Frame != null && e.Source is TabControl)
-                switch ((PageSelector.SelectedContent as Frame).Content)
+            {
+                Page page = (PageSelector.SelectedContent as Frame).Content as Page;
+                switch (page)
                 {
-                    case SettingsPage page:
-                        page.LoadSettings();
+                    case SettingsPage settingsPage:
+                        settingsPage.LoadSettings();
                         break;
-                    case FileManagerPage page:
-                        page.UpdateTable();
+                    case FileManagerPage fileManagerPage:
+                        fileManagerPage.UpdateTable();
                         break;
                     default:
                         break;
                 }
+
+                DataContext = page;
+            }
             e.Handled = true;
         }
     }

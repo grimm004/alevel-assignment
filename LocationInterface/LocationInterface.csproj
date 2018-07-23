@@ -309,9 +309,7 @@
     <SplashScreen Include="Images\StartUp.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\tes_logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images\tes_logo.png" />
     <Resource Include="Images\tes_logo_round.png" />
     <Resource Include="Images\cruise.ico" />
     <Content Include="Images\Deck4.bmp">

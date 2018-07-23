@@ -27,19 +27,10 @@ namespace LocationInterface.Pages
             InitializeComponent();
             
             Common = common;
+            
             AnalysisOptions = PluginManager.Plugins;
         }
-
-        ///// <summary>
-        ///// Show the previous page
-        ///// </summary>
-        ///// <param name="sender">The instance of the object that triggered the event</param>
-        ///// <param name="e">Information about the event</param>
-        //public void BackButtonClick(object sender, RoutedEventArgs e)
-        //{
-        //    Common.ShowPreviousPage();
-        //}
-
+        
         /// <summary>
         /// Show the email window
         /// </summary>
