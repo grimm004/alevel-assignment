@@ -9,7 +9,7 @@
 
     <Grid>
         <utils:LocationMap x:Name="MapViewer" HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch" Margin="0,0,0,20"/>
+                           VerticalAlignment="Stretch" Margin="0,0,0,35"/>
 
         <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
@@ -25,7 +25,7 @@
                     ItemsSource="{Binding ImageFiles, Mode=OneWay}"
                     DisplayMemberPath="Identifier"
                     SelectionChanged="DeckSelectionComboBoxSelectionChanged"
-                    Grid.Column="0"/>
+                    Grid.Column="0" MinWidth="75"/>
             <Button Grid.Column="1" Content="Select Data" Click="SelectDataClick"/>
             <Button Grid.Column="2" Content="Update Points" Click="UpdatePointsClick"/>
             <Label Content="Toggle Time Controls" Grid.Column="3"/>
@@ -33,7 +33,7 @@
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowTimeManager" Unchecked="HideTimeManager"/>
         </Grid>
-        
-        <Image Width="300" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+
+        <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

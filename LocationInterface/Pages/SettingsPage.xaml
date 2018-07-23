@@ -70,7 +70,7 @@
             <Button x:Name="LoadDefaultsButton" Grid.Row="13" Grid.Column="0" Margin="0,0,10,0" Content="Load Defaults" VerticalAlignment="Center" HorizontalAlignment="Right" Width="80" Click="LoadDefaultsButtonClick"/>
             <Button x:Name="ApplyButton" IsEnabled="False" Grid.Row="13" Grid.Column="1" Margin="10,0,0,0" Content="Apply" HorizontalAlignment="Left" Width="80" Click="ApplyButtonClick" VerticalAlignment="Center"/>
         </Grid>
-        
-        <!--<Button Grid.Row="10" Content="Back" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="80" Click="BackButtonClick"/>-->
+
+        <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

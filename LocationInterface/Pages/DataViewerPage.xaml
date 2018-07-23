@@ -7,7 +7,7 @@
       Title="DataViewerPage">
 
     <Grid>
-        <DataGrid x:Name="dataFilesDataGrid" VerticalContentAlignment="Stretch" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
+        <DataGrid x:Name="dataFilesDataGrid" VerticalContentAlignment="Stretch" Margin="0,0,0,35" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="*"></DataGridTextColumn>
@@ -15,19 +15,19 @@
                 <DataGridTextColumn Header="Record Count" IsReadOnly="True"  Binding="{Binding Path=RecordCount}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!--<Button x:Name="backButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="0,275,0,0" Click="BackButtonClick"/>-->
-        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="UpdateButtonClick" Margin="50,0,0,0"/>
-        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Click="SubmitButtonClick" Margin="100,0,0,0"/>
-        <Button x:Name="viewSelectionInformationButton" Content="Selection Information" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="130" Click="SelectionInformationButtonClick" Margin="150,0,0,0"/>
-        <Button x:Name="importFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="280,0,0,0" VerticalAlignment="Bottom" Width="100" Click="ImportDataFileClick"/>
-        <Grid VerticalAlignment="Bottom" Margin="380,0,80,0" Height="20">
+        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="UpdateButtonClick" Margin="0,0,0,0"/>
+        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="SubmitButtonClick" Margin="50,0,0,0"/>
+        <Button x:Name="viewSelectionInformationButton" Content="Selection Information" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="130" Height="30" Click="SelectionInformationButtonClick" Margin="100,0,0,0"/>
+        <Button x:Name="importFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Bottom" Width="100" Height="30" Click="ImportDataFileClick"/>
+        <Button x:Name="clearCacheButton" Content="Clear Cache" HorizontalAlignment="Left" Margin="330,0,0,0" VerticalAlignment="Bottom" Width="80" Height="30" Click="ClearCacheButtonClick"/>
+        <Grid VerticalAlignment="Bottom" Margin="410,0,210,0" Height="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <ProgressBar x:Name="statusProgressBar" Height="20" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
-            <Label x:Name="statusLabel" Height="30"  Grid.Column="1" Grid.Row="0" Content="Ready" VerticalContentAlignment="Center" Margin="0,0,0,-5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <ProgressBar x:Name="statusProgressBar" Height="30" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+            <Label x:Name="statusLabel" Height="30"  Grid.Column="1" Grid.Row="0" Content="Ready" VerticalContentAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
         </Grid>
-        <Button x:Name="clearCacheButton" Content="Clear Cache" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="80" Click="ClearCacheButtonClick"/>
+        <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>
