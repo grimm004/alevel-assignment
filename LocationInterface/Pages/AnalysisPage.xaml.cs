@@ -25,7 +25,8 @@ namespace LocationInterface.Pages
         public AnalysisPage(Common common)
         {
             InitializeComponent();
-            
+            DataContext = this;
+
             Common = common;
             
             AnalysisOptions = PluginManager.Plugins;
