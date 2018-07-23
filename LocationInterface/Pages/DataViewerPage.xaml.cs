@@ -19,7 +19,7 @@ namespace LocationInterface.Pages
     /// <summary>
     /// Interaction logic for DataViewerPage.xaml
     /// </summary>
-    public partial class DataViewerPage : Page
+    public partial class FileManagerPage : Page
     {
         protected List<LocationDataFile> SelectedDataFiles { get; set; }
         protected bool Importing { get; set; }
@@ -29,7 +29,7 @@ namespace LocationInterface.Pages
         /// Initialise the data viewer page
         /// </summary>
         /// <param name="common">Instance of the common class</param>
-        public DataViewerPage(Common common)
+        public FileManagerPage(Common common)
         {
             Common = common;
             Importing = false;
@@ -100,7 +100,7 @@ namespace LocationInterface.Pages
         private void OnImportStart()
         {
             importFolderButton.Content = "Importing Folder";
-            updateButton.IsEnabled = backButton.IsEnabled = importFolderButton.IsEnabled = false;
+            updateButton.IsEnabled = /*backButton.IsEnabled =*/ importFolderButton.IsEnabled = false;
         }
         /// <summary>
         /// Callback to safely update WPF items from the dispatcher on ending of import
@@ -108,7 +108,7 @@ namespace LocationInterface.Pages
         private void OnImportFinish()
         {
             importFolderButton.Content = "Import Folder";
-            updateButton.IsEnabled = backButton.IsEnabled = importFolderButton.IsEnabled = true;
+            updateButton.IsEnabled = /*backButton.IsEnabled =*/ importFolderButton.IsEnabled = true;
         }
 
         /// <summary>
@@ -389,16 +389,16 @@ namespace LocationInterface.Pages
             // Call to the common submitselection method
             SubmitSelection();
         }
-        /// <summary>
-        /// Return to the previous page
-        /// </summary>
-        /// <param name="sender">The instance of the object that triggered the event</param>
-        /// <param name="e">Information about the event</param>
-        private void BackButtonClick(object sender, RoutedEventArgs e)
-        {
-            // Run the callback to show the previous page
-            Common.ShowPreviousPage();
-        }
+        ///// <summary>
+        ///// Return to the previous page
+        ///// </summary>
+        ///// <param name="sender">The instance of the object that triggered the event</param>
+        ///// <param name="e">Information about the event</param>
+        //private void BackButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    // Run the callback to show the previous page
+        //    Common.ShowPreviousPage();
+        //}
         /// <summary>
         /// Clear the datacache
         /// </summary>

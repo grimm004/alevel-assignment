@@ -101,16 +101,16 @@ namespace LocationInterface.Pages
                 }
         }
 
-        /// <summary>
-        /// Return to the previous page
-        /// </summary>
-        /// <param name="sender">The instance of the object that triggered the event</param>
-        /// <param name="e">Information about the event</param>
-        private void BackButtonClick(object sender, RoutedEventArgs e)
-        {
-            // Run the callback to show the previous page
-            Common.ShowPreviousPage();
-        }
+        ///// <summary>
+        ///// Return to the previous page
+        ///// </summary>
+        ///// <param name="sender">The instance of the object that triggered the event</param>
+        ///// <param name="e">Information about the event</param>
+        //private void BackButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    // Run the callback to show the previous page
+        //    Common.ShowPreviousPage();
+        //}
         /// <summary>
         /// Apply the changes to the settings
         /// </summary>

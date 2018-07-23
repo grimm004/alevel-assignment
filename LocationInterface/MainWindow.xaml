@@ -7,6 +7,23 @@
         Title="Location Service Visualiser" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinWidth="768" MinHeight="535">
 
     <Grid>
-        <Frame x:Name="frame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <!--Frame x:Name="frame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/-->
+        <TabControl SelectionChanged="PageChanged">
+            <TabItem Header="File Manager">
+                <Frame x:Name="FileManagerPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+            <TabItem Header="Map Viewer">
+                <Frame x:Name="MapViewerPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+            <TabItem Header="Raw Data Viewer">
+                <Frame x:Name="RawDataPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+            <TabItem Header="Data Analysis Viewer">
+                <Frame x:Name="AnalysisPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Frame x:Name="SettingsPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -84,7 +84,7 @@ namespace LocationInterface.Utils
             PointRadius = 5;
             DecreasePointSizeListener = new KeyListener(Keys.Z, () => PointRadius--);
             IncreasePointSizeListener = new KeyListener(Keys.X, () => PointRadius++);
-
+            
             TimeBased = false;
 
             Random = new Random();

@@ -20,27 +20,27 @@ namespace LocationInterface.Pages
             InitializeComponent();
         }
 
-        // The below events show their corresponding pages
-        private void ViewImportedFilesButtonClick(object sender, RoutedEventArgs e)
-        {
-            Common.ShowDataViewerPage();
-        }
-        private void ViewMapViewerButtonClick(object sender, RoutedEventArgs e)
-        {
-            Common.ShowMapPage();
-        }
-        private void RawDataViewerButtonClick(object sender, RoutedEventArgs e)
-        {
-            Common.ShowRawDataPage();
-        }
-        private void SettingsButtonClick(object sender, RoutedEventArgs e)
-        {
-            Common.ShowSettingsPage();
-        }
-        private void AnalysisPageButtonClick(object sender, RoutedEventArgs e)
-        {
-            Common.ShowAnalysisPage();
-        }
+        //// The below events show their corresponding pages
+        //private void ViewImportedFilesButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    Common.ShowDataViewerPage();
+        //}
+        //private void ViewMapViewerButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    Common.ShowMapPage();
+        //}
+        //private void RawDataViewerButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    Common.ShowRawDataPage();
+        //}
+        //private void SettingsButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    Common.ShowSettingsPage();
+        //}
+        //private void AnalysisPageButtonClick(object sender, RoutedEventArgs e)
+        //{
+        //    Common.ShowAnalysisPage();
+        //}
 
         // Exit the program
         private void ExitButtonClick(object sender, RoutedEventArgs e)

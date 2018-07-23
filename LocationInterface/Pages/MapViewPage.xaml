@@ -21,7 +21,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Back" Click="BackButtonClick"/>
+            <!--<Button Grid.Column="0" Content="Back" Click="BackButtonClick"/>-->
             <ComboBox
                     ItemsSource="{Binding ImageFiles, Mode=OneWay}"
                     DisplayMemberPath="Identifier"

@@ -31,7 +31,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Margin="10,10,10,10" Content="Back" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BackButtonClick"/>
+            <!--<Button Grid.Row="0" Grid.Column="0" Margin="10,10,10,10" Content="Back" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="BackButtonClick"/>-->
             <Button Grid.Row="0" Grid.Column="1" Margin="10,10,10,10" Content="Open Plugin Folder" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OpenPluginFolderButtonClick"/>
             <Button Grid.Row="0" Grid.Column="2" Margin="10,10,10,10" Content="Email Results" Width="75" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Click="SendEmailButtonClick"/>
         </Grid>
