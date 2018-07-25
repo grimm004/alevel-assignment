@@ -23,6 +23,7 @@ namespace LocationInterface.Utils
         private Camera Camera { get; set; }
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
+        //private Texture2D HeatMapTexture { get; set; }
         private int pointRadius;
         private int PointRadius
         {
@@ -90,12 +91,34 @@ namespace LocationInterface.Utils
             Random = new Random();
             MacPointCollections = new MacPointCollection[0];
 
+            //HeatMapTexture = new Texture2D(GraphicsDevice, 100, 100);
+            //HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, Color.White));
+
             // Load a pre-compiled font
             Font = Content.Load<SpriteFont>("Font");
 
             // Create a KeyListener for the 'S' key (used for saving image metadata)
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
         }
+
+        //public Color[] GetData(int width, int height, Color colour)
+        //{
+        //    Color[] data = new Color[width * height];
+        //    for (int x = -width / 2; x < width / 2; x++)
+        //        for (int y = -height / 2; y < height / 2; y++)
+        //            data[GetIndex(x + (width / 2), y + (height / 2), width)] = new Color(colour, GetAlpha(x, y));
+        //    return data;
+        //}
+
+        //public int GetIndex(int x, int y, int width)
+        //{
+        //    return (y * width) + x;
+        //}
+
+        //public float GetAlpha(int x, int y)
+        //{
+        //    return (float)Math.Exp(-Math.Pow(((x * x) + (y * y)) * (double)((x * x) + (y * y)), .5) / 1000);
+        //}
 
         /// <summary>
         /// Load an array of MacPointCollections
@@ -157,6 +180,12 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.F)) TranslatePoints(shiftDown ? -4 : -1, 0);
             if (keyboardState.IsKeyDown(Keys.G)) TranslatePoints(0, shiftDown ? +4 : +1);
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
+
+            if (keyboardState.IsKeyDown(Keys.Q)) heat -= .01f;
+            if (keyboardState.IsKeyDown(Keys.E)) heat += .01f;
+
+            if (heat < 0.0f) heat = 0.0f;
+            if (heat > 1.0f) heat = 1.0f;
         }
 
         /// <summary>
@@ -180,6 +209,8 @@ namespace LocationInterface.Utils
             SelectedImageFile.Offset += new Vector2(x, y);
         }
 
+        float heat = 1f;
+
         /// <summary>
         /// Draw the location map state
         /// </summary>
@@ -194,13 +225,30 @@ namespace LocationInterface.Utils
             // Draw the points
             DrawPoints();
             SpriteBatch.End();
-
+            
             // Begin drawing all the static 2D sprites
             SpriteBatch.Begin();
             // Draw the MAC key
             DrawKey();
             SpriteBatch.End();
         }
+
+        //private void DrawHeatMap(Rectangle position, float heat)
+        //{
+        //    HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, GetHeatColour(heat)));
+        //    SpriteBatch.Draw(HeatMapTexture, position, Color.White);
+        //}
+
+        //Color c1 = Color.Yellow;
+        //Color c2 = Color.Red;
+        //private Color GetHeatColour(float heat)
+        //{
+        //    return new Color(
+        //        (byte)(c1.R + (byte)(heat * (c2.R - c1.R))),
+        //        (byte)(c1.G + (byte)(heat * (c2.G - c1.G))),
+        //        (byte)(c1.B + (byte)(heat * (c2.B - c1.B))),
+        //        255);
+        //}
 
         /// <summary>
         /// Draw the current location points

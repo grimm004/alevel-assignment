@@ -87,16 +87,6 @@ namespace LocationInterface.Pages
                 if (!TimeManagerWindow.TimeEnabled) MapViewer.LoadPoints(MacPointCollections);
             }
         }
-
-        ///// <summary>
-        ///// Show the home page
-        ///// </summary>
-        ///// <param name="sender">Control that called the event</param>
-        ///// <param name="e">Information about the event</param>
-        //private void BackButtonClick(object sender, RoutedEventArgs e)
-        //{
-        //    Common.ShowHomePage();
-        //}
         
         /// <summary>
         /// Update the deck map when changed
@@ -107,6 +97,7 @@ namespace LocationInterface.Pages
         {
             // Fetch the new selectedimagefile instance
             SelectedImageFile = ((ImageFile)((ComboBox)sender).SelectedValue);
+
             // Load the image in the map
             MapViewer.LoadMap(SelectedImageFile);
         }
