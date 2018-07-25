@@ -38,6 +38,11 @@ namespace LocationInterface.Utils
 
         [JsonIgnore]
         public bool Exists { get { return File.Exists($"{ SettingsManager.Active.ImageFolder }\\{ FileName }"); } }
+        
+        public ImageFileReference GetReference()
+        {
+            return new ImageFileReference(FileName);
+        }
 
         /// <summary>
         /// Get the hash code of the class
@@ -51,6 +56,30 @@ namespace LocationInterface.Utils
         public override string ToString()
         {
             return $"ImageFile('{ FileName }', { Multiplier.ToString("0.00") }, { Offset })";
+        }
+    }
+
+    public class ImageFileReference
+    {
+        public string FileName { get; set; }
+
+        [JsonIgnore]
+        public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
+
+        /// <summary>
+        /// Initialize an ImageFileReference instacne
+        /// </summary>
+        public ImageFileReference()
+        {
+            FileName = "";
+        }
+
+        /// <summary>
+        /// Initialize an ImageFileReference instacne
+        /// </summary>
+        public ImageFileReference(string fileName)
+        {
+            FileName = fileName;
         }
     }
 }

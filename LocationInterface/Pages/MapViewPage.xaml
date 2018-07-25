@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <ComboBox
-                    ItemsSource="{Binding ImageFiles, Mode=OneWay}"
+                    ItemsSource="{Binding ImageFileReferences, Mode=OneWay}"
                     DisplayMemberPath="Identifier"
                     SelectionChanged="DeckSelectionComboBoxSelectionChanged"
                     Grid.Column="0" MinWidth="75"/>

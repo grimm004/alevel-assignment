@@ -10,7 +10,7 @@ namespace LocationInterface.Utils
 {
     public class LocationMap : WpfGame
     {
-        private ImageFile SelectedImageFile { get; set; }
+        private ImageFile CurrentImageFile { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
         private IGraphicsDeviceService GraphicsDeviceManager { get; set; }
         private WpfKeyboard WpfKeyboard { get; set; }
@@ -23,7 +23,7 @@ namespace LocationInterface.Utils
         private Camera Camera { get; set; }
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
-        //private Texture2D HeatMapTexture { get; set; }
+        private Texture2D HeatMapTexture { get; set; }
         private int pointRadius;
         private int PointRadius
         {
@@ -78,7 +78,7 @@ namespace LocationInterface.Utils
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             Camera = new Camera();
 
-            SelectedImageFile = new ImageFile();
+            CurrentImageFile = new ImageFile();
             
             base.Initialize();
 
@@ -91,8 +91,8 @@ namespace LocationInterface.Utils
             Random = new Random();
             MacPointCollections = new MacPointCollection[0];
 
-            //HeatMapTexture = new Texture2D(GraphicsDevice, 100, 100);
-            //HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, Color.White));
+            HeatMapTexture = new Texture2D(GraphicsDevice, 100, 100);
+            HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, Color.White));
 
             // Load a pre-compiled font
             Font = Content.Load<SpriteFont>("Font");
@@ -101,24 +101,24 @@ namespace LocationInterface.Utils
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
         }
 
-        //public Color[] GetData(int width, int height, Color colour)
-        //{
-        //    Color[] data = new Color[width * height];
-        //    for (int x = -width / 2; x < width / 2; x++)
-        //        for (int y = -height / 2; y < height / 2; y++)
-        //            data[GetIndex(x + (width / 2), y + (height / 2), width)] = new Color(colour, GetAlpha(x, y));
-        //    return data;
-        //}
+        public Color[] GetData(int width, int height, Color colour)
+        {
+            Color[] data = new Color[width * height];
+            for (int x = -width / 2; x < width / 2; x++)
+                for (int y = -height / 2; y < height / 2; y++)
+                    data[GetIndex(x + (width / 2), y + (height / 2), width)] = new Color(colour, GetAlpha(x, y));
+            return data;
+        }
 
-        //public int GetIndex(int x, int y, int width)
-        //{
-        //    return (y * width) + x;
-        //}
+        public int GetIndex(int x, int y, int width)
+        {
+            return (y * width) + x;
+        }
 
-        //public float GetAlpha(int x, int y)
-        //{
-        //    return (float)Math.Exp(-Math.Pow(((x * x) + (y * y)) * (double)((x * x) + (y * y)), .5) / 1000);
-        //}
+        public float GetAlpha(int x, int y)
+        {
+            return (float)Math.Exp(-Math.Pow(((x * x) + (y * y)) * (double)((x * x) + (y * y)), .5) / 1000);
+        }
 
         /// <summary>
         /// Load an array of MacPointCollections
@@ -135,7 +135,7 @@ namespace LocationInterface.Utils
         /// <param name="selectedImageFile">The image file of the map to load</param>
         public void LoadMap(ImageFile selectedImageFile)
         {
-            SelectedImageFile = selectedImageFile;
+            CurrentImageFile = selectedImageFile;
             FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\" +
                 $"{ selectedImageFile.FileName }", FileMode.Open);
             // Dynamically produce the map texture to be rendered in the background
@@ -195,7 +195,7 @@ namespace LocationInterface.Utils
         public void ScalePoints(float change)
         {
             // Increment the stored multiplyer for the current image file
-            SelectedImageFile.Multiplier += change;
+            CurrentImageFile.Multiplier += change;
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace LocationInterface.Utils
         public void TranslatePoints(float x, float y)
         {
             // Increment the image file offset by the desired offset
-            SelectedImageFile.Offset += new Vector2(x, y);
+            CurrentImageFile.Offset += new Vector2(x, y);
         }
 
         float heat = 1f;
@@ -224,6 +224,14 @@ namespace LocationInterface.Utils
             SpriteBatch.Begin(transformMatrix: Camera.Transformation);
             // Draw the points
             DrawPoints();
+            for (int x = 100; x < 300; x += 25)
+            {
+                for (int y = 100; y < 300; y += 25)
+                {
+                    //if ((x * x) + (y * y) < )
+                    //    DrawHeatMap(new Rectangle(x, y, 100, 100), heat);
+                }
+            }
             SpriteBatch.End();
             
             // Begin drawing all the static 2D sprites
@@ -233,22 +241,22 @@ namespace LocationInterface.Utils
             SpriteBatch.End();
         }
 
-        //private void DrawHeatMap(Rectangle position, float heat)
-        //{
-        //    HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, GetHeatColour(heat)));
-        //    SpriteBatch.Draw(HeatMapTexture, position, Color.White);
-        //}
+        private void DrawHeatMap(Rectangle position, float heat)
+        {
+            HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, GetHeatColour(heat)));
+            SpriteBatch.Draw(HeatMapTexture, position, Color.White);
+        }
 
-        //Color c1 = Color.Yellow;
-        //Color c2 = Color.Red;
-        //private Color GetHeatColour(float heat)
-        //{
-        //    return new Color(
-        //        (byte)(c1.R + (byte)(heat * (c2.R - c1.R))),
-        //        (byte)(c1.G + (byte)(heat * (c2.G - c1.G))),
-        //        (byte)(c1.B + (byte)(heat * (c2.B - c1.B))),
-        //        255);
-        //}
+        Color c1 = Color.Yellow;
+        Color c2 = Color.Red;
+        private Color GetHeatColour(float heat)
+        {
+            return new Color(
+                (byte)(c1.R + (byte)(heat * (c2.R - c1.R))),
+                (byte)(c1.G + (byte)(heat * (c2.G - c1.G))),
+                (byte)(c1.B + (byte)(heat * (c2.B - c1.B))),
+                255);
+        }
 
         /// <summary>
         /// Draw the current location points
@@ -262,8 +270,8 @@ namespace LocationInterface.Utils
                 // Loop through each macpoint in the current macpointcollection
                 foreach (Vector2 macPoint in macPointCollection.MacPoints)
                     // Draw the point with the desired colour with its offset and multiplier
-                    SpriteBatch.Draw(PointTexture, SelectedImageFile.Offset +
-                        (SelectedImageFile.Multiplier * macPoint), null, macPointCollection.Colour,
+                    SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
+                        (CurrentImageFile.Multiplier * macPoint), null, macPointCollection.Colour,
                         0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 

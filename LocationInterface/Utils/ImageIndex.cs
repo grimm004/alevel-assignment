@@ -10,6 +10,7 @@ namespace LocationInterface.Utils
     public class ImageIndex
     {
         public List<ImageFile> ImageFiles { get; set; }
+        public List<ImageFileReference> ImageFileReferences { get; set; }
 
         /// <summary>
         /// Initialise the ImageIndex
@@ -17,6 +18,7 @@ namespace LocationInterface.Utils
         public ImageIndex()
         {
             ImageFiles = new List<ImageFile>();
+            ImageFileReferences = new List<ImageFileReference>();
         }
 
         /// <summary>
@@ -38,6 +40,13 @@ namespace LocationInterface.Utils
             File.WriteAllBytes($"{ SettingsManager.Active.ImageFolder }\\index.json", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this, Formatting.Indented)));
         }
 
+        public ImageFile GetImageFile(ImageFileReference reference)
+        {
+            for (int i = 0; i < ImageFiles.Count; i++)
+                if (ImageFiles[i].FileName == reference.FileName) return ImageFiles[i];
+            return null;
+        }
+
         /// <summary>
         /// Scan through the images folder and add new files to the index
         /// </summary>
@@ -51,6 +60,14 @@ namespace LocationInterface.Utils
                     ImageFiles.Add(new ImageFile(Path.GetFileName(fileName), 1, Vector2.Zero));
             // Reorder the index alphabetically
             ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.Identifier).ToList();
+            LoadReferences();
+        }
+
+        public void LoadReferences()
+        {
+            ImageFileReferences.Clear();
+            foreach (ImageFile imageFile in ImageFiles)
+                ImageFileReferences.Add(imageFile.GetReference());
         }
 
         /// <summary>
@@ -98,6 +115,7 @@ namespace LocationInterface.Utils
         {
             // Loop through each image file and if it does not exist remove it from the index
             for (int i = ImageFiles.Count - 1; i >= 0; i--) if (!ImageFiles[i].Exists) ImageFiles.RemoveAt(i);
+            LoadReferences();
             // Save the data index
             SaveIndex();
         }
