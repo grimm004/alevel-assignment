@@ -47,7 +47,7 @@ namespace LocationInterface.Pages
         public void RemoveTable()
         {
             // Loop through each LocationDataFile in the selected items
-            foreach (LocationDataFile file in dataFilesDataGrid.SelectedItems)
+            foreach (LocationDataFile file in DataFilesDataGrid.SelectedItems)
                 // Call to the main database to delete the coresponding table
                 Common.LocationDatabase.DeleteTable(file.TableName);
             // Save changes to the table
@@ -70,6 +70,7 @@ namespace LocationInterface.Pages
                 LoadTables();
             }
         }
+
         /// <summary>
         /// Load the data tables
         /// </summary>
@@ -77,14 +78,19 @@ namespace LocationInterface.Pages
         {
             // If not importing (to avoid access denied exceptions)
             if (!Importing)
+            {
+                //Common.ReloadDatabase();
+
                 Dispatcher.Invoke(() =>
                 {
                     // Clear the items in the data grid
-                    dataFilesDataGrid.Items.Clear();
+                    DataFilesDataGrid.Items.Clear();
                     // Loop through the location data files and add them to the data grid
-                    foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) dataFilesDataGrid.Items.Add(currentFile);
+                    foreach (LocationDataFile currentFile in App.DataIndex.LocationDataFiles) DataFilesDataGrid.Items.Add(currentFile);
                 });
+            }
         }
+
         /// <summary>
         /// Submit the current selection of tables (allowing other pages to access them)
         /// </summary>
@@ -93,22 +99,23 @@ namespace LocationInterface.Pages
             // Load the tables into the common class
             Common.LoadTables(SelectedDataFiles.ToArray());
         }
-        
+
         /// <summary>
         /// Callback to safely update WPF items from the dispatcher on starting of import
         /// </summary>
         private void OnImportStart()
         {
             importFolderButton.Content = "Importing Folder";
-            updateButton.IsEnabled = /*backButton.IsEnabled =*/ importFolderButton.IsEnabled = false;
+            updateButton.IsEnabled = importFolderButton.IsEnabled = false;
         }
+
         /// <summary>
         /// Callback to safely update WPF items from the dispatcher on ending of import
         /// </summary>
         private void OnImportFinish()
         {
             importFolderButton.Content = "Import Folder";
-            updateButton.IsEnabled = /*backButton.IsEnabled =*/ importFolderButton.IsEnabled = true;
+            updateButton.IsEnabled = importFolderButton.IsEnabled = true;
         }
 
         /// <summary>
@@ -367,7 +374,7 @@ namespace LocationInterface.Pages
         private void DataFilesSelectionChange(object sender, SelectionChangedEventArgs e)
         {
             // Set the LocationDataFile list to the selected datafiles
-            SelectedDataFiles = dataFilesDataGrid.SelectedItems.Cast<LocationDataFile>().ToList();
+            SelectedDataFiles = DataFilesDataGrid.SelectedItems.Cast<LocationDataFile>().ToList();
         }
         /// <summary>
         /// Update the datagrid table

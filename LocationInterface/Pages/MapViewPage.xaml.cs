@@ -15,7 +15,7 @@ namespace LocationInterface.Pages
     public partial class MapViewPage : Page
     {
         protected Common Common { get; }
-        protected ImageFileReference SelectedImageFile { get; set; }
+        protected ImageFile SelectedImageFile { get; set; }
         public List<ImageFileReference> ImageFileReferences { get; private set; }
         protected MacPointCollection[] MacPointCollections { get; set; }
         public bool Polling { get; protected set; }
@@ -95,9 +95,8 @@ namespace LocationInterface.Pages
         /// <param name="e">Information about the selection change</param>
         private void DeckSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ImageFile imageFileReference = App.ImageIndex.GetImageFile((sender as ComboBox).SelectedValue as ImageFileReference);
             // Load the image in the map
-            MapViewer.LoadMap(imageFileReference);
+            MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile((sender as ComboBox).SelectedValue as ImageFileReference));
         }
 
         /// <summary>

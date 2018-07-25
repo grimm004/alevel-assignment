@@ -19,6 +19,11 @@ namespace LocationInterface.Utils
             LoadedDataTables = new Table[0];
         }
 
+        //public void ReloadDatabase()
+        //{
+        //    LocationDatabase.ReloadDatabase();
+        //}
+
         /// <summary>
         /// Clean up anytrhing on close
         /// </summary>
