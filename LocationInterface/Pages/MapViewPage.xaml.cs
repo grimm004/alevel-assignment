@@ -62,12 +62,13 @@ namespace LocationInterface.Pages
             {
                 // Get the selected MAC addresses
                 MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
+                foreach (MacPointCollection collections in MacPointCollections)
+                    collections.MacPoints.Clear();
 
-                // Loop through each selected table
-                foreach (Table table in Common.LoadedDataTables)
+                if (Common.LoadedDataTables.Length > 0)
                     // Loop through each record in the current selected table where the deck
                     // is equal to the current deck map's ID
-                    foreach (Record record in table.GetRecords("Deck", SelectedImageFile.Identifier))
+                    foreach (Record record in Common.LoadedDataTables[0].GetRecords("Deck", SelectedImageFile.Identifier))
                         // Loop through each selected MAC address
                         foreach (MacPointCollection macPointCollection in MacPointCollections)
                             // If the current deck MAC address is equal to the current selected
@@ -89,14 +90,15 @@ namespace LocationInterface.Pages
         }
         
         /// <summary>
-        /// Update the deck map when changed
+        /// Update the map when changed
         /// </summary>
         /// <param name="sender">The control that called the action</param>
         /// <param name="e">Information about the selection change</param>
-        private void DeckSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MapChanged(object sender, SelectionChangedEventArgs e)
         {
             // Load the image in the map
             MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile((sender as ComboBox).SelectedValue as ImageFileReference));
+            if (!TimeManagerWindow.TimeEnabled) UpdatePoints();
         }
 
         /// <summary>

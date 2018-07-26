@@ -24,7 +24,7 @@
             <ComboBox
                     ItemsSource="{Binding ImageFileReferences, Mode=OneWay}"
                     DisplayMemberPath="Identifier"
-                    SelectionChanged="DeckSelectionComboBoxSelectionChanged"
+                    SelectionChanged="MapChanged"
                     Grid.Column="0" MinWidth="75"/>
             <Button Grid.Column="1" Content="Select Data" Click="SelectDataClick"/>
             <Button Grid.Column="2" Content="Update Points" Click="UpdatePointsClick"/>
