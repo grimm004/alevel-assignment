@@ -52,8 +52,9 @@ namespace LocationInterface.Pages
                 Common.LocationDatabase.DeleteTable(file.TableName);
             // Save changes to the table
             Common.LocationDatabase.SaveChanges();
-            // Update
+            // Update the table
             UpdateTable();
+            // Re-set the loaded tables
             Common.LoadTables(new LocationDataFile[0]);
         }
 
@@ -80,6 +81,7 @@ namespace LocationInterface.Pages
             // If not importing (to avoid access denied exceptions)
             if (!Importing)
             {
+                // Reload the database
                 Common.ReloadDatabase();
 
                 Dispatcher.Invoke(() =>
@@ -288,6 +290,7 @@ namespace LocationInterface.Pages
         private CSVTableFields currentFields;
         // The current filed sizes array for the table being processed
         private ushort[] currentFieldSizes;
+
         /// <summary>
         /// A callback to help process the maximum string size in each field for a table
         /// </summary>
@@ -377,6 +380,7 @@ namespace LocationInterface.Pages
             // Set the LocationDataFile list to the selected datafiles
             SelectedDataFiles = DataFilesDataGrid.SelectedItems.Cast<LocationDataFile>().ToList();
         }
+
         /// <summary>
         /// Update the datagrid table
         /// </summary>
@@ -387,6 +391,7 @@ namespace LocationInterface.Pages
             // Call to the common updatetable function
             UpdateTable();
         }
+
         /// <summary>
         /// Submit the current file selection
         /// </summary>
@@ -397,16 +402,7 @@ namespace LocationInterface.Pages
             // Call to the common submitselection method
             SubmitSelection();
         }
-        ///// <summary>
-        ///// Return to the previous page
-        ///// </summary>
-        ///// <param name="sender">The instance of the object that triggered the event</param>
-        ///// <param name="e">Information about the event</param>
-        //private void BackButtonClick(object sender, RoutedEventArgs e)
-        //{
-        //    // Run the callback to show the previous page
-        //    Common.ShowPreviousPage();
-        //}
+
         /// <summary>
         /// Clear the datacache
         /// </summary>
@@ -419,6 +415,7 @@ namespace LocationInterface.Pages
             // If the user confirms yes, delete the cache
             if (result == DialogResult.Yes) ClearCache();
         }
+
         /// <summary>
         /// Start the import of a data file folder
         /// </summary>
@@ -433,6 +430,7 @@ namespace LocationInterface.Pages
                 // Start a new background thread importing the folder
                 new Thread(() => ImportFolder(folderBrowser.SelectedPath)) { IsBackground = true }.Start();
         }
+
         /// <summary>
         /// Show information about the current datafile selction
         /// </summary>

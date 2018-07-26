@@ -34,7 +34,7 @@ namespace LocationInterface.Pages
             new Thread(() =>
             {
                 // Clear the datagrid
-                rawData.Dispatcher.Invoke(rawData.Items.Clear);
+                RawData.Dispatcher.Invoke(RawData.Items.Clear);
                 // Initialise a location record buffer
                 List<LocationRecord> locationRecordBuffer = new List<LocationRecord>();
                 // Loop through each table in the loaded tables
@@ -61,11 +61,11 @@ namespace LocationInterface.Pages
         {
             // Create a local instance of the buffer
             List<LocationRecord> currentBuffer = nextBuffer;
-            rawData.Dispatcher.Invoke(() =>
+            RawData.Dispatcher.Invoke(() =>
             {
                 // Loop through each record in the buffer and add it to the datagird
                 foreach (LocationRecord locationRecord in currentBuffer)
-                    rawData.Items.Add(locationRecord);
+                    RawData.Items.Add(locationRecord);
             });
             // Clear the handled buffer
             nextBuffer.Clear();

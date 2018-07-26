@@ -9,7 +9,7 @@
       Title="RawDataPage">
 
     <Grid>
-        <DataGrid x:Name="rawData" VerticalContentAlignment="Stretch" Margin="0,0,0,35" HorizontalContentAlignment="Stretch">
+        <DataGrid x:Name="RawData" VerticalContentAlignment="Stretch" Margin="0,0,0,35" HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="MAC" IsReadOnly="True" Binding="{Binding Path=MAC}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding Path=Date}" Width="*"></DataGridTextColumn>
@@ -19,7 +19,7 @@
                 <DataGridTextColumn Header="Y" IsReadOnly="True" Binding="{Binding Path=Y}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="RefreshTable"/>
+        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="RefreshTable" Margin="2,0,0,2"/>
         <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

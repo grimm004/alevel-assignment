@@ -16,10 +16,10 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="UpdateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="UpdateButtonClick" Margin="0,0,0,0"/>
-        <Button x:Name="submitButton" Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="SubmitButtonClick" Margin="50,0,0,0"/>
-        <Button x:Name="viewSelectionInformationButton" Content="Selection Information" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="130" Height="30" Click="SelectionInformationButtonClick" Margin="100,0,0,0"/>
+        <Button Content="Submit" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="SubmitButtonClick" Margin="50,0,0,0"/>
+        <Button Content="Selection Information" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="130" Height="30" Click="SelectionInformationButtonClick" Margin="100,0,0,0"/>
         <Button x:Name="ImportFolderButton" Content="Import Folder" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Bottom" Width="100" Height="30" Click="ImportDataFileClick"/>
-        <Button x:Name="clearCacheButton" Content="Clear Cache" HorizontalAlignment="Left" Margin="330,0,0,0" VerticalAlignment="Bottom" Width="80" Height="30" Click="ClearCacheButtonClick"/>
+        <Button Content="Clear Cache" HorizontalAlignment="Left" Margin="330,0,0,0" VerticalAlignment="Bottom" Width="80" Height="30" Click="ClearCacheButtonClick"/>
         <Grid VerticalAlignment="Bottom" Margin="410,0,210,0" Height="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
