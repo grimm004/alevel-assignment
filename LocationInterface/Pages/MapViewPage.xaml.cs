@@ -24,6 +24,8 @@ namespace LocationInterface.Pages
         private TimeManagerWindow TimeManagerWindow { get; }
         private TimeSetterWindow TimeSetterWindow { get; }
 
+        private MappingType MappingType { get; set; }
+
         public MapViewPage(Common common)
         {
             InitializeComponent();
@@ -62,6 +64,7 @@ namespace LocationInterface.Pages
             {
                 // Get the selected MAC addresses
                 MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
+
                 foreach (MacPointCollection collections in MacPointCollections)
                     collections.MacPoints.Clear();
 
@@ -108,7 +111,7 @@ namespace LocationInterface.Pages
         private void UpdateTimedPoints(double hour)
         {
             // Check that the time mode is enabled
-            if (TimeManagerWindow.TimeEnabled)
+            if (TimeManagerWindow.TimeEnabled && SelectedImageFile != null)
             {
                 // Get a TimeSpan object for the selected hour
                 TimeSpan selectedTime = TimeSpan.FromHours(hour);
@@ -198,5 +201,26 @@ namespace LocationInterface.Pages
         {
             SelectionManagerWindow.Show();
         }
+
+        private void MapTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (((sender as ComboBox).SelectedItem as ComboBoxItem).Name)
+            {
+                case "Selected":
+                    MappingType = MappingType.Selected;
+                    break;
+                case "All":
+                    MappingType = MappingType.All;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    enum MappingType
+    {
+        Selected,
+        All
     }
 }

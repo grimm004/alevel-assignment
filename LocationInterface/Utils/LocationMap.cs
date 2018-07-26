@@ -5,6 +5,7 @@ using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
 using System;
 using System.IO;
+using MonoGame.Extended;
 
 namespace LocationInterface.Utils
 {
@@ -23,7 +24,7 @@ namespace LocationInterface.Utils
         private Camera Camera { get; set; }
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
-        //private Texture2D HeatMapTexture { get; set; }
+        private MapArea[] MapAreas { get; set; }
         private int pointRadius;
         private int PointRadius
         {
@@ -90,36 +91,16 @@ namespace LocationInterface.Utils
 
             Random = new Random();
             MacPointCollections = new MacPointCollection[0];
-
-            //HeatMapTexture = new Texture2D(GraphicsDevice, 100, 100);
-            //HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, Color.White));
-
+            
             // Load a pre-compiled font
             Font = Content.Load<SpriteFont>("Font");
 
             // Create a KeyListener for the 'S' key (used for saving image metadata)
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
+
+            MapAreas = new MapAreaFile("GeoFencing\\Deck4\\FEUTI001_TCD_DECK4_AREAS_00.csv").LoadAreas();
         }
-
-        //public Color[] GetData(int width, int height, Color colour)
-        //{
-        //    Color[] data = new Color[width * height];
-        //    for (int x = -width / 2; x < width / 2; x++)
-        //        for (int y = -height / 2; y < height / 2; y++)
-        //            data[GetIndex(x + (width / 2), y + (height / 2), width)] = new Color(colour, GetAlpha(x, y));
-        //    return data;
-        //}
-
-        //public int GetIndex(int x, int y, int width)
-        //{
-        //    return (y * width) + x;
-        //}
-
-        //public float GetAlpha(int x, int y)
-        //{
-        //    return (float)Math.Exp(-Math.Pow(((x * x) + (y * y)) * (double)((x * x) + (y * y)), .5) / 1000);
-        //}
-
+        
         /// <summary>
         /// Load an array of MacPointCollections
         /// </summary>
@@ -162,7 +143,7 @@ namespace LocationInterface.Utils
             // Fetch the mouse and keyboard states
             MouseState mouseState = WpfMouse.GetState();
             KeyboardState keyboardState = WpfKeyboard.GetState();
-
+            
             // Update the binds
             SKeyBind.Update(keyboardState);
             DecreasePointSizeListener.Update(keyboardState);
@@ -174,28 +155,24 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.W)) Camera.Move(0, 5);
             if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl))
                 Camera.Move(0, -5);
-            if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(shiftDown ? -.05f : -.001f);
-            if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(shiftDown ? +.05f : +.001f);
+            if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(new Vector2(shiftDown ? -.05f : -.001f, 0));
+            if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(new Vector2(shiftDown ? +.05f : +.001f, 0));
+            if (keyboardState.IsKeyDown(Keys.U)) ScalePoints(new Vector2(0, shiftDown ? -.05f : -.001f));
+            if (keyboardState.IsKeyDown(Keys.J)) ScalePoints(new Vector2(0, shiftDown ? +.05f : +.001f));
             if (keyboardState.IsKeyDown(Keys.T)) TranslatePoints(0, shiftDown ? -4 : -1);
             if (keyboardState.IsKeyDown(Keys.F)) TranslatePoints(shiftDown ? -4 : -1, 0);
             if (keyboardState.IsKeyDown(Keys.G)) TranslatePoints(0, shiftDown ? +4 : +1);
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
-
-            //if (keyboardState.IsKeyDown(Keys.Q)) heat -= .01f;
-            //if (keyboardState.IsKeyDown(Keys.E)) heat += .01f;
-
-            //if (heat < 0.0f) heat = 0.0f;
-            //if (heat > 1.0f) heat = 1.0f;
         }
 
         /// <summary>
         /// Change the scale of all the points
         /// </summary>
         /// <param name="change">The scale to increment by</param>
-        public void ScalePoints(float change)
+        public void ScalePoints(Vector2 change)
         {
             // Increment the stored multiplyer for the current image file
-            CurrentImageFile.Multiplier += change;
+            CurrentImageFile.Scale += change;
         }
 
         /// <summary>
@@ -208,9 +185,7 @@ namespace LocationInterface.Utils
             // Increment the image file offset by the desired offset
             CurrentImageFile.Offset += new Vector2(x, y);
         }
-
-        //float heat = 1f;
-
+        
         /// <summary>
         /// Draw the location map state
         /// </summary>
@@ -224,6 +199,7 @@ namespace LocationInterface.Utils
             SpriteBatch.Begin(transformMatrix: Camera.Transformation);
             // Draw the points
             DrawPoints();
+            DrawBounds();
             SpriteBatch.End();
             
             // Begin drawing all the static 2D sprites
@@ -232,24 +208,7 @@ namespace LocationInterface.Utils
             DrawKey();
             SpriteBatch.End();
         }
-
-        //private void DrawHeatMap(Rectangle position, float heat)
-        //{
-        //    HeatMapTexture.SetData(GetData(HeatMapTexture.Width, HeatMapTexture.Height, GetHeatColour(heat)));
-        //    SpriteBatch.Draw(HeatMapTexture, position, Color.White);
-        //}
-
-        //Color c1 = Color.Yellow;
-        //Color c2 = Color.Red;
-        //private Color GetHeatColour(float heat)
-        //{
-        //    return new Color(
-        //        (byte)(c1.R + (byte)(heat * (c2.R - c1.R))),
-        //        (byte)(c1.G + (byte)(heat * (c2.G - c1.G))),
-        //        (byte)(c1.B + (byte)(heat * (c2.B - c1.B))),
-        //        255);
-        //}
-
+        
         /// <summary>
         /// Draw the current location points
         /// </summary>
@@ -263,8 +222,14 @@ namespace LocationInterface.Utils
                 foreach (Vector2 macPoint in macPointCollection.MacPoints)
                     // Draw the point with the desired colour with its offset and multiplier
                     SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
-                        (CurrentImageFile.Multiplier * macPoint), null, macPointCollection.Colour,
+                        (CurrentImageFile.Scale * macPoint), null, macPointCollection.Colour,
                         0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
+        }
+
+        protected void DrawBounds()
+        {
+            foreach (MapArea mapArea in MapAreas)
+                mapArea.Draw(SpriteBatch, CurrentImageFile.Offset, CurrentImageFile.Scale);
         }
 
         /// <summary>

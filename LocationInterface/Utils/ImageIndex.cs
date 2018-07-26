@@ -57,7 +57,7 @@ namespace LocationInterface.Utils
                 // If the image file is not in the index
                 if (!ImageFileExists(Path.GetFileName(fileName)))
                     // Add the file to the index
-                    ImageFiles.Add(new ImageFile(Path.GetFileName(fileName), 1, Vector2.Zero));
+                    ImageFiles.Add(new ImageFile(Path.GetFileName(fileName), new Vector2(1), Vector2.Zero));
             // Reorder the index alphabetically
             ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.Identifier).ToList();
             LoadReferences();

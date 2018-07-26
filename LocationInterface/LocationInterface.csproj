@@ -95,6 +95,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -133,6 +136,7 @@
     <Compile Include="Utils\ImageIndex.cs" />
     <Compile Include="Utils\KeyBind.cs" />
     <Compile Include="Utils\MacPointCollection.cs" />
+    <Compile Include="Utils\MapArea.cs" />
     <Compile Include="Utils\PluginManager.cs" />
     <Compile Include="Windows\AddressListWindow.xaml.cs">
       <DependentUpon>AddressListWindow.xaml</DependentUpon>
@@ -342,6 +346,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)Content" "$(TargetDir)Content" /i /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)Content" "$(TargetDir)Content" /i /y
+xcopy "$(ProjectDir)CSV GeoFencing" "$(TargetDir)GeoFencing" /i /y /s</PostBuildEvent>
   </PropertyGroup>
 </Project>

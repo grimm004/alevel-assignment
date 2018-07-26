@@ -7,7 +7,7 @@ namespace LocationInterface.Utils
     public class ImageFile
     {
         public string FileName { get; set; }
-        public float Multiplier { get; set; }
+        public Vector2 Scale { get; set; }
         public Vector2 Offset { get; set; }
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace LocationInterface.Utils
         public ImageFile()
         {
             FileName = "";
-            Multiplier = 1;
+            Scale = new Vector2(1);
             Offset = Vector2.Zero;
         }
 
@@ -26,10 +26,10 @@ namespace LocationInterface.Utils
         /// <param name="fileName">The name of the image file</param>
         /// <param name="multiplier">The point scale multiplier of the image file</param>
         /// <param name="offset">The point offset of the image file</param>
-        public ImageFile(string fileName, float multiplier, Vector2 offset)
+        public ImageFile(string fileName, Vector2 scale, Vector2 offset)
         {
             FileName = fileName;
-            Multiplier = multiplier;
+            Scale = scale;
             Offset = offset;
         }
 
@@ -51,11 +51,11 @@ namespace LocationInterface.Utils
         public override int GetHashCode()
         {
             // Return the XOR of all the hash codes of the core class properties
-            return FileName.GetHashCode() ^ Multiplier.GetHashCode() ^ Offset.GetHashCode();
+            return FileName.GetHashCode() ^ Scale.GetHashCode() ^ Offset.GetHashCode();
         }
         public override string ToString()
         {
-            return $"ImageFile('{ FileName }', { Multiplier.ToString("0.00") }, { Offset })";
+            return $"ImageFile('{ FileName }', { Scale.ToString() }, { Offset })";
         }
     }
 
