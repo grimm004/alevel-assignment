@@ -5,8 +5,8 @@ namespace LocationInterface.Utils
 {
     public class Common
     {
-        public Database LocationDatabase { get; }
-        public Table[] LoadedDataTables { get; protected set; }
+        public Database LocationDatabase { get; private set; }
+        public Table[] LoadedDataTables { get; private set; }
 
         /// <summary>
         /// Initialise the common class
@@ -19,10 +19,10 @@ namespace LocationInterface.Utils
             LoadedDataTables = new Table[0];
         }
 
-        //public void ReloadDatabase()
-        //{
-        //    LocationDatabase.ReloadDatabase();
-        //}
+        public void ReloadDatabase()
+        {
+            LocationDatabase = new BINDatabase(SettingsManager.Active.LocationDataFolder);
+        }
 
         /// <summary>
         /// Clean up anytrhing on close

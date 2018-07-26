@@ -79,7 +79,7 @@ namespace LocationInterface.Pages
             // If not importing (to avoid access denied exceptions)
             if (!Importing)
             {
-                //Common.ReloadDatabase();
+                Common.ReloadDatabase();
 
                 Dispatcher.Invoke(() =>
                 {
