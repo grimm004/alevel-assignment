@@ -38,13 +38,13 @@ namespace LocationInterface.Pages
             LoadTables();
 
             // Add a keydown event to remove selected tables if the delete key is down
-            KeyDown += delegate { if (Keyboard.IsKeyDown(Key.Delete)) RemoveTable(); };
+            KeyDown += delegate { if (Keyboard.IsKeyDown(Key.Delete)) RemoveTables(); };
         }
 
         /// <summary>
         /// Delete any selected tables (data files) from the database
         /// </summary>
-        public void RemoveTable()
+        public void RemoveTables()
         {
             // Loop through each LocationDataFile in the selected items
             foreach (LocationDataFile file in DataFilesDataGrid.SelectedItems)
@@ -54,6 +54,7 @@ namespace LocationInterface.Pages
             Common.LocationDatabase.SaveChanges();
             // Update
             UpdateTable();
+            Common.LoadTables(new LocationDataFile[0]);
         }
 
         /// <summary>
@@ -105,8 +106,8 @@ namespace LocationInterface.Pages
         /// </summary>
         private void OnImportStart()
         {
-            importFolderButton.Content = "Importing Folder";
-            updateButton.IsEnabled = importFolderButton.IsEnabled = false;
+            ImportFolderButton.Content = "Importing Folder";
+            UpdateButton.IsEnabled = ImportFolderButton.IsEnabled = false;
         }
 
         /// <summary>
@@ -114,8 +115,8 @@ namespace LocationInterface.Pages
         /// </summary>
         private void OnImportFinish()
         {
-            importFolderButton.Content = "Import Folder";
-            updateButton.IsEnabled = importFolderButton.IsEnabled = true;
+            ImportFolderButton.Content = "Import Folder";
+            UpdateButton.IsEnabled = ImportFolderButton.IsEnabled = true;
         }
 
         /// <summary>
@@ -127,8 +128,8 @@ namespace LocationInterface.Pages
         {
             Dispatcher.Invoke(delegate
             {
-                statusProgressBar.Value = statusBarValue;
-                statusLabel.Content = statusText;
+                StatusProgressBar.Value = statusBarValue;
+                StatusLabel.Content = statusText;
             });
         }
 
