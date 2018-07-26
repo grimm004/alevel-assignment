@@ -9,6 +9,7 @@ namespace LocationInterface.Utils
         public string FileName { get; set; }
         public Vector2 Scale { get; set; }
         public Vector2 Offset { get; set; }
+        public string AreaFileName { get; set; }
 
         /// <summary>
         /// Initialize an imagefile instacne
@@ -16,21 +17,23 @@ namespace LocationInterface.Utils
         public ImageFile()
         {
             FileName = "";
+            AreaFileName = "";
             Scale = new Vector2(1);
             Offset = Vector2.Zero;
         }
-
+        
         /// <summary>
         /// Initialze an imagefile instance
         /// </summary>
         /// <param name="fileName">The name of the image file</param>
         /// <param name="multiplier">The point scale multiplier of the image file</param>
         /// <param name="offset">The point offset of the image file</param>
-        public ImageFile(string fileName, Vector2 scale, Vector2 offset)
+        public ImageFile(string fileName, Vector2 scale, Vector2 offset, string areaFileName)
         {
             FileName = fileName;
             Scale = scale;
             Offset = offset;
+            AreaFileName = areaFileName;
         }
 
         [JsonIgnore]
@@ -38,6 +41,20 @@ namespace LocationInterface.Utils
 
         [JsonIgnore]
         public bool Exists { get { return File.Exists($"{ SettingsManager.Active.ImageFolder }\\{ FileName }"); } }
+
+        [JsonIgnore]
+        public MapArea[] MapAreas
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(AreaFileName) || !File.Exists(AreaFileName))
+                {
+                    System.Console.WriteLine($"Could not find area file '{ AreaFileName }' for '{ FileName }'.");
+                    return new MapArea[0];
+                }
+                else return new MapAreaFile(AreaFileName).LoadAreas();
+            }
+        }
         
         public ImageFileReference GetReference()
         {
@@ -62,8 +79,7 @@ namespace LocationInterface.Utils
     public class ImageFileReference
     {
         public string FileName { get; set; }
-
-        [JsonIgnore]
+        
         public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
 
         /// <summary>

@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 
+//Count,Name,FLOOR#,POI#,POI_CAT,BUILDING#,VISIBILTY,End X,End Y,Start X,Start Y
+
 namespace LocationInterface.Utils
 {
     public class MapAreaFile
@@ -25,7 +27,7 @@ namespace LocationInterface.Utils
                 reader.ReadLine();
                 reader.ReadLine();
                 reader.ReadLine();
-                reader.ReadLine();
+                //reader.ReadLine();
 
                 string infoLine;
                 while (!reader.EndOfStream && (infoLine = reader.ReadLine()) != null && infoLine != "")

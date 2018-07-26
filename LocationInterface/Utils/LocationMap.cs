@@ -5,7 +5,6 @@ using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
 using System;
 using System.IO;
-using MonoGame.Extended;
 
 namespace LocationInterface.Utils
 {
@@ -98,7 +97,7 @@ namespace LocationInterface.Utils
             // Create a KeyListener for the 'S' key (used for saving image metadata)
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
 
-            MapAreas = new MapAreaFile("GeoFencing\\Deck4\\FEUTI001_TCD_DECK4_AREAS_00.csv").LoadAreas();
+            MapAreas = new MapArea[0];
         }
         
         /// <summary>
@@ -109,7 +108,7 @@ namespace LocationInterface.Utils
         {
             MacPointCollections = points;
         }
-
+        
         /// <summary>
         /// Load a map file
         /// </summary>
@@ -122,6 +121,7 @@ namespace LocationInterface.Utils
             // Dynamically produce the map texture to be rendered in the background
             MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
             fileStream.Dispose();
+            MapAreas = selectedImageFile.MapAreas;
         }
 
         /// <summary>
