@@ -101,6 +101,7 @@ namespace LocationInterface.Pages
         {
             // Load the tables into the common class
             Common.LoadTables(SelectedDataFiles.ToArray());
+            UpdateStatus($"Submitted { SelectedDataFiles.Count } data file{ (SelectedDataFiles.Count != 1 ? "s" : "") }.", 0);
         }
 
         /// <summary>

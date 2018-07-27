@@ -115,7 +115,7 @@ namespace LocationInterface.Windows
             if ((colorDialog = new ColorDialog()).ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 // Instanciate and add a MacPointCollection to the list of selected addresses
-                Addresses.Add(new MacPointCollection { Address = MacEntry.Text, Colour = new Color { R = colorDialog.Color.R, G = colorDialog.Color.G, B = colorDialog.Color.B, A = colorDialog.Color.A }, MacPoints = new List<LocationPoint>() });
+                Addresses.Add(new MacPointCollection { Address = MacEntry.Text, Colour = new Color { R = colorDialog.Color.R, G = colorDialog.Color.G, B = colorDialog.Color.B, A = colorDialog.Color.A } });
                 // Re-set the mac entry textbox
                 MacEntry.Text = "";
                 // Update the DataGrid table

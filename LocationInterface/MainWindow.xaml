@@ -7,8 +7,8 @@
         Title="Location Service Visualiser" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinWidth="768" MinHeight="535">
 
     <Grid>
-        <TabControl x:Name="PageSelector" SelectionChanged="PageChanged">
-            <TabItem Header="File Manager">
+        <TabControl x:Name="PageSelector">
+            <TabItem Header="File Manager" Selector.Selected="FileManagerPageSelected">
                 <Frame x:Name="FileManagerPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
             </TabItem>
             <TabItem Header="Map Viewer">
@@ -20,7 +20,7 @@
             <TabItem Header="Data Analysis Viewer">
                 <Frame x:Name="AnalysisPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
             </TabItem>
-            <TabItem Header="Settings">
+            <TabItem Header="Settings" Selector.Selected="SettingsPageSelected">
                 <Frame x:Name="SettingsPageFrame" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" NavigationUIVisibility="Hidden"/>
             </TabItem>
         </TabControl>

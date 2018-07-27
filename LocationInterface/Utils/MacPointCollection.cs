@@ -7,7 +7,7 @@ namespace LocationInterface.Utils
     {
         public string Address { get; set; }
         public Color Colour { get; set; }
-        public List<LocationPoint> MacPoints { get; set; }
+        public Dictionary<string, List<LocationPoint>> MapLocationPoints { get; set; }
 
         /// <summary>
         /// Initialze a MacPointCollection
@@ -16,7 +16,9 @@ namespace LocationInterface.Utils
         {
             Address = "";
             Colour = Color.Black;
-            MacPoints = new List<LocationPoint>();
+            MapLocationPoints = new Dictionary<string, List<LocationPoint>>();
+            foreach (ImageFile imageFile in App.ImageIndex.ImageFiles)
+                MapLocationPoints.Add(imageFile.DataReference, new List<LocationPoint>());
         }
     }
 }

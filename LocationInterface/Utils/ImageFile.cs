@@ -7,6 +7,7 @@ namespace LocationInterface.Utils
     public class ImageFile
     {
         public string FileName { get; set; }
+        public string DataReference { get; set; }
         public Vector2 Scale { get; set; }
         public Vector2 Offset { get; set; }
         public string AreaFileName { get; set; }
@@ -20,6 +21,7 @@ namespace LocationInterface.Utils
             AreaFileName = "";
             Scale = new Vector2(1);
             Offset = Vector2.Zero;
+            DataReference = "None";
         }
         
         /// <summary>
@@ -34,10 +36,8 @@ namespace LocationInterface.Utils
             Scale = scale;
             Offset = offset;
             AreaFileName = areaFileName;
+            DataReference = Path.GetFileNameWithoutExtension(FileName);
         }
-
-        [JsonIgnore]
-        public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
 
         [JsonIgnore]
         public bool Exists { get { return File.Exists($"{ SettingsManager.Active.ImageFolder }\\{ FileName }"); } }
@@ -58,7 +58,7 @@ namespace LocationInterface.Utils
         
         public ImageFileReference GetReference()
         {
-            return new ImageFileReference(FileName);
+            return new ImageFileReference(FileName, DataReference);
         }
 
         /// <summary>
@@ -79,8 +79,7 @@ namespace LocationInterface.Utils
     public class ImageFileReference
     {
         public string FileName { get; set; }
-        
-        public string Identifier { get { return Path.GetFileNameWithoutExtension(FileName); } }
+        public string DataReference { get; set; }
 
         /// <summary>
         /// Initialize an ImageFileReference instacne
@@ -88,14 +87,16 @@ namespace LocationInterface.Utils
         public ImageFileReference()
         {
             FileName = "";
+            DataReference = "None";
         }
 
         /// <summary>
         /// Initialize an ImageFileReference instacne
         /// </summary>
-        public ImageFileReference(string fileName)
+        public ImageFileReference(string fileName, string dataReference)
         {
             FileName = fileName;
+            DataReference = dataReference;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace LocationInterface.Utils
         private WpfKeyboard WpfKeyboard { get; set; }
         private WpfMouse WpfMouse { get; set; }
 
-        private MacPointCollection[] MacPointCollections { get; set; } = new MacPointCollection[0];
+        private MacPointCollection[] MacPointCollections { get; set; }
 
         private int KeyYOffset { get; set; }
         private Texture2D PointTexture { get; set; }
@@ -120,7 +120,6 @@ namespace LocationInterface.Utils
         {
             CurrentImageFile = selectedImageFile;
             FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
-            // Dynamically produce the map texture to be rendered in the background
             MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
             fileStream.Dispose();
             MapAreas = selectedImageFile.MapAreas;
@@ -166,7 +165,7 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
             if (keyboardState.IsKeyDown(Keys.Z)) KeyYOffset -= shiftDown ? +20 : +5;
             if (keyboardState.IsKeyDown(Keys.X)) KeyYOffset += shiftDown ? +20 : +5;
-
+            
             //foreach (MacPointCollection macPointCollection in MacPointCollections)
             //    foreach (LocationPoint point in macPointCollection.MacPoints)
             //        foreach (MapArea mapArea in MapAreas)
@@ -228,7 +227,7 @@ namespace LocationInterface.Utils
             // Loop through the macpointcollections
             foreach (MacPointCollection macPointCollection in MacPointCollections)
                 // Loop through each macpoint in the current macpointcollection
-                foreach (LocationPoint macPoint in macPointCollection.MacPoints)
+                foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.DataReference])
                     // Draw the point with the desired colour with its offset and multiplier
                     SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
                         (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
@@ -262,13 +261,13 @@ namespace LocationInterface.Utils
                 if (TimeBased)
                 {
                     // Draw the time of the point being displayed
-                    SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints.Count > 0
-                        ? MacPointCollections[i].MacPoints[0].Time.ToString(@"hh\:mm\:ss") :
+                    SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
+                        ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Time.ToString(@"hh\:mm\:ss") :
                         "No Points", position + new Vector2(120 + (PointRadius * 2),
                         PointRadius / -2), Color.Black);
                     // If there is a point being played, draw its location node
-                    if (MacPointCollections[i].MacPoints.Count > 0)
-                        SpriteBatch.DrawString(Font, MacPointCollections[i].MacPoints[0].Node,
+                    if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0)
+                        SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
                             position + new Vector2(175 + (PointRadius * 2),
                             PointRadius / -2), Color.Black);
                 }

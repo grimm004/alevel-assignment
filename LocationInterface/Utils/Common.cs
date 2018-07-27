@@ -1,5 +1,6 @@
 ﻿using DatabaseManagerLibrary;
 using DatabaseManagerLibrary.BIN;
+using System;
 
 namespace LocationInterface.Utils
 {
@@ -7,6 +8,7 @@ namespace LocationInterface.Utils
     {
         public Database LocationDatabase { get; private set; }
         public Table[] LoadedDataTables { get; private set; }
+        public Action UpdatePointsCallback { get; set; }
 
         /// <summary>
         /// Initialise the common class

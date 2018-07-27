@@ -23,6 +23,9 @@ namespace LocationInterface.Pages
         private SelectionManagerWindow SelectionManagerWindow { get; }
         private TimeManagerWindow TimeManagerWindow { get; }
         private TimeSetterWindow TimeSetterWindow { get; }
+        private MacPointCollection[] FollowAddressPoints { get; set; }
+
+        private MappingType CurrentMappingType { get; set; }
 
         public MapViewPage(Common common)
         {
@@ -30,9 +33,12 @@ namespace LocationInterface.Pages
             DataContext = this;
 
             MacPointCollections = new MacPointCollection[0];
+            FollowAddressPoints = new MacPointCollection[0];
 
             Common = common;
             TimeAutomation = false;
+
+            CurrentMappingType = MappingType.Standard;
 
             ImageFileReferences = App.ImageIndex.ImageFileReferences;
 
@@ -55,39 +61,38 @@ namespace LocationInterface.Pages
         /// <summary>
         /// Update all the points being used in the map-viewer
         /// </summary>
-        private void UpdatePoints()
+        public void UpdatePoints()
         {
             // Check that there is a selected image file
-            if (SelectedImageFile != null)
-            {
-                // Get the selected MAC addresses
-                MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
+            // Get the selected MAC addresses
+            MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
 
-                foreach (MacPointCollection collections in MacPointCollections)
-                    collections.MacPoints.Clear();
+            foreach (MacPointCollection collections in MacPointCollections)
+                foreach (string mapIdentifier in collections.MapLocationPoints.Keys)
+                    collections.MapLocationPoints[mapIdentifier].Clear();
 
-                if (Common.LoadedDataTables.Length > 0)
-                    // Loop through each record in the current selected table where the deck
-                    // is equal to the current deck map's ID
-                    foreach (Record record in Common.LoadedDataTables[0].GetRecords("Deck", SelectedImageFile.Identifier))
-                        // Loop through each selected MAC address
-                        foreach (MacPointCollection macPointCollection in MacPointCollections)
-                            // If the current deck MAC address is equal to the current selected
-                            // MAC address
-                            if (record.GetValue<string>("MAC") == macPointCollection.Address)
-                            {
-                                // Get the location record representation of the location point
-                                LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                                // Implicitly cast this to a LocationPoint and add it to the list
-                                // of active macPointCollection
-                                macPointCollection.MacPoints.Add(locationRecord);
-                                // Break out of the loop as there is no need to continue searching
-                                // the MAC addresses
-                                break;
-                            }
-                // If the map viewer is not in timed mode, show all loaded points
-                if (!TimeManagerWindow.TimeEnabled) MapViewer.LoadPoints(MacPointCollections);
-            }
+            if (Common.LoadedDataTables.Length > 0)
+                // Loop through each record in the current selected table where the deck
+                // is equal to the current deck map's ID
+                foreach (Record record in Common.LoadedDataTables[0].GetRecords())
+                    // Loop through each selected MAC address
+                    foreach (MacPointCollection macPointCollection in MacPointCollections)
+                        // If the current deck MAC address is equal to the current selected
+                        // MAC address
+                        if (record.GetValue<string>("MAC") == macPointCollection.Address)
+                        {
+                            // Get the location record representation of the location point
+                            LocationRecord locationRecord = record.ToObject<LocationRecord>();
+                            // Implicitly cast this to a LocationPoint and add it to the list
+                            // of active macPointCollection
+                            if (macPointCollection.MapLocationPoints.ContainsKey(locationRecord.Deck))
+                                macPointCollection.MapLocationPoints[locationRecord.Deck].Add(locationRecord);
+                            // Break out of the loop as there is no need to continue searching
+                            // the MAC addresses
+                            break;
+                        }
+
+            MapViewer.LoadPoints(MacPointCollections);
         }
 
         /// <summary>
@@ -99,7 +104,6 @@ namespace LocationInterface.Pages
         {
             // Load the image in the map
             MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile((sender as ComboBox).SelectedValue as ImageFileReference));
-            if (!TimeManagerWindow.TimeEnabled) UpdatePoints();
         }
 
         /// <summary>
@@ -122,14 +126,18 @@ namespace LocationInterface.Pages
                 LocationPoint[] laterPoints;
                 // Loop through the current macpointcollections
                 for (int i = 0; i < macPointCollections.Length; i++)
+                {
                     // Set the current temporary macPointCollections item with up to a single point that represents the most available location point
                     macPointCollections[i] = new MacPointCollection()
                     {
                         Address = MacPointCollections[i].Address,
                         Colour = MacPointCollections[i].Colour,
-                        MacPoints = (laterPoints = MacPointCollections[i].MacPoints.Where(point => point.Time < selectedTime).ToArray()).Length > 0
-                                ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>()
                     };
+
+                    macPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference] =
+                        (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference]
+                        .Where(point => point.Time < selectedTime).ToArray()).Length > 0 ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>();
+                }
 
                 // Load these points into the map viewer
                 MapViewer.LoadPoints(macPointCollections);
@@ -199,5 +207,12 @@ namespace LocationInterface.Pages
         {
             SelectionManagerWindow.Show();
         }
+    }
+
+    enum MappingType
+    {
+        Standard,
+        TimeBased,
+        FollowAddress
     }
 }

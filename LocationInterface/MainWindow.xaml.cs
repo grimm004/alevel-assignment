@@ -38,6 +38,8 @@ namespace LocationInterface
             MapViewerPageFrame.Content = MapViewPage = new MapViewPage(Common);
             RawDataPageFrame.Content = RawDataPage = new RawDataPage(Common);
             AnalysisPageFrame.Content = AnalysisPage = new AnalysisPage(Common);
+
+            Common.UpdatePointsCallback = MapViewPage.UpdatePoints;
         }
         
         /// <summary>
@@ -49,23 +51,15 @@ namespace LocationInterface
             Common.OnClose();
             base.OnClosing(e);
         }
-        
-        private void PageChanged(object sender, SelectionChangedEventArgs e)
+
+        private void FileManagerPageSelected(object sender, RoutedEventArgs e)
         {
-            if (PageSelector.SelectedContent as Frame != null && e.Source is TabControl)
-                switch ((PageSelector.SelectedContent as Frame).Content as Page)
-                {
-                    case SettingsPage settingsPage:
-                        settingsPage.LoadSettings();
-                        break;
-                    case FileManagerPage fileManagerPage:
-                        fileManagerPage.UpdateTable();
-                        break;
-                    default:
-                        break;
-                }
-            
-            e.Handled = true;
+            FileManagerPage.UpdateTable();
+        }
+
+        private void SettingsPageSelected(object sender, RoutedEventArgs e)
+        {
+            SettingsPage.LoadSettings();
         }
     }
 }

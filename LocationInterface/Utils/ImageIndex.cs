@@ -60,7 +60,7 @@ namespace LocationInterface.Utils
                     // Add the file to the index
                     ImageFiles.Add(new ImageFile(Path.GetFileName(fileName), new Vector2(1), Vector2.Zero, ""));
             // Reorder the index alphabetically
-            ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.Identifier).ToList();
+            ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.DataReference).ToList();
             LoadReferences();
         }
 
@@ -79,7 +79,7 @@ namespace LocationInterface.Utils
         public ImageFile GetDataFile(string imageIdentifier)
         {
             // Loop through each image file object in the image file list, if the current image identifier equals the image identifier return the current image object
-            foreach (ImageFile currentImageFile in ImageFiles) if (currentImageFile.Identifier == imageIdentifier) return currentImageFile;
+            foreach (ImageFile currentImageFile in ImageFiles) if (currentImageFile.DataReference == imageIdentifier) return currentImageFile;
             // Return null
             return null;
         }
