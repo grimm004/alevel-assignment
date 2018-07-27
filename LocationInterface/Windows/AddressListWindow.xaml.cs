@@ -1,5 +1,4 @@
-﻿using DatabaseManagerLibrary;
-using LocationInterface.Utils;
+﻿using LocationInterface.Utils;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -41,9 +40,9 @@ namespace LocationInterface.Windows
             // Clear the current HashSet of MAC addresses
             MacAddresses.Clear();
             // Loop through each table in the loaded data tables list
-            foreach (Table table in Common.LoadedDataTables)
+            if (Common.LoadedDataTables.Length > 0)
                 // Search each record for new MAC addresses (the hash set will only add it if it is unique)
-                table.SearchRecords(record => MacAddresses.Add((string)record.GetValue("MAC")));
+                Common.LoadedDataTables[0].SearchRecords(record => MacAddresses.Add((string)record.GetValue("MAC")));
             
             // Clear the DataGrid's list of MAC addresses
             MacSelectionDataGrid.Items.Clear();

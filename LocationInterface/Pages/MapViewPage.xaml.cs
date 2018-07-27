@@ -24,8 +24,6 @@ namespace LocationInterface.Pages
         private TimeManagerWindow TimeManagerWindow { get; }
         private TimeSetterWindow TimeSetterWindow { get; }
 
-        private MappingType MappingType { get; set; }
-
         public MapViewPage(Common common)
         {
             InitializeComponent();
@@ -91,7 +89,7 @@ namespace LocationInterface.Pages
                 if (!TimeManagerWindow.TimeEnabled) MapViewer.LoadPoints(MacPointCollections);
             }
         }
-        
+
         /// <summary>
         /// Update the map when changed
         /// </summary>
@@ -201,26 +199,5 @@ namespace LocationInterface.Pages
         {
             SelectionManagerWindow.Show();
         }
-
-        private void MapTypeChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (((sender as ComboBox).SelectedItem as ComboBoxItem).Name)
-            {
-                case "Selected":
-                    MappingType = MappingType.Selected;
-                    break;
-                case "All":
-                    MappingType = MappingType.All;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    enum MappingType
-    {
-        Selected,
-        All
     }
 }

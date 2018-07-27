@@ -8,6 +8,15 @@ namespace LocationInterface.Utils
         public Vector2 Point { get; set; }
         public TimeSpan Time { get; set; }
         public string Node { get; set; }
+        public bool InArea { get; set; }
+
+        public LocationPoint()
+        {
+            Point = Vector2.Zero;
+            Time = new TimeSpan();
+            Node = "";
+            InArea = true;
+        }
 
         /// <summary>
         /// Implicitly convert to a Vector2
@@ -16,6 +25,19 @@ namespace LocationInterface.Utils
         public static implicit operator Vector2(LocationPoint point)
         {
             return point.Point;
+        }
+
+        /// <summary>
+        /// Implicitly convert to a Polygon
+        /// </summary>
+        /// <param name="point">the point to convert</param>
+        public static implicit operator Polygon(LocationPoint point)
+        {
+            Polygon polygon = new Polygon();
+            polygon.Points.Add(new Vector2(0, 0));
+            polygon.Offset(point);
+            polygon.BuildEdges();
+            return polygon;
         }
 
         /// <summary>

@@ -18,6 +18,7 @@ namespace LocationInterface.Utils
 
         private MacPointCollection[] MacPointCollections { get; set; } = new MacPointCollection[0];
 
+        private int KeyYOffset { get; set; }
         private Texture2D PointTexture { get; set; }
         private Random Random { get; set; }
         private Camera Camera { get; set; }
@@ -83,9 +84,11 @@ namespace LocationInterface.Utils
             CurrentImageFile = new ImageFile();
             
             PointRadius = 5;
-            DecreasePointSizeListener = new KeyListener(Keys.Z, () => PointRadius--);
-            IncreasePointSizeListener = new KeyListener(Keys.X, () => PointRadius++);
-            
+            DecreasePointSizeListener = new KeyListener(Keys.Q, () => PointRadius--);
+            IncreasePointSizeListener = new KeyListener(Keys.E, () => PointRadius++);
+
+            KeyYOffset = 20;
+
             TimeBased = false;
 
             Random = new Random();
@@ -116,8 +119,7 @@ namespace LocationInterface.Utils
         public void LoadMap(ImageFile selectedImageFile)
         {
             CurrentImageFile = selectedImageFile;
-            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\" +
-                $"{ selectedImageFile.FileName }", FileMode.Open);
+            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
             // Dynamically produce the map texture to be rendered in the background
             MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
             fileStream.Dispose();
@@ -133,7 +135,7 @@ namespace LocationInterface.Utils
             if (WpfKeyboard.GetState().IsKeyDown(Keys.LeftControl))
                 App.ImageIndex.SaveIndex();
         }
-        
+
         /// <summary>
         /// Update the location map state
         /// </summary>
@@ -143,18 +145,17 @@ namespace LocationInterface.Utils
             // Fetch the mouse and keyboard states
             MouseState mouseState = WpfMouse.GetState();
             KeyboardState keyboardState = WpfKeyboard.GetState();
-            
+
             // Update the binds
             SKeyBind.Update(keyboardState);
             DecreasePointSizeListener.Update(keyboardState);
             IncreasePointSizeListener.Update(keyboardState);
             // Update the controls
             bool shiftDown = keyboardState.IsKeyDown(Keys.LeftShift);
-            if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(5, 0);
-            if (keyboardState.IsKeyDown(Keys.D)) Camera.Move(-5, 0);
-            if (keyboardState.IsKeyDown(Keys.W)) Camera.Move(0, 5);
-            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl))
-                Camera.Move(0, -5);
+            if (keyboardState.IsKeyDown(Keys.A)) Camera.Move(shiftDown ? 20 : 5, 0);
+            if (keyboardState.IsKeyDown(Keys.D)) Camera.Move(shiftDown ? -20 : -5, 0);
+            if (keyboardState.IsKeyDown(Keys.W)) Camera.Move(0, shiftDown ? 20 : 5);
+            if (keyboardState.IsKeyDown(Keys.S) && !keyboardState.IsKeyDown(Keys.LeftControl)) Camera.Move(0, shiftDown ? -20 : -5);
             if (keyboardState.IsKeyDown(Keys.R)) ScalePoints(new Vector2(shiftDown ? -.05f : -.001f, 0));
             if (keyboardState.IsKeyDown(Keys.Y)) ScalePoints(new Vector2(shiftDown ? +.05f : +.001f, 0));
             if (keyboardState.IsKeyDown(Keys.U)) ScalePoints(new Vector2(0, shiftDown ? -.05f : -.001f));
@@ -163,6 +164,14 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.F)) TranslatePoints(shiftDown ? -4 : -1, 0);
             if (keyboardState.IsKeyDown(Keys.G)) TranslatePoints(0, shiftDown ? +4 : +1);
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
+            if (keyboardState.IsKeyDown(Keys.Z)) KeyYOffset -= shiftDown ? +20 : +5;
+            if (keyboardState.IsKeyDown(Keys.X)) KeyYOffset += shiftDown ? +20 : +5;
+
+            //foreach (MacPointCollection macPointCollection in MacPointCollections)
+            //    foreach (LocationPoint point in macPointCollection.MacPoints)
+            //        foreach (MapArea mapArea in MapAreas)
+            //            if (mapArea.Polygon.Points.Count > 0 && point.Node == mapArea.Identifier)
+            //                point.InArea = mapArea.Polygon.PolygonCollision(point, Vector2.Zero).Intersecting;
         }
 
         /// <summary>
@@ -219,10 +228,10 @@ namespace LocationInterface.Utils
             // Loop through the macpointcollections
             foreach (MacPointCollection macPointCollection in MacPointCollections)
                 // Loop through each macpoint in the current macpointcollection
-                foreach (Vector2 macPoint in macPointCollection.MacPoints)
+                foreach (LocationPoint macPoint in macPointCollection.MacPoints)
                     // Draw the point with the desired colour with its offset and multiplier
                     SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
-                        (CurrentImageFile.Scale * macPoint), null, macPointCollection.Colour,
+                        (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
                         0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
@@ -238,7 +247,7 @@ namespace LocationInterface.Utils
         protected void DrawKey()
         {
             // Define a position storage vector
-            Vector2 position = new Vector2(20);
+            Vector2 position = new Vector2(20, 20 - KeyYOffset);
             // Loop through each macpointcollection
             for (int i = 0; i < MacPointCollections.Length; i++)
             {
