@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MAC Selection" Height="300" Width="300">
     <Grid>
-        <DataGrid x:Name="MacSelectionDataGrid" Margin="0,0,0,20" IsReadOnly="True" AutoGenerateColumns="False" LoadingRow="RowLoad">
+        <DataGrid x:Name="MacSelectionDataGrid" Margin="0,0,0,20" IsReadOnly="True" AutoGenerateColumns="False" LoadingRow="RowLoad" MouseDoubleClick="DoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="MAC Address" IsReadOnly="True" Binding="{Binding Path=Address}" Width="*"/>
             </DataGrid.Columns>

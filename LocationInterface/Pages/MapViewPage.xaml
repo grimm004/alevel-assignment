@@ -27,7 +27,7 @@
                     Grid.Column="0" MinWidth="75"/>
             <Button Grid.Column="1" Content="Select Data" Click="SelectDataClick"/>
             <Button Grid.Column="2" Content="Update Points" Click="UpdatePointsClick"/>
-            <Label Content="Toggle Time Controls" Grid.Column="3"/>
+            <Label Content="Show Time Controls" Grid.Column="3"/>
             <CheckBox ToolTip="Show/hide the time-based location controls." Grid.Column="4"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowTimeManager" Unchecked="HideTimeManager"/>

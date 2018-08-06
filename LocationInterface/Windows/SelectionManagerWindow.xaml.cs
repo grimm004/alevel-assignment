@@ -190,5 +190,24 @@ namespace LocationInterface.Windows
         {
             if (e.Key == Key.Return) AddMac();
         }
+
+        private void DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (MacSelectionDataGrid.SelectedItem != null)
+            {
+                ColorDialog colorDialog;
+                if ((colorDialog = new ColorDialog()).ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    foreach (MacPointCollection collection in Addresses.Where(c => (MacSelectionDataGrid.SelectedItem as MacPointCollection).Address == c.Address))
+                        collection.Colour = new Color { R = colorDialog.Color.R, G = colorDialog.Color.G, B = colorDialog.Color.B, A = colorDialog.Color.A };
+                    // Re-set the mac entry textbox
+                    MacEntry.Text = "";
+                    // Update the DataGrid table
+                    UpdateTable();
+                    // Run the callback for the new MAC address
+                    MacChangeCallback?.Invoke();
+                }
+            }
+        }
     }
 }

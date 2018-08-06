@@ -226,12 +226,13 @@ namespace LocationInterface.Utils
             if (MapTexture != null) SpriteBatch.Draw(MapTexture, Vector2.Zero);
             // Loop through the macpointcollections
             foreach (MacPointCollection macPointCollection in MacPointCollections)
-                // Loop through each macpoint in the current macpointcollection
-                foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.DataReference])
-                    // Draw the point with the desired colour with its offset and multiplier
-                    SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
-                        (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
-                        0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
+                if (macPointCollection.MapLocationPoints.ContainsKey(CurrentImageFile.DataReference))
+                    // Loop through each macpoint in the current macpointcollection
+                    foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.DataReference])
+                        // Draw the point with the desired colour with its offset and multiplier
+                        SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
+                            (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
+                            0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
         protected void DrawBounds()
@@ -249,31 +250,32 @@ namespace LocationInterface.Utils
             Vector2 position = new Vector2(20, 20 - KeyYOffset);
             // Loop through each macpointcollection
             for (int i = 0; i < MacPointCollections.Length; i++)
-            {
-                // Draw a point in the desired colour
-                SpriteBatch.Draw(PointTexture, position, null,
-                    MacPointCollections[i].Colour, 0f, new Vector2(PointRadius / 2),
-                    1f, SpriteEffects.None, 0);
-                // Draw the MAC address
-                SpriteBatch.DrawString(Font, MacPointCollections[i].Address,
-                    position + new Vector2(PointRadius * 2, PointRadius / -2), Color.Black);
-                // If in time based mode
-                if (TimeBased)
+                if (MacPointCollections[i].MapLocationPoints.ContainsKey(CurrentImageFile.DataReference))
                 {
-                    // Draw the time of the point being displayed
-                    SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
-                        ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Time.ToString(@"hh\:mm\:ss") :
-                        "No Points", position + new Vector2(120 + (PointRadius * 2),
-                        PointRadius / -2), Color.Black);
-                    // If there is a point being played, draw its location node
-                    if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0)
-                        SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
-                            position + new Vector2(175 + (PointRadius * 2),
+                    // Draw a point in the desired colour
+                    SpriteBatch.Draw(PointTexture, position, null,
+                        MacPointCollections[i].Colour, 0f, new Vector2(PointRadius / 2),
+                        1f, SpriteEffects.None, 0);
+                    // Draw the MAC address
+                    SpriteBatch.DrawString(Font, MacPointCollections[i].Address,
+                        position + new Vector2(PointRadius * 2, PointRadius / -2), Color.Black);
+                    // If in time based mode
+                    if (TimeBased)
+                    {
+                        // Draw the time of the point being displayed
+                        SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
+                            ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Time.ToString(@"hh\:mm\:ss") :
+                            "No Points", position + new Vector2(120 + (PointRadius * 2),
                             PointRadius / -2), Color.Black);
+                        // If there is a point being played, draw its location node
+                        if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0)
+                            SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
+                                position + new Vector2(175 + (PointRadius * 2),
+                                PointRadius / -2), Color.Black);
+                    }
+                    // Increment the y position
+                    position.Y += 20;
                 }
-                // Increment the y position
-                position.Y += 20;
-            }
         }
     }
 }
