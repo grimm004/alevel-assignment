@@ -101,8 +101,8 @@
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="MonoGame.Framework.WpfInterop, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.WpfInterop.1.5.2\lib\net45\MonoGame.Framework.WpfInterop.dll</HintPath>
+    <Reference Include="MonoGame.Framework.WpfInterop, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WpfInterop.1.5.3\lib\net45\MonoGame.Framework.WpfInterop.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -158,6 +158,9 @@
     </Compile>
     <Compile Include="Pages\RawDataPage.xaml.cs">
       <DependentUpon>RawDataPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FollowManager.xaml.cs">
+      <DependentUpon>FollowManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InsertAnalysisWindow.xaml.cs">
       <DependentUpon>InsertAnalysisWindow.xaml</DependentUpon>
@@ -235,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FollowManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

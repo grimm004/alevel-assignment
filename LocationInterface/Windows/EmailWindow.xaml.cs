@@ -30,7 +30,7 @@ namespace LocationInterface.Windows
             };
 
             // Loop through each plugin in the plugin manager
-            foreach (AnalysisPlugin plugin in PluginManager.Plugins)
+            foreach (AnalysisPlugin plugin in PluginManager.AnalysisPlugins)
                 // Add the plugin as a bindable variable to the email processor
                 EmailProcessor.BindableVariables[plugin.Name] = plugin.Analysis;
         }

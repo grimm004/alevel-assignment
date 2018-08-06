@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AnalysisSDK;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
@@ -15,6 +16,8 @@ namespace LocationInterface.Utils
         private IGraphicsDeviceService GraphicsDeviceManager { get; set; }
         private WpfKeyboard WpfKeyboard { get; set; }
         private WpfMouse WpfMouse { get; set; }
+
+        private IMapper[] PluginMaps { get; set; }
 
         private MacPointCollection[] MacPointCollections { get; set; }
 
@@ -101,6 +104,12 @@ namespace LocationInterface.Utils
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
 
             MapAreas = new MapArea[0];
+            PluginMaps = new IMapper[0];
+        }
+
+        public void LoadPlugins(IMapper[] mapperPlugins)
+        {
+            PluginMaps = mapperPlugins;
         }
         
         /// <summary>
@@ -165,6 +174,8 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
             if (keyboardState.IsKeyDown(Keys.Z)) KeyYOffset -= shiftDown ? +20 : +5;
             if (keyboardState.IsKeyDown(Keys.X)) KeyYOffset += shiftDown ? +20 : +5;
+
+            foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Update(time);
             
             //foreach (MacPointCollection macPointCollection in MacPointCollections)
             //    foreach (LocationPoint point in macPointCollection.MacPoints)
@@ -215,6 +226,8 @@ namespace LocationInterface.Utils
             // Draw the MAC key
             DrawKey();
             SpriteBatch.End();
+
+            foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Draw(time, SpriteBatch);
         }
         
         /// <summary>

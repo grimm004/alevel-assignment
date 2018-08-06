@@ -8,7 +8,8 @@ namespace LocationInterface.Utils
 {
     public class PluginManager
     {
-        public static List<AnalysisPlugin> Plugins { get; set; }
+        public static List<AnalysisPlugin> AnalysisPlugins { get; set; }
+        public static List<MapperPlugin> MapperPlugins { get; set; }
 
         /// <summary>
         /// Initialze the plugin manager
@@ -16,7 +17,7 @@ namespace LocationInterface.Utils
         static PluginManager()
         {
             // Initialze the AnalysisPlugin List
-            Plugins = new List<AnalysisPlugin>();
+            AnalysisPlugins = new List<AnalysisPlugin>();
         }
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace LocationInterface.Utils
         /// </summary>
         public static void Load()
         {
-            Plugins = new List<AnalysisPlugin>();
+            AnalysisPlugins = new List<AnalysisPlugin>();
             // Fetch all the dlls in the plugin folder
             string[] pluginFiles = Directory.GetFiles(Constants.PLUGINFOLDER, "*.dll");
             // Loop through each one
@@ -33,8 +34,7 @@ namespace LocationInterface.Utils
                 {
                     // Try to load it
                     Assembly assembly = Assembly.LoadFrom(pluginFile);
-
-                    IAnalysis analysis = null;
+                    
                     // Fetch all the types from the loaded assembly
                     Type[] types = assembly.GetTypes();
                     // Loop though each available type
@@ -42,19 +42,31 @@ namespace LocationInterface.Utils
                         // If the type implements the IAnalysis interface
                         if (typeof(IAnalysis).IsAssignableFrom(type))
                         {
-                            // Load it in and break out of the loop
-                            analysis = (IAnalysis)Activator.CreateInstance(type);
-                            break;
+                            // Load it in as an instance
+                            IAnalysis analysis = (IAnalysis)Activator.CreateInstance(type);
+                            // If the instance is not null, add it to the analysis plugins list
+                            if (analysis != null)
+                                AnalysisPlugins.Add(new AnalysisPlugin()
+                                {
+                                    Name = Path.GetFileNameWithoutExtension(pluginFile),
+                                    Assembly = assembly,
+                                    Analysis = analysis,
+                                });
                         }
-
-                    // if a valid analysis class is found, add it to the plugin list
-                    if (analysis != null)
-                        Plugins.Add(new AnalysisPlugin()
+                        // Else if the type implements the IMapper interface
+                        else if (typeof(IMapper).IsAssignableFrom(type))
                         {
-                            Name = Path.GetFileNameWithoutExtension(pluginFile),
-                            Assembly = assembly,
-                            Analysis = analysis,
-                        });
+                            // Load it in as an instance
+                            IMapper mapper = (IMapper)Activator.CreateInstance(type);
+                            // If the instance is not null, add it to the mapper plugins list
+                            if (mapper != null)
+                                MapperPlugins.Add(new MapperPlugin()
+                                {
+                                    Name = Path.GetFileNameWithoutExtension(pluginFile),
+                                    Assembly = assembly,
+                                    Analysis = mapper,
+                                });
+                        }
                 }
                 // If loading is invalid, catch the error and move on
                 catch (ReflectionTypeLoadException)
@@ -64,10 +76,19 @@ namespace LocationInterface.Utils
         }
     }
 
-    public class AnalysisPlugin
+    public class Plugin
     {
         public string Name { get; set; }
         public Assembly Assembly { get; set; }
+    }
+
+    public class AnalysisPlugin : Plugin
+    {
         public IAnalysis Analysis { get; set; }
+    }
+
+    public class MapperPlugin : Plugin
+    {
+        public IMapper Analysis { get; set; }
     }
 }

@@ -25,7 +25,8 @@ namespace VendorAnalysis
     class VendorAnalysis : IAnalysis
     {
         public double CompletionRatio { get; protected set; }
-
+        
+        public string Name { get { return "Vendor Analysis"; } }
         public string Description { get { return "Analyse the MAC addresses for their vendors."; } }
 
         public const string API = "api.macvendors.com";

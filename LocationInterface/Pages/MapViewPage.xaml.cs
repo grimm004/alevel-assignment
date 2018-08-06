@@ -23,6 +23,7 @@ namespace LocationInterface.Pages
         private SelectionManagerWindow SelectionManagerWindow { get; }
         private TimeManagerWindow TimeManagerWindow { get; }
         private TimeSetterWindow TimeSetterWindow { get; }
+        private FollowManagerWindow FollowManagerWindow { get; }
         private MacPointCollection[] FollowAddressPoints { get; set; }
 
         private MappingType CurrentMappingType { get; set; }
@@ -45,6 +46,7 @@ namespace LocationInterface.Pages
             SelectionManagerWindow = new SelectionManagerWindow(Common, UpdatePoints);
             TimeSetterWindow = new TimeSetterWindow(UpdateTimedPoints);
             TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
+            FollowManagerWindow = new FollowManagerWindow();
         }
 
         /// <summary>
@@ -120,27 +122,59 @@ namespace LocationInterface.Pages
                 // Set the selected time label to a representation of the current selected time
                 TimeManagerWindow.SelectedTimeLabel.Content = selectedTime.ToString(@"hh\:mm\:ss");
 
-                // Produce a local MacPointCollection array to store the latest MacPointLocations
-                MacPointCollection[] macPointCollections = new MacPointCollection[MacPointCollections.Length];
-                // Pre-define the laterPoints (to temporarily store the points to be used)
-                LocationPoint[] laterPoints;
-                // Loop through the current macpointcollections
-                for (int i = 0; i < macPointCollections.Length; i++)
+                if (FollowManagerWindow.FollowEnabled)
                 {
-                    // Set the current temporary macPointCollections item with up to a single point that represents the most available location point
-                    macPointCollections[i] = new MacPointCollection()
+                    IEnumerable<MacPointCollection> matchingCollections = MacPointCollections.Where(m => m.Address == FollowManagerWindow.SelectedAddress);
+                    if (matchingCollections.Count() == 0) return;
+                    MacPointCollection collection = matchingCollections.First();
+
+                    TimeSpan latestTime = new TimeSpan();
+                    LocationPoint currentPoint = null;
+                    string identifier = "";
+
+                    foreach (string locationIdentifier in collection.MapLocationPoints.Keys)
+                        foreach (LocationPoint point in collection.MapLocationPoints[locationIdentifier])
+                        {
+                            if (latestTime < point.Time && point.Time < selectedTime)
+                            {
+                                currentPoint = point;
+                                identifier = locationIdentifier;
+                            }
+                        }
+                    
+                    if (currentPoint != null)
                     {
-                        Address = MacPointCollections[i].Address,
-                        Colour = MacPointCollections[i].Colour,
-                    };
-
-                    macPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference] =
-                        (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference]
-                        .Where(point => point.Time < selectedTime).ToArray()).Length > 0 ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>();
+                        int currentIndex = ImageFileReferences.IndexOf(ImageFileReferences.Where(i => i.DataReference == identifier).First());
+                        if (MapImageSelector.SelectedIndex != currentIndex) MapImageSelector.SelectedIndex = currentIndex;
+                        MapViewer.LoadPoints(new MacPointCollection[] { new MacPointCollection { Address = "", Colour = Microsoft.Xna.Framework.Color.Red, MapLocationPoints = new Dictionary<string, List<LocationPoint>>() { { identifier, new List<LocationPoint>() { currentPoint } } } } });
+                    }
+                    else
+                        MapViewer.LoadPoints(new MacPointCollection[0]);
                 }
+                else
+                {
+                    // Produce a local MacPointCollection array to store the latest MacPointLocations
+                    MacPointCollection[] macPointCollections = new MacPointCollection[MacPointCollections.Length];
+                    // Pre-define the laterPoints (to temporarily store the points to be used)
+                    LocationPoint[] laterPoints;
+                    // Loop through the current macpointcollections
+                    for (int i = 0; i < macPointCollections.Length; i++)
+                    {
+                        // Set the current temporary macPointCollections item with up to a single point that represents the most available location point
+                        macPointCollections[i] = new MacPointCollection()
+                        {
+                            Address = MacPointCollections[i].Address,
+                            Colour = MacPointCollections[i].Colour,
+                        };
 
-                // Load these points into the map viewer
-                MapViewer.LoadPoints(macPointCollections);
+                        macPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference] =
+                            (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference]
+                            .Where(point => point.Time < selectedTime).ToArray()).Length > 0 ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>();
+                    }
+
+                    // Load these points into the map viewer
+                    MapViewer.LoadPoints(macPointCollections);
+                }
             }
         }
 
@@ -206,6 +240,16 @@ namespace LocationInterface.Pages
         private void SelectDataClick(object sender, RoutedEventArgs e)
         {
             SelectionManagerWindow.Show();
+        }
+
+        private void ShowFollowManager(object sender, RoutedEventArgs e)
+        {
+            FollowManagerWindow.Show();
+        }
+
+        private void HideFollowManager(object sender, RoutedEventArgs e)
+        {
+            FollowManagerWindow.Hide();
         }
     }
 

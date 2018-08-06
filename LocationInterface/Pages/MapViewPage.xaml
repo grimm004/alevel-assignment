@@ -18,9 +18,11 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ComboBox
+            <ComboBox x:Name="MapImageSelector"
                     ItemsSource="{Binding ImageFileReferences, Mode=OneWay}"
                     DisplayMemberPath="DataReference"
                     SelectionChanged="MapChanged"
@@ -31,8 +33,11 @@
             <CheckBox ToolTip="Show/hide the time-based location controls." Grid.Column="4"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowTimeManager" Unchecked="HideTimeManager"/>
+            <Label Content="Show Follow MAC Address Controls" Grid.Column="5"/>
+            <CheckBox ToolTip="Show/hide the follow MAC address controls." Grid.Column="6"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Checked="ShowFollowManager" Unchecked="HideFollowManager"/>
         </Grid>
-
         <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

@@ -21,6 +21,7 @@ namespace BasicAnalysis
     {
         public Dictionary<string, int> DeckCounts { get; set; }
 
+        public string Name { get { return "Basic Analysis"; } }
         public string Description { get { return "Analyse the number of records from each deck."; } }
 
         public void Run(Table[] tables, Action<double> PercentageCompletionChange)

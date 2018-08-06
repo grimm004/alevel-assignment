@@ -1,0 +1,27 @@
+﻿<Window x:Class="LocationInterface.Windows.FollowManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface.Windows"
+        mc:Ignorable="d"
+        Title="Follow MAC Address" Height="200" Width="400" ResizeMode="CanMinimize" Loaded="OnLoaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Enable Follow MAC Address" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <CheckBox x:Name="EnableFollowCheckbox" Grid.Row="0" Grid.Column="1" ToolTip="Enable time-basted locations." HorizontalAlignment="Center" VerticalAlignment="Center" Checked="FollowCheckboxEnabled" Unchecked="FollowCheckboxDisabled"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Selected MAC Address" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox x:Name="SelectedAddressTextbox" Grid.Column="1" HorizontalAlignment="Center" Height="22" Grid.Row="1" TextWrapping="Wrap" IsEnabled="{Binding ElementName=EnableFollowCheckbox, Path=IsChecked}" VerticalAlignment="Center" Width="120" TextChanged="SelectedAddressChanged"/>
+    </Grid>
+</Window>

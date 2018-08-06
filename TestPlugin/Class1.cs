@@ -10,6 +10,7 @@ namespace TestPlugin
 {
     public class TestPlugin : IAnalysis
     {
+        public string Name { get { return "Test Plugin"; } }
         public string Description { get { return "A test plugin..."; } }
 
         public AnalysisResult FetchResult(string metadata)

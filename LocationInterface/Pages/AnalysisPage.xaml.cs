@@ -29,7 +29,7 @@ namespace LocationInterface.Pages
 
             Common = common;
             
-            AnalysisOptions = PluginManager.Plugins;
+            AnalysisOptions = PluginManager.AnalysisPlugins;
         }
         
         /// <summary>
