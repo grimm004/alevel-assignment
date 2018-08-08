@@ -74,7 +74,6 @@ namespace LocationInterface.Utils
         protected override void Initialize()
         {
             base.Initialize();
-
             GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
 
             WpfKeyboard = new WpfKeyboard(this);
@@ -101,6 +100,7 @@ namespace LocationInterface.Utils
             MapAreas = new MapArea[0];
             PluginMaps = new IMapper[0];
 
+            StandardContent.Initialize(Content);
             foreach (MapperPlugin mapperPlugin in PluginManager.MapperPlugins)
                 mapperPlugin.Mapper.Initialize(Content);
         }

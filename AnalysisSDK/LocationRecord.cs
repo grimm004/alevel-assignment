@@ -19,7 +19,7 @@ namespace AnalysisSDK
         public static SpriteFont Font { get; private set; }
         public static Texture2D PointTexture { get; set; }
 
-        public static void LoadContent(ContentManager content)
+        public static void Initialize(ContentManager content)
         {
             // Load a pre-compiled font
             Font = content.Load<SpriteFont>("Font");
