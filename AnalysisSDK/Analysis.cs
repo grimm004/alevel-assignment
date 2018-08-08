@@ -1,5 +1,6 @@
 ﻿using DatabaseManagerLibrary;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.ComponentModel;
@@ -84,6 +85,11 @@ namespace AnalysisSDK
         /// The description of the mapper plugin.
         /// </summary>
         string Description { get; }
+
+        /// <summary>
+        /// Called when the LocationMap is initialized.
+        /// </summary>
+        void Initialize(ContentManager content);
 
         /// <summary>
         /// Called when a table is loaded by the user.

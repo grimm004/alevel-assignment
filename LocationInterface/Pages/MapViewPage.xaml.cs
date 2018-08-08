@@ -132,13 +132,11 @@ namespace LocationInterface.Pages
 
                     foreach (string locationIdentifier in collection.MapLocationPoints.Keys)
                         foreach (LocationPoint point in collection.MapLocationPoints[locationIdentifier])
-                        {
                             if (latestTime < point.Time && point.Time < selectedTime)
                             {
                                 currentPoint = point;
                                 identifier = locationIdentifier;
                             }
-                        }
                     
                     if (currentPoint != null)
                     {

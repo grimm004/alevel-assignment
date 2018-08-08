@@ -22,12 +22,12 @@ namespace LocationInterface.Utils
         private MacPointCollection[] MacPointCollections { get; set; }
 
         private int KeyYOffset { get; set; }
-        private Texture2D PointTexture { get; set; }
         private Random Random { get; set; }
         private Camera Camera { get; set; }
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
         private MapArea[] MapAreas { get; set; }
+
         private int pointRadius;
         private int PointRadius
         {
@@ -44,7 +44,7 @@ namespace LocationInterface.Utils
 
                 int diameter = 2 * pointRadius;
                 // Create an instance of the texture
-                PointTexture = new Texture2D(GraphicsDevice, diameter, diameter);
+                StandardContent.PointTexture = new Texture2D(GraphicsDevice, diameter, diameter);
                 // Deine and initialize the array that will store the texture data
                 Color[] circleData = new Color[diameter * diameter];
                 int i = 0;
@@ -59,14 +59,12 @@ namespace LocationInterface.Utils
                         // Else set the colour of the position to not have an alpha (is transparent)
                         else circleData[i++] = new Color(0, 0, 0, 0);
                 // Set the data in the texture instance
-                PointTexture.SetData(circleData);
+                StandardContent.PointTexture.SetData(circleData);
             }
         }
 
         public bool TimeBased { get; set; }
-
-        private SpriteFont Font { get; set; }
-
+        
         private KeyListener DecreasePointSizeListener { get; set; }
         private KeyListener IncreasePointSizeListener { get; set; }
 
@@ -96,15 +94,15 @@ namespace LocationInterface.Utils
 
             Random = new Random();
             MacPointCollections = new MacPointCollection[0];
-            
-            // Load a pre-compiled font
-            Font = Content.Load<SpriteFont>("Font");
 
             // Create a KeyListener for the 'S' key (used for saving image metadata)
             SKeyBind = new KeyListener(Keys.S, SaveInfo);
 
             MapAreas = new MapArea[0];
             PluginMaps = new IMapper[0];
+
+            foreach (MapperPlugin mapperPlugin in PluginManager.MapperPlugins)
+                mapperPlugin.Mapper.Initialize(Content);
         }
 
         public void LoadPlugins(IMapper[] mapperPlugins)
@@ -248,7 +246,7 @@ namespace LocationInterface.Utils
                     // Loop through each macpoint in the current macpointcollection
                     foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.DataReference])
                         // Draw the point with the desired colour with its offset and multiplier
-                        SpriteBatch.Draw(PointTexture, CurrentImageFile.Offset +
+                        SpriteBatch.Draw(StandardContent.PointTexture, CurrentImageFile.Offset +
                             (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
                             0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
@@ -271,23 +269,23 @@ namespace LocationInterface.Utils
                 if (MacPointCollections[i].MapLocationPoints.ContainsKey(CurrentImageFile.DataReference))
                 {
                     // Draw a point in the desired colour
-                    SpriteBatch.Draw(PointTexture, position, null,
+                    SpriteBatch.Draw(StandardContent.PointTexture, position, null,
                         MacPointCollections[i].Colour, 0f, new Vector2(PointRadius / 2),
                         1f, SpriteEffects.None, 0);
                     // Draw the MAC address
-                    SpriteBatch.DrawString(Font, MacPointCollections[i].Address,
+                    SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].Address,
                         position + new Vector2(PointRadius * 2, PointRadius / -2), Color.Black);
                     // If in time based mode
                     if (TimeBased)
                     {
                         // Draw the time of the point being displayed
-                        SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
+                        SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
                             ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Time.ToString(@"hh\:mm\:ss") :
                             "No Points", position + new Vector2(120 + (PointRadius * 2),
                             PointRadius / -2), Color.Black);
                         // If there is a point being played, draw its location node
                         if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0)
-                            SpriteBatch.DrawString(Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
+                            SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
                                 position + new Vector2(175 + (PointRadius * 2),
                                 PointRadius / -2), Color.Black);
                     }
