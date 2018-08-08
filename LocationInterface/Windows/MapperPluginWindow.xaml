@@ -1,0 +1,20 @@
+﻿<Window x:Class="LocationInterface.Windows.MapperPluginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface.Windows"
+        mc:Ignorable="d"
+        Title="Plugin Manager" Height="300" Width="200" Loaded="OnLoaded" ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <CheckBox x:Name="PluginsEnabledCheckBox" Content="Enable Selected Plugins" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,10,10,10" Checked="PluginsEnabled" Unchecked="PluginsDisabled"/>
+        <Label Content="Selected Plugins" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10,30,10,10"/>
+        <ListBox x:Name="PluginListBox" DisplayMemberPath="Name" KeyDown="PluginListKeyDown" MinWidth="100" Margin="10,55,10,30" IsEnabled="{Binding ElementName=PluginsEnabledCheckBox, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}"/>
+        <Button Content="Add Plugins" VerticalAlignment="Bottom" Click="SelectPluginsButtonClick" Margin="10" IsEnabled="{Binding ElementName=PluginsEnabledCheckBox, Path=IsChecked, Converter={StaticResource InverseBooleanConverter}}"/>
+    </Grid>
+</Window>

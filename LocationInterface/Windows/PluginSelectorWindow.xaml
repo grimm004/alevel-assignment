@@ -1,0 +1,23 @@
+﻿<Window x:Class="LocationInterface.Windows.PluginSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface.Windows"
+        mc:Ignorable="d"
+        MinWidth="300"
+        MinHeight="300"
+        Width="400"
+        Height="300"
+        Title="Select Plugins" Loaded="OnLoaded">
+    
+    <Grid>
+        <DataGrid x:Name="PluginsDataGrid" IsReadOnly="True" SelectionChanged="DataGridSelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" IsReadOnly="True"  Binding="{Binding Path=Name}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Click="CancelButtonClick"/>
+        <Button Content="Add Plugins" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Click="SubmitSelectionButtonClick"/>
+    </Grid>
+</Window>

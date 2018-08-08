@@ -138,6 +138,7 @@
     <Compile Include="Utils\MacPointCollection.cs" />
     <Compile Include="Utils\MapArea.cs" />
     <Compile Include="Utils\PluginManager.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="Windows\AddressListWindow.xaml.cs">
       <DependentUpon>AddressListWindow.xaml</DependentUpon>
     </Compile>
@@ -164,6 +165,12 @@
     </Compile>
     <Compile Include="Windows\InsertAnalysisWindow.xaml.cs">
       <DependentUpon>InsertAnalysisWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MapperPluginWindow.xaml.cs">
+      <DependentUpon>MapperPluginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PluginSelectorWindow.xaml.cs">
+      <DependentUpon>PluginSelectorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\PresetNameWindow.xaml.cs">
       <DependentUpon>PresetNameWindow.xaml</DependentUpon>
@@ -246,6 +253,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\InsertAnalysisWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MapperPluginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PluginSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

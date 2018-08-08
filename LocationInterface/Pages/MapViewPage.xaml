@@ -20,6 +20,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <ComboBox x:Name="MapImageSelector"
@@ -37,6 +39,10 @@
             <CheckBox ToolTip="Show/hide the follow MAC address controls." Grid.Column="6"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowFollowManager" Unchecked="HideFollowManager"/>
+            <Label Content="Show Plugin Controls" Grid.Column="7"/>
+            <CheckBox ToolTip="Show/hide the follow plugin controls." Grid.Column="8"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Checked="ShowPluginManager" Unchecked="HidePluginManager"/>
         </Grid>
         <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>

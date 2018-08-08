@@ -24,10 +24,9 @@ namespace LocationInterface.Pages
         private TimeManagerWindow TimeManagerWindow { get; }
         private TimeSetterWindow TimeSetterWindow { get; }
         private FollowManagerWindow FollowManagerWindow { get; }
+        private MapperPluginWindow MapperPluginWindow { get; }
         private MacPointCollection[] FollowAddressPoints { get; set; }
-
-        private MappingType CurrentMappingType { get; set; }
-
+        
         public MapViewPage(Common common)
         {
             InitializeComponent();
@@ -38,15 +37,14 @@ namespace LocationInterface.Pages
 
             Common = common;
             TimeAutomation = false;
-
-            CurrentMappingType = MappingType.Standard;
-
+            
             ImageFileReferences = App.ImageIndex.ImageFileReferences;
 
             SelectionManagerWindow = new SelectionManagerWindow(Common, UpdatePoints);
             TimeSetterWindow = new TimeSetterWindow(UpdateTimedPoints);
             TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
             FollowManagerWindow = new FollowManagerWindow();
+            MapperPluginWindow = new MapperPluginWindow(selectedPlugins => MapViewer.LoadPlugins(selectedPlugins.Select(selectedPlugin => selectedPlugin.Mapper).ToArray()), MapViewer.UnloadPlugins);
         }
 
         /// <summary>
@@ -251,12 +249,16 @@ namespace LocationInterface.Pages
         {
             FollowManagerWindow.Hide();
         }
-    }
 
-    enum MappingType
-    {
-        Standard,
-        TimeBased,
-        FollowAddress
+        private void ShowPluginManager(object sender, RoutedEventArgs e)
+        {
+            MapperPluginWindow.Show();
+        }
+
+        private void HidePluginManager(object sender, RoutedEventArgs e)
+        {
+            MapperPluginWindow.Hide();
+        }
     }
+    
 }

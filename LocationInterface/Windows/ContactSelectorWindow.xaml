@@ -16,7 +16,7 @@
                 <DataGridTextColumn Header="Email Address" IsReadOnly="True"  Binding="{Binding Path=EmailAddress}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Add Contacts" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Click="SubmitSelectionButtonClick"/>
-        <Button Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Click="CancelButtonClick"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Click="CancelButtonClick"/>
+        <Button Content="Add Contacts" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Click="SubmitSelectionButtonClick"/>
     </Grid>
 </Window>

@@ -111,7 +111,12 @@ namespace LocationInterface.Utils
         {
             PluginMaps = mapperPlugins;
         }
-        
+
+        public void UnloadPlugins()
+        {
+            PluginMaps = new IMapper[0];
+        }
+
         /// <summary>
         /// Load an array of MacPointCollections
         /// </summary>

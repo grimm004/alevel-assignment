@@ -18,6 +18,7 @@ namespace LocationInterface.Utils
         {
             // Initialze the AnalysisPlugin List
             AnalysisPlugins = new List<AnalysisPlugin>();
+            MapperPlugins = new List<MapperPlugin>();
         }
 
         /// <summary>
@@ -26,6 +27,7 @@ namespace LocationInterface.Utils
         public static void Load()
         {
             AnalysisPlugins = new List<AnalysisPlugin>();
+            MapperPlugins = new List<MapperPlugin>();
             // Fetch all the dlls in the plugin folder
             string[] pluginFiles = Directory.GetFiles(Constants.PLUGINFOLDER, "*.dll");
             // Loop through each one
@@ -40,33 +42,23 @@ namespace LocationInterface.Utils
                     // Loop though each available type
                     foreach (Type type in types)
                         // If the type implements the IAnalysis interface
-                        if (typeof(IAnalysis).IsAssignableFrom(type))
-                        {
-                            // Load it in as an instance
-                            IAnalysis analysis = (IAnalysis)Activator.CreateInstance(type);
+                        if (typeof(IAnalysis).IsAssignableFrom(type) && Activator.CreateInstance(type) is IAnalysis analysis)
                             // If the instance is not null, add it to the analysis plugins list
-                            if (analysis != null)
-                                AnalysisPlugins.Add(new AnalysisPlugin()
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(pluginFile),
-                                    Assembly = assembly,
-                                    Analysis = analysis,
-                                });
-                        }
+                            AnalysisPlugins.Add(new AnalysisPlugin()
+                            {
+                                Name = analysis.Name,
+                                Assembly = assembly,
+                                Analysis = analysis,
+                            });
                         // Else if the type implements the IMapper interface
-                        else if (typeof(IMapper).IsAssignableFrom(type))
-                        {
-                            // Load it in as an instance
-                            IMapper mapper = (IMapper)Activator.CreateInstance(type);
+                        else if (typeof(IMapper).IsAssignableFrom(type) && Activator.CreateInstance(type) is IMapper mapper)
                             // If the instance is not null, add it to the mapper plugins list
-                            if (mapper != null)
-                                MapperPlugins.Add(new MapperPlugin()
-                                {
-                                    Name = Path.GetFileNameWithoutExtension(pluginFile),
-                                    Assembly = assembly,
-                                    Analysis = mapper,
-                                });
-                        }
+                            MapperPlugins.Add(new MapperPlugin()
+                            {
+                                Name = mapper.Name,
+                                Assembly = assembly,
+                                Mapper = mapper,
+                            });
                 }
                 // If loading is invalid, catch the error and move on
                 catch (ReflectionTypeLoadException)
@@ -80,6 +72,11 @@ namespace LocationInterface.Utils
     {
         public string Name { get; set; }
         public Assembly Assembly { get; set; }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 
     public class AnalysisPlugin : Plugin
@@ -89,6 +86,6 @@ namespace LocationInterface.Utils
 
     public class MapperPlugin : Plugin
     {
-        public IMapper Analysis { get; set; }
+        public IMapper Mapper { get; set; }
     }
 }
