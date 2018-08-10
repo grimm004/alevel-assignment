@@ -27,7 +27,7 @@ namespace LocationInterface.Utils
         private KeyListener SKeyBind { get; set; }
         private Texture2D MapTexture { get; set; }
         private MapArea[] MapAreas { get; set; }
-
+        
         private int pointRadius;
         private int PointRadius
         {
@@ -84,11 +84,11 @@ namespace LocationInterface.Utils
             CurrentImageFile = new ImageFile();
             
             PointRadius = 5;
-            DecreasePointSizeListener = new KeyListener(Keys.Q, () => PointRadius--);
-            IncreasePointSizeListener = new KeyListener(Keys.E, () => PointRadius++);
+            DecreasePointSizeListener = new KeyListener(Keys.C, () => PointRadius--);
+            IncreasePointSizeListener = new KeyListener(Keys.V, () => PointRadius++);
 
             KeyYOffset = 20;
-
+            
             TimeBased = false;
 
             Random = new Random();
@@ -177,14 +177,13 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.H)) TranslatePoints(shiftDown ? +4 : +1, 0);
             if (keyboardState.IsKeyDown(Keys.Z)) KeyYOffset -= shiftDown ? +20 : +5;
             if (keyboardState.IsKeyDown(Keys.X)) KeyYOffset += shiftDown ? +20 : +5;
+            if (keyboardState.IsKeyDown(Keys.Q)) Camera.Scale -= shiftDown ? .2f : .01f;
+            if (keyboardState.IsKeyDown(Keys.E)) Camera.Scale += shiftDown ? .2f : .01f;
+
+            if (Camera.Scale < 0) Camera.Scale = 0;
+            else if (Camera.Scale > 5) Camera.Scale = 5;
 
             foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Update(time);
-            
-            //foreach (MacPointCollection macPointCollection in MacPointCollections)
-            //    foreach (LocationPoint point in macPointCollection.MacPoints)
-            //        foreach (MapArea mapArea in MapAreas)
-            //            if (mapArea.Polygon.Points.Count > 0 && point.Node == mapArea.Identifier)
-            //                point.InArea = mapArea.Polygon.PolygonCollision(point, Vector2.Zero).Intersecting;
         }
 
         /// <summary>
@@ -194,7 +193,7 @@ namespace LocationInterface.Utils
         public void ScalePoints(Vector2 change)
         {
             // Increment the stored multiplyer for the current image file
-            CurrentImageFile.Scale += change;
+            CurrentImageFile.Scale += new Vector2(CurrentImageFile.FlipHorizontal ? -1 : 1, CurrentImageFile.FlipVertical ? -1 : 1) * change;
         }
 
         /// <summary>
@@ -205,7 +204,7 @@ namespace LocationInterface.Utils
         public void TranslatePoints(float x, float y)
         {
             // Increment the image file offset by the desired offset
-            CurrentImageFile.Offset += new Vector2(x, y);
+            CurrentImageFile.Offset += new Vector2(CurrentImageFile.FlipHorizontal ? -x : x, CurrentImageFile.FlipVertical ? -y : y);
         }
         
         /// <summary>
@@ -242,19 +241,20 @@ namespace LocationInterface.Utils
             if (MapTexture != null) SpriteBatch.Draw(MapTexture, Vector2.Zero);
             // Loop through the macpointcollections
             foreach (MacPointCollection macPointCollection in MacPointCollections)
-                if (macPointCollection.MapLocationPoints.ContainsKey(CurrentImageFile.DataReference))
+                if (macPointCollection.MapLocationPoints.ContainsKey(CurrentImageFile.FileName))
                     // Loop through each macpoint in the current macpointcollection
-                    foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.DataReference])
+                    foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
                         // Draw the point with the desired colour with its offset and multiplier
-                        SpriteBatch.Draw(StandardContent.PointTexture, CurrentImageFile.Offset +
-                            (CurrentImageFile.Scale * macPoint), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
+                        SpriteBatch.Draw(StandardContent.PointTexture, new Vector2(CurrentImageFile.FlipHorizontal ? MapTexture.Width : 0, CurrentImageFile.FlipVertical ? MapTexture.Height : 0)
+                            + (new Vector2(CurrentImageFile.FlipHorizontal ? -1 : 1, CurrentImageFile.FlipVertical ? -1 : 1) * (CurrentImageFile.Offset +
+                            (CurrentImageFile.Scale * macPoint))), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
                             0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
         protected void DrawBounds()
         {
             foreach (MapArea mapArea in MapAreas)
-                mapArea.Draw(SpriteBatch, CurrentImageFile.Offset, CurrentImageFile.Scale);
+                mapArea.Draw(SpriteBatch, CurrentImageFile.FlipHorizontal, CurrentImageFile.FlipVertical, MapTexture.Width, MapTexture.Height, CurrentImageFile.Offset, CurrentImageFile.Scale);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace LocationInterface.Utils
             Vector2 position = new Vector2(20, 20 - KeyYOffset);
             // Loop through each macpointcollection
             for (int i = 0; i < MacPointCollections.Length; i++)
-                if (MacPointCollections[i].MapLocationPoints.ContainsKey(CurrentImageFile.DataReference))
+                if (MacPointCollections[i].MapLocationPoints.ContainsKey(CurrentImageFile.FileName))
                 {
                     // Draw a point in the desired colour
                     SpriteBatch.Draw(StandardContent.PointTexture, position, null,
@@ -279,13 +279,13 @@ namespace LocationInterface.Utils
                     if (TimeBased)
                     {
                         // Draw the time of the point being displayed
-                        SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0
-                            ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Time.ToString(@"hh\:mm\:ss") :
+                        SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points.Count > 0
+                            ? MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points[0].Time.ToString(@"hh\:mm\:ss") :
                             "No Points", position + new Vector2(120 + (PointRadius * 2),
                             PointRadius / -2), Color.Black);
                         // If there is a point being played, draw its location node
-                        if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference].Count > 0)
-                            SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.DataReference][0].Node,
+                        if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points.Count > 0)
+                            SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points[0].Node,
                                 position + new Vector2(175 + (PointRadius * 2),
                                 PointRadius / -2), Color.Black);
                     }

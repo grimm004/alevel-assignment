@@ -26,7 +26,7 @@
 
             <ComboBox x:Name="MapImageSelector"
                     ItemsSource="{Binding ImageFileReferences, Mode=OneWay}"
-                    DisplayMemberPath="DataReference"
+                    DisplayMemberPath="FileName"
                     SelectionChanged="MapChanged"
                     Grid.Column="0" MinWidth="75"/>
             <Button Grid.Column="1" Content="Select Data" Click="SelectDataClick"/>

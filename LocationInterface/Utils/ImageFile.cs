@@ -11,6 +11,8 @@ namespace LocationInterface.Utils
         public Vector2 Scale { get; set; }
         public Vector2 Offset { get; set; }
         public string AreaFileName { get; set; }
+        public bool FlipHorizontal { get; set; }
+        public bool FlipVertical { get; set; }
 
         /// <summary>
         /// Initialize an imagefile instacne
@@ -22,6 +24,8 @@ namespace LocationInterface.Utils
             Scale = new Vector2(1);
             Offset = Vector2.Zero;
             DataReference = "None";
+            FlipHorizontal = false;
+            FlipVertical = false;
         }
         
         /// <summary>
@@ -37,6 +41,8 @@ namespace LocationInterface.Utils
             Offset = offset;
             AreaFileName = areaFileName;
             DataReference = Path.GetFileNameWithoutExtension(FileName);
+            FlipHorizontal = false;
+            FlipVertical = false;
         }
 
         [JsonIgnore]

@@ -4,16 +4,15 @@ namespace LocationInterface.Utils
 {
     public class Camera
     {
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get; private set; } = Vector2.Zero;
+        public float Scale { get; set; } = 1f;
 
         public Matrix Transformation
         {
             get
             {
                 // Fetch the translation matrix for the camera's position
-                return Matrix.CreateTranslation(
-                    Position.X,
-                    Position.Y, 0);
+                return Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position.X, Position.Y, 0);
             }
         }
 

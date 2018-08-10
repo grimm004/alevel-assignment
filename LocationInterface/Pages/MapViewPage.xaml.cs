@@ -68,8 +68,8 @@ namespace LocationInterface.Pages
             MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
 
             foreach (MacPointCollection collections in MacPointCollections)
-                foreach (string mapIdentifier in collections.MapLocationPoints.Keys)
-                    collections.MapLocationPoints[mapIdentifier].Clear();
+                foreach (string mapFileName in collections.MapLocationPoints.Keys)
+                    collections.MapLocationPoints[mapFileName].Points.Clear();
 
             if (Common.LoadedDataTables.Length > 0)
                 // Loop through each record in the current selected table where the deck
@@ -83,13 +83,12 @@ namespace LocationInterface.Pages
                         {
                             // Get the location record representation of the location point
                             LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                            // Implicitly cast this to a LocationPoint and add it to the list
-                            // of active macPointCollection
-                            if (macPointCollection.MapLocationPoints.ContainsKey(locationRecord.Deck))
-                                macPointCollection.MapLocationPoints[locationRecord.Deck].Add(locationRecord);
-                            // Break out of the loop as there is no need to continue searching
-                            // the MAC addresses
+                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Deck))
+                                macPointCollection.MapLocationPoints[k].Points.Add(locationRecord);
                             break;
+
+                            //if (macPointCollection.MapLocationPoints.ContainsKey(locationRecord.Deck))
+                            //    macPointCollection.MapLocationPoints[locationRecord.Deck].Points.Add(locationRecord);
                         }
 
             MapViewer.LoadPoints(MacPointCollections);
@@ -128,21 +127,23 @@ namespace LocationInterface.Pages
 
                     TimeSpan latestTime = new TimeSpan();
                     LocationPoint currentPoint = null;
-                    string identifier = "";
+                    string fileName = "";
+                    string locationIdentifier = "";
 
-                    foreach (string locationIdentifier in collection.MapLocationPoints.Keys)
-                        foreach (LocationPoint point in collection.MapLocationPoints[locationIdentifier])
+                    foreach (string locationFileName in collection.MapLocationPoints.Keys)
+                        foreach (LocationPoint point in collection.MapLocationPoints[locationFileName].Points)
                             if (latestTime < point.Time && point.Time < selectedTime)
                             {
                                 currentPoint = point;
-                                identifier = locationIdentifier;
+                                fileName = locationFileName;
+                                locationIdentifier = collection.MapLocationPoints[locationFileName].LocationReference;
                             }
                     
                     if (currentPoint != null)
                     {
-                        int currentIndex = ImageFileReferences.IndexOf(ImageFileReferences.Where(i => i.DataReference == identifier).First());
+                        int currentIndex = ImageFileReferences.IndexOf(ImageFileReferences.Where(i => i.FileName == fileName).First());
                         if (MapImageSelector.SelectedIndex != currentIndex) MapImageSelector.SelectedIndex = currentIndex;
-                        MapViewer.LoadPoints(new MacPointCollection[] { new MacPointCollection { Address = "", Colour = Microsoft.Xna.Framework.Color.Red, MapLocationPoints = new Dictionary<string, List<LocationPoint>>() { { identifier, new List<LocationPoint>() { currentPoint } } } } });
+                        MapViewer.LoadPoints(new MacPointCollection[] { new MacPointCollection { Address = "", Colour = Microsoft.Xna.Framework.Color.Red, MapLocationPoints = new Dictionary<string, MapLocationPoint>() { { fileName, new MapLocationPoint(locationIdentifier, new List<LocationPoint>() { currentPoint }) } } } });
                     }
                     else
                         MapViewer.LoadPoints(new MacPointCollection[0]);
@@ -163,8 +164,8 @@ namespace LocationInterface.Pages
                             Colour = MacPointCollections[i].Colour,
                         };
 
-                        macPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference] =
-                            (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference]
+                        macPointCollections[i].MapLocationPoints[SelectedImageFile.FileName].Points =
+                            (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference].Points
                             .Where(point => point.Time < selectedTime).ToArray()).Length > 0 ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>();
                     }
 

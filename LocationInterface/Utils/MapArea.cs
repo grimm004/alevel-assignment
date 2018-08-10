@@ -73,10 +73,10 @@ namespace LocationInterface.Utils
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 offset, Vector2 scale)
+        public void Draw(SpriteBatch spriteBatch, bool fH, bool fV, int w, int h, Vector2 offset, Vector2 scale)
         {
             foreach (Line line in Bounds)
-                line.Draw(spriteBatch, Color.Red, offset, scale);
+                line.Draw(spriteBatch, Color.Red, fH, fV, w, h, offset, scale);
         }
     }
 
@@ -103,9 +103,14 @@ namespace LocationInterface.Utils
             End = new Vector2(xEnd, yEnd);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Color colour, Vector2 offset, Vector2 scale)
+        public void Draw(SpriteBatch spriteBatch, Color colour, bool fH, bool fV, int w, int h, Vector2 offset, Vector2 scale)
         {
-            spriteBatch.DrawLine(offset + (scale * Start), offset + (scale * End), colour, 2);
+            spriteBatch.DrawLine(FlipPoint(fH, fV, w, h, offset, scale, Start), FlipPoint(fH, fV, w, h, offset, scale, End), colour, 2);
+        }
+
+        private Vector2 FlipPoint(bool fH, bool fV, int w, int h, Vector2 offset, Vector2 scale, Vector2 point)
+        {
+            return new Vector2(fH ? w : 0, fV ? h : 0) + (new Vector2(fH ? -1 : 1, fV ? -1 : 1) * (offset + (scale * point)));
         }
     }
 
