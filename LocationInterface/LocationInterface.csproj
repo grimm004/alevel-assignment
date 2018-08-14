@@ -355,39 +355,18 @@
     <Resource Include="Images\cruise.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\Deck10.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck11.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck2.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck3.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck4-0.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck4-1.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck4.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck6.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck7.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck8.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck9.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Images\Deck10.bmp" />
+    <Content Include="Images\Deck11.bmp" />
+    <Content Include="Images\Deck2.bmp" />
+    <Content Include="Images\Deck3.bmp" />
+    <Content Include="Images\Deck4-0.bmp" />
+    <Content Include="Images\Deck4-1.bmp" />
+    <Content Include="Images\Deck4.bmp" />
+    <Content Include="Images\Deck5.bmp" />
+    <Content Include="Images\Deck6.bmp" />
+    <Content Include="Images\Deck7.bmp" />
+    <Content Include="Images\Deck8.bmp" />
+    <Content Include="Images\Deck9.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

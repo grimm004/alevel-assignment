@@ -16,7 +16,7 @@
         <DataGrid x:Name="ImageIndexDataGrid" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,20" ItemsSource="{Binding ImageFiles}" MouseDoubleClick="DoubleClick" KeyDown="DataGridKeyDown" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="File Name" Width="*" IsReadOnly="True" Binding="{Binding Path=FileName}"/>
-                <DataGridTextColumn Header="Data Reference" Width="*"  IsReadOnly="True" Binding="{Binding Path=FileName}"/>
+                <DataGridTextColumn Header="Data Reference" Width="*"  IsReadOnly="True" Binding="{Binding Path=DataReference}"/>
             </DataGrid.Columns>
         </DataGrid>
 

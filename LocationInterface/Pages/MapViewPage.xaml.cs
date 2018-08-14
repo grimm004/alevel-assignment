@@ -111,7 +111,8 @@ namespace LocationInterface.Pages
         private void MapChanged(object sender, SelectionChangedEventArgs e)
         {
             // Load the image in the map
-            MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile((sender as ComboBox).SelectedValue as ImageFileReference));
+            if (MapImageSelector.SelectedValue != null)
+                MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile(MapImageSelector.SelectedValue as ImageFileReference));
         }
 
         /// <summary>

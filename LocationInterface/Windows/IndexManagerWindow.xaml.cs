@@ -51,8 +51,16 @@ namespace LocationInterface.Windows
             else return false;
 
             newFileName = $"{ imageName }.bmp";
+            if (!IsImage(Path.GetExtension(sourceFileName))) return false;
             System.Drawing.Image.FromFile(sourceFileName).Save($"{ SettingsManager.Active.ImageFolder }\\{ newFileName }", ImageFormat.Bmp);
             return true;
+        }
+
+        private bool IsImage(string extension)
+        {
+            foreach (string acceptableExtension in new string[] { ".jpg", ".jpeg", ".png", ".bmp" })
+                if (extension.ToLower() == acceptableExtension) return true;
+            return false;
         }
 
         private void CloseClick(object sender, RoutedEventArgs e)
@@ -68,15 +76,18 @@ namespace LocationInterface.Windows
 
         private void DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (new ImageFileWindow(ImageIndexDataGrid.SelectedItem as ImageFile).ShowDialog() == true) Changed = true;
-            UpdateTable(); 
+            if (ImageIndexDataGrid.SelectedItems.Count == 1)
+            {
+                if (new ImageFileWindow(ImageIndexDataGrid.SelectedItem as ImageFile).ShowDialog() == true) Changed = true;
+                UpdateTable();
+            }
         }
         
         public void UpdateTable()
         {
             ImageIndexDataGrid.Items.Clear();
             foreach (ImageFile imageFile in App.ImageIndex.ImageFiles)
-                ImageIndexDataGrid.Items.Add(imageFile);
+                if (imageFile != null) ImageIndexDataGrid.Items.Add(imageFile);
         }
 
         private void DataGridKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
