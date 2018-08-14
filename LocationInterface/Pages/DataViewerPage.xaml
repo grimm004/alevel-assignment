@@ -9,10 +9,10 @@
     <Grid>
         <DataGrid x:Name="DataFilesDataGrid" VerticalContentAlignment="Stretch" Margin="0,0,0,35" HorizontalContentAlignment="Stretch" SelectionChanged="DataFilesSelectionChange">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="File Name" IsReadOnly="True"  Binding="{Binding Path=FileName}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Date Recorded" IsReadOnly="True"  Binding="{Binding Path=DateTime}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Table Name" IsReadOnly="True"  Binding="{Binding Path=TableName}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Record Count" IsReadOnly="True"  Binding="{Binding Path=RecordCount}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="File Name" IsReadOnly="True" Binding="{Binding Path=FileName}" Width="*"/>
+                <DataGridTextColumn Header="Date Recorded" IsReadOnly="True" Binding="{Binding Path=DateTime}" Width="*"/>
+                <DataGridTextColumn Header="Table Name" IsReadOnly="True" Binding="{Binding Path=TableName}" Width="*"/>
+                <DataGridTextColumn Header="Record Count" IsReadOnly="True" Binding="{Binding Path=RecordCount}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="UpdateButton" Content="Update" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="30" Click="UpdateButtonClick" Margin="0,0,0,0"/>

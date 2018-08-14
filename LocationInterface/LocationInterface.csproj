@@ -160,8 +160,17 @@
     <Compile Include="Pages\RawDataPage.xaml.cs">
       <DependentUpon>RawDataPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FileRenameWindow.xaml.cs">
+      <DependentUpon>FileRenameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FollowManager.xaml.cs">
       <DependentUpon>FollowManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ImageFileWindow.xaml.cs">
+      <DependentUpon>ImageFileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\IndexManagerWindow.xaml.cs">
+      <DependentUpon>IndexManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InsertAnalysisWindow.xaml.cs">
       <DependentUpon>InsertAnalysisWindow.xaml</DependentUpon>
@@ -248,7 +257,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\FileRenameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\FollowManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ImageFileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\IndexManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -353,9 +374,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Deck4.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Deck5.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Deck6.bmp">

@@ -22,28 +22,30 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <ComboBox x:Name="MapImageSelector"
-                    ItemsSource="{Binding ImageFileReferences, Mode=OneWay}"
                     DisplayMemberPath="FileName"
                     SelectionChanged="MapChanged"
                     Grid.Column="0" MinWidth="75"/>
-            <Button Grid.Column="1" Content="Select Data" Click="SelectDataClick"/>
-            <Button Grid.Column="2" Content="Update Points" Click="UpdatePointsClick"/>
-            <Label Content="Show Time Controls" Grid.Column="3"/>
-            <CheckBox ToolTip="Show/hide the time-based location controls." Grid.Column="4"
+            <Button Grid.Column="1" Content="Image Index" Click="ManageIndexClick"/>
+            <Button Grid.Column="2" Content="Select Data" Click="SelectDataClick"/>
+            <Button Grid.Column="3" Content="Update Points" Click="UpdatePointsClick"/>
+            <Label Content="Show Time Controls" Grid.Column="4"/>
+            <CheckBox ToolTip="Show/hide the time-based location controls." Grid.Column="5"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowTimeManager" Unchecked="HideTimeManager"/>
-            <Label Content="Show Follow MAC Address Controls" Grid.Column="5"/>
-            <CheckBox ToolTip="Show/hide the follow MAC address controls." Grid.Column="6"
+            <Label Content="Show Follow MAC Address Controls" Grid.Column="6"/>
+            <CheckBox ToolTip="Show/hide the follow MAC address controls." Grid.Column="7"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowFollowManager" Unchecked="HideFollowManager"/>
-            <Label Content="Show Plugin Controls" Grid.Column="7"/>
-            <CheckBox ToolTip="Show/hide the follow plugin controls." Grid.Column="8"
+            <Label Content="Show Plugin Controls" Grid.Column="8"/>
+            <CheckBox ToolTip="Show/hide the follow plugin controls." Grid.Column="9"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Checked="ShowPluginManager" Unchecked="HidePluginManager"/>
         </Grid>
+        
         <Image Width="200" Source="/LocationInterface;component/Images/tes_logo.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>

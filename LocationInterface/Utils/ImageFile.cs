@@ -46,7 +46,10 @@ namespace LocationInterface.Utils
         }
 
         [JsonIgnore]
-        public bool Exists { get { return File.Exists($"{ SettingsManager.Active.ImageFolder }\\{ FileName }"); } }
+        public bool Exists { get { return File.Exists(FullFileName); } }
+
+        [JsonIgnore]
+        public string FullFileName { get { return $"{ SettingsManager.Active.ImageFolder }\\{ FileName }"; } }
 
         [JsonIgnore]
         public MapArea[] MapAreas
@@ -67,6 +70,11 @@ namespace LocationInterface.Utils
             return new ImageFileReference(FileName, DataReference);
         }
 
+        public void Delete()
+        {
+            if (Exists) File.Delete(FullFileName);
+        }
+
         /// <summary>
         /// Get the hash code of the class
         /// </summary>
@@ -74,7 +82,7 @@ namespace LocationInterface.Utils
         public override int GetHashCode()
         {
             // Return the XOR of all the hash codes of the core class properties
-            return FileName.GetHashCode() ^ Scale.GetHashCode() ^ Offset.GetHashCode();
+            return FileName.GetHashCode() ^ Scale.GetHashCode() ^ Offset.GetHashCode() ^ DataReference.GetHashCode() ^ AreaFileName.GetHashCode() ^ FlipHorizontal.GetHashCode() ^ FlipVertical.GetHashCode();
         }
         public override string ToString()
         {

@@ -80,7 +80,7 @@ namespace LocationInterface.Utils
             WpfMouse = new WpfMouse(this);
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             Camera = new Camera();
-
+            
             CurrentImageFile = new ImageFile();
             
             PointRadius = 5;
@@ -130,11 +130,15 @@ namespace LocationInterface.Utils
         /// <param name="selectedImageFile">The image file of the map to load</param>
         public void LoadMap(ImageFile selectedImageFile)
         {
-            CurrentImageFile = selectedImageFile;
-            FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
-            MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
-            fileStream.Dispose();
-            MapAreas = selectedImageFile.MapAreas;
+            if (selectedImageFile != null)
+            {
+                CurrentImageFile = selectedImageFile;
+                FileStream fileStream = new FileStream($"{ SettingsManager.Active.ImageFolder }\\{ selectedImageFile.FileName }", FileMode.Open);
+                MapTexture = Texture2D.FromStream(GraphicsDevice, fileStream);
+                fileStream.Dispose();
+                MapAreas = selectedImageFile.MapAreas;
+            }
+            else Console.WriteLine("Selected image file was null");
         }
 
         /// <summary>
@@ -180,8 +184,8 @@ namespace LocationInterface.Utils
             if (keyboardState.IsKeyDown(Keys.Q)) Camera.Scale -= shiftDown ? .2f : .01f;
             if (keyboardState.IsKeyDown(Keys.E)) Camera.Scale += shiftDown ? .2f : .01f;
 
-            if (Camera.Scale < 0) Camera.Scale = 0;
-            else if (Camera.Scale > 5) Camera.Scale = 5;
+            if (Camera.Scale < .01f) Camera.Scale = .01f;
+            else if (Camera.Scale > 10) Camera.Scale = 10;
 
             foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Update(time);
         }

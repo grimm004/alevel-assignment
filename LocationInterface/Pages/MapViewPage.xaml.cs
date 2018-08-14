@@ -16,7 +16,7 @@ namespace LocationInterface.Pages
     {
         protected Common Common { get; }
         protected ImageFile SelectedImageFile { get; set; }
-        public List<ImageFileReference> ImageFileReferences { get; private set; }
+        public List<ImageFileReference> ImageFileReferences { get; set; }
         protected MacPointCollection[] MacPointCollections { get; set; }
         public bool Polling { get; protected set; }
         protected bool TimeAutomation { get; set; }
@@ -30,7 +30,6 @@ namespace LocationInterface.Pages
         public MapViewPage(Common common)
         {
             InitializeComponent();
-            DataContext = this;
 
             MacPointCollections = new MacPointCollection[0];
             FollowAddressPoints = new MacPointCollection[0];
@@ -45,6 +44,16 @@ namespace LocationInterface.Pages
             TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
             FollowManagerWindow = new FollowManagerWindow();
             MapperPluginWindow = new MapperPluginWindow(selectedPlugins => MapViewer.LoadPlugins(selectedPlugins.Select(selectedPlugin => selectedPlugin.Mapper).ToArray()), MapViewer.UnloadPlugins);
+
+            UpdateImageSelection();
+        }
+
+        private void UpdateImageSelection()
+        {
+            MapImageSelector.SelectedIndex = -1;
+            MapImageSelector.Items.Clear();
+            foreach (ImageFileReference imageFileReference in ImageFileReferences)
+                MapImageSelector.Items.Add(imageFileReference);
         }
 
         /// <summary>
@@ -258,6 +267,15 @@ namespace LocationInterface.Pages
         {
             MapperPluginWindow.Hide();
         }
+
+        private void ManageIndexClick(object sender, RoutedEventArgs e)
+        {
+            IndexManagerWindow indexManagerWindow = new IndexManagerWindow();
+            if (indexManagerWindow.ShowDialog() == true)
+            {
+                ImageFileReferences = App.ImageIndex.ImageFileReferences;
+                UpdateImageSelection();
+            }
+        }
     }
-    
 }

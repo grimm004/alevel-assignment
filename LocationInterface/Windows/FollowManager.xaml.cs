@@ -20,14 +20,14 @@ namespace LocationInterface.Windows
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        public bool FollowEnabled { get; private set; }
-        public string SelectedAddress { get { return SelectedAddressTextbox.Text; } }
-
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
+        
+        public bool FollowEnabled { get; private set; }
+        public string SelectedAddress { get { return SelectedAddressTextbox.Text; } }
 
         public FollowManagerWindow()
         {

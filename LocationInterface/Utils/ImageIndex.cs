@@ -59,9 +59,32 @@ namespace LocationInterface.Utils
                 if (!ImageFileExists(Path.GetFileName(fileName)))
                     // Add the file to the index
                     ImageFiles.Add(new ImageFile(Path.GetFileName(fileName), new Vector2(1), Vector2.Zero, ""));
-            // Reorder the index alphabetically
-            ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.DataReference).ToList();
+            ReOrder();
             LoadReferences();
+        }
+
+        public void ReOrder()
+        {
+            // Reorder the index alphabetically
+            ImageFiles = ImageFiles.OrderBy(imageFile => imageFile.FileName).ToList();
+        }
+
+        public void UpdateImageFile(ImageFile imageFile)
+        {
+            for (int i = 0; i < ImageFiles.Count; i++)
+                if (ImageFiles[i].FileName == imageFile.FileName) { ImageFiles[i] = imageFile; break; }
+            ReOrder();
+            LoadReferences();
+        }
+
+        public void AddImage(ImageFile imageFile)
+        {
+            if (!ImageFileExists(imageFile.FileName))
+            {
+                ImageFiles.Add(imageFile);
+                ReOrder();
+                LoadReferences();
+            }
         }
 
         public void LoadReferences()
@@ -69,6 +92,18 @@ namespace LocationInterface.Utils
             ImageFileReferences.Clear();
             foreach (ImageFile imageFile in ImageFiles)
                 ImageFileReferences.Add(imageFile.GetReference());
+        }
+
+        public void DeleteImage(ImageFile imageFile)
+        {
+            for (int i = ImageFiles.Count - 1; i > -1; i--)
+                if (ImageFiles[i].FileName == imageFile.FileName)
+                {
+                    ImageFiles[i].Delete();
+                    ImageFiles.RemoveAt(i);
+                }
+            ReOrder();
+            LoadReferences();
         }
 
         /// <summary>

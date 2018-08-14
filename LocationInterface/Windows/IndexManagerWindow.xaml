@@ -1,0 +1,26 @@
+﻿<Window x:Class="LocationInterface.Windows.IndexManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocationInterface.Windows"
+        mc:Ignorable="d"
+        Title="Image Index Manager" Height="450" Width="400">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="ImageIndexDataGrid" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,20" ItemsSource="{Binding ImageFiles}" MouseDoubleClick="DoubleClick" KeyDown="DataGridKeyDown" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="File Name" Width="*" IsReadOnly="True" Binding="{Binding Path=FileName}"/>
+                <DataGridTextColumn Header="Data Reference" Width="*"  IsReadOnly="True" Binding="{Binding Path=FileName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Column="0" Content="Close" VerticalAlignment="Bottom" Click="CloseClick"/>
+        <Button Grid.Column="1" Content="Add Image" VerticalAlignment="Bottom" Click="AddImageClick"/>
+    </Grid>
+</Window>
