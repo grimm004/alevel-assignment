@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using DatabaseManagerLibrary;
 using System;
 
 namespace AnalysisSDK
@@ -9,7 +10,8 @@ namespace AnalysisSDK
         public string MAC { get; set; }
         public DateTime Date { get; set; }
         public string Location { get; set; }
-        public string Deck { get; set; }
+        [FieldIdentifier("Deck")]
+        public string MapIdentifier { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
     }

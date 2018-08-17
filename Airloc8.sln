@@ -21,7 +21,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapTestPlugin", "MapTestPlugin\MapTestPlugin.csproj", "{79CCB6FF-C338-42EE-B351-92B40288131F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharpMath2", "..\SharpMath2\SharpMath2.shproj", "{53290E9B-7A54-4098-AB3D-E936D93BDF97}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\SharpMath2\SharpMath2.projitems*{0ff223d7-9d24-4c32-a3af-d02685dc697f}*SharedItemsImports = 4
+		..\SharpMath2\SharpMath2.projitems*{53290e9b-7a54-4098-ab3d-e936d93bdf97}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LocationInterface.Windows"
         mc:Ignorable="d"
-        Title="Image Index Manager" Height="450" Width="400">
+        Title="Image Index Manager" Height="450" Width="400" MinHeight="450" MinWidth="400">
 
     <Grid>
         <Grid.ColumnDefinitions>

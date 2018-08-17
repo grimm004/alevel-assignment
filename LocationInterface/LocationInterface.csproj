@@ -355,18 +355,42 @@
     <Resource Include="Images\cruise.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\Deck10.bmp" />
-    <Content Include="Images\Deck11.bmp" />
-    <Content Include="Images\Deck2.bmp" />
-    <Content Include="Images\Deck3.bmp" />
-    <Content Include="Images\Deck4-0.bmp" />
-    <Content Include="Images\Deck4-1.bmp" />
-    <Content Include="Images\Deck4.bmp" />
-    <Content Include="Images\Deck5.bmp" />
-    <Content Include="Images\Deck6.bmp" />
-    <Content Include="Images\Deck7.bmp" />
-    <Content Include="Images\Deck8.bmp" />
-    <Content Include="Images\Deck9.bmp" />
+    <Content Include="Images\Deck10.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck11.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck2.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck3.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck4-0.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck4-1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck4.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck6.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck7.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck8.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Deck9.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -390,6 +414,7 @@
       <Name>AnalysisSDK</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\SharpMath2\SharpMath2.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)Content" "$(TargetDir)Content" /i /y

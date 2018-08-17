@@ -4,6 +4,8 @@ using LocationInterface.Utils;
 using DatabaseManagerLibrary;
 using DatabaseManagerLibrary.CSV;
 using Newtonsoft.Json;
+using SharpMath2;
+using Microsoft.Xna.Framework;
 
 namespace LocationInterface
 {
@@ -17,6 +19,17 @@ namespace LocationInterface
 
         public App()
         {
+            Polygon2 polygon = new Polygon2(new[] { new Vector2(-50, -50), new Vector2(50, -50), new Vector2(50, 50), new Vector2(-50, 50) });
+            System.Console.WriteLine(Polygon2.Contains(polygon, new Vector2(51, 51), Rotation2.Zero, new Vector2(0, 0), false));
+
+
+
+
+
+
+
+
+
             // Validate the required folders exist
             ValidateFolders();
             // Validate the required database tables exist

@@ -50,8 +50,8 @@ namespace BasicAnalysis
         public void RecordCallback(Record record)
         {
             LocationRecord locationRecord = record.ToObject<LocationRecord>();
-            if (DeckCounts.ContainsKey(locationRecord.Deck)) DeckCounts[locationRecord.Deck]++;
-            else DeckCounts[locationRecord.Deck] = 1;
+            if (DeckCounts.ContainsKey(locationRecord.MapIdentifier)) DeckCounts[locationRecord.MapIdentifier]++;
+            else DeckCounts[locationRecord.MapIdentifier] = 1;
         }
 
         public AnalysisResult FetchResult(string metadata)

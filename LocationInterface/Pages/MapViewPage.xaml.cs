@@ -175,7 +175,7 @@ namespace LocationInterface.Pages
                         };
 
                         macPointCollections[i].MapLocationPoints[SelectedImageFile.FileName].Points =
-                            (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.DataReference].Points
+                            (laterPoints = MacPointCollections[i].MapLocationPoints[SelectedImageFile.FileName].Points
                             .Where(point => point.Time < selectedTime).ToArray()).Length > 0 ? new List<LocationPoint> { laterPoints.Last() } : new List<LocationPoint>();
                     }
 

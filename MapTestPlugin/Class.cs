@@ -16,13 +16,6 @@ namespace MapTestPlugin
 
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Begin();
-            spriteBatch.DrawString(StandardContent.Font, "Map Test", new Vector2(250), Color.Black);
-            spriteBatch.End();
-        }
-
         public void LoadTables(Table[] tables)
         {
 
@@ -31,6 +24,13 @@ namespace MapTestPlugin
         public void Update(GameTime gameTime)
         {
 
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+            spriteBatch.DrawString(StandardContent.Font, "Map Test", new Vector2(250), Color.Black);
+            spriteBatch.End();
         }
     }
 }

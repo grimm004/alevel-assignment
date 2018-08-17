@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Framework.WpfInterop;
 using MonoGame.Framework.WpfInterop.Input;
+using SharpMath2;
 using System;
 using System.IO;
 
@@ -187,6 +188,17 @@ namespace LocationInterface.Utils
             if (Camera.Scale < .01f) Camera.Scale = .01f;
             else if (Camera.Scale > 10) Camera.Scale = 10;
 
+            foreach (MacPointCollection macPointCollection in MacPointCollections)
+                foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
+                    locationPoint.InArea = false;
+
+            foreach (MapArea area in MapAreas)
+                if (area.Polygon != null)
+                    foreach (MacPointCollection macPointCollection in MacPointCollections)
+                        foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
+                            if (!locationPoint.InArea)
+                                locationPoint.InArea = Polygon2.Contains(area.Polygon, Vector2.Zero, Rotation2.Zero, locationPoint, false);
+
             foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Update(time);
         }
 
@@ -247,11 +259,11 @@ namespace LocationInterface.Utils
             foreach (MacPointCollection macPointCollection in MacPointCollections)
                 if (macPointCollection.MapLocationPoints.ContainsKey(CurrentImageFile.FileName))
                     // Loop through each macpoint in the current macpointcollection
-                    foreach (LocationPoint macPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
+                    foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
                         // Draw the point with the desired colour with its offset and multiplier
                         SpriteBatch.Draw(StandardContent.PointTexture, new Vector2(CurrentImageFile.FlipHorizontal ? MapTexture.Width : 0, CurrentImageFile.FlipVertical ? MapTexture.Height : 0)
                             + (new Vector2(CurrentImageFile.FlipHorizontal ? -1 : 1, CurrentImageFile.FlipVertical ? -1 : 1) * (CurrentImageFile.Offset +
-                            (CurrentImageFile.Scale * macPoint))), null, macPoint.InArea ? macPointCollection.Colour : Color.Black,
+                            (CurrentImageFile.Scale * locationPoint))), null, locationPoint.InArea ? macPointCollection.Colour : Color.Black,
                             0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 
