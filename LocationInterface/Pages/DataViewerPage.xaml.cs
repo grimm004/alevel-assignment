@@ -163,15 +163,21 @@ namespace LocationInterface.Pages
                     // Update the status information
                     UpdateStatus(string.Format("Importing '{0}'", fileInfos[i].Name), 100d * i / fileInfos.Length);
 
+                    // Skip a line in the source file
+                    long position = 0;
+                    using (StreamReader reader = new StreamReader(fileInfos[i].OpenRead()))
+                        position = reader.ReadLine().Length;
+                    
                     // Open the file to be imported
                     using (FileStream sourceFile = fileInfos[i].OpenRead())
                     // Create and open a new file in the file cache folder
                     using (FileStream desinationFile = File.Create($"{ SettingsManager.Active.DataCacheFolder}\\{ fileInfos[i].Name }"))
                     {
                         // Get the bytes for the new file CSVDatabase table header
-                        byte[] data = Encoding.UTF8.GetBytes(Constants.DATAFILEHEADER + Environment.NewLine);
+                        byte[] data = Encoding.UTF8.GetBytes(Constants.DATAFILEHEADER);
                         // Write this data into the new file
                         desinationFile.Write(data, 0, data.Length);
+                        sourceFile.Position = position;
                         // Copy the file to be imported to the new file
                         sourceFile.CopyTo(desinationFile);
                     }

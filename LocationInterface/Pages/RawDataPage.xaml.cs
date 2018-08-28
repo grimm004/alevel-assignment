@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LocationInterface.Utils;
 using System.Threading;
 using DatabaseManagerLibrary;
+using AnalysisSDK;
 
 namespace LocationInterface.Pages
 {

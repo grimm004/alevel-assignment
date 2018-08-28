@@ -125,9 +125,7 @@ namespace LocationInterface.Utils
             @"(?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]" +
             @"(?:[a-z0-9-]*[a-z0-9])?)\Z";
         public const string DATAFILEHEADER =
-            "MAC:string,Unknown1:string,Date:datetime," +
-            "Unknown2:string,Location:string,Vendor:string," +
-            "Ship:string,Deck:string,X:number,Y:number";
+            "rssireccount:INT,journey_type:TEXT,user_type:TEXT,apmac:TEXT,trilat_result:TEXT,floor:TEXT,area:TEXT,visit:INT,lable:TEXT,source:TEXT,ycoords:NUMBER,xcoords:NUMBER,zcoords:NUMBER,username:TEXT,assettype:TEXT,engine_ref:TEXT,start_ts:DATETIME,site:TEXT,first_ts:DATETIME,mac:TEXT,dwell:INT,building:TEXT,dwell_periods:INT,last_updated_time:DATETIME,rssifix:INT";
         public const int MAPUPS = 30;
     }
 }

@@ -6,6 +6,8 @@ using LocationInterface.Utils;
 using System.Linq;
 using DatabaseManagerLibrary;
 using LocationInterface.Windows;
+using AnalysisSDK;
+using Microsoft.Xna.Framework;
 
 namespace LocationInterface.Pages
 {
@@ -88,16 +90,13 @@ namespace LocationInterface.Pages
                     foreach (MacPointCollection macPointCollection in MacPointCollections)
                         // If the current deck MAC address is equal to the current selected
                         // MAC address
-                        if (record.GetValue<string>("MAC") == macPointCollection.Address)
+                        if (record.GetValue<string>("mac") == macPointCollection.Address)
                         {
                             // Get the location record representation of the location point
                             LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Deck))
-                                macPointCollection.MapLocationPoints[k].Points.Add(locationRecord);
+                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Area))
+                                macPointCollection.MapLocationPoints[k].Points.Add(new LocationPoint { Point = new Vector2((float)locationRecord.X, (float)locationRecord.Y), Node = locationRecord.Area, Time = locationRecord.Date.TimeOfDay });
                             break;
-
-                            //if (macPointCollection.MapLocationPoints.ContainsKey(locationRecord.Deck))
-                            //    macPointCollection.MapLocationPoints[locationRecord.Deck].Points.Add(locationRecord);
                         }
 
             MapViewer.LoadPoints(MacPointCollections);

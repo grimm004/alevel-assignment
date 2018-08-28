@@ -188,7 +188,6 @@
     <Compile Include="Utils\DataIndex.cs" />
     <Compile Include="Utils\Email.cs" />
     <Compile Include="Utils\LocationDataFile.cs" />
-    <Compile Include="Utils\LocationRecord.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Windows\SelectionInformationWindow.xaml.cs">
       <DependentUpon>SelectionInformationWindow.xaml</DependentUpon>
