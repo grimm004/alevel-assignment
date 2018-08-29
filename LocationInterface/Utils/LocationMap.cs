@@ -188,16 +188,19 @@ namespace LocationInterface.Utils
             if (Camera.Scale < .01f) Camera.Scale = .01f;
             else if (Camera.Scale > 10) Camera.Scale = 10;
 
-            foreach (MacPointCollection macPointCollection in MacPointCollections)
-                foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
-                    locationPoint.InArea = false;
+            if (CurrentImageFile.FileName != "")
+            {
+                foreach (MacPointCollection macPointCollection in MacPointCollections)
+                    foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
+                        locationPoint.InArea = false;
 
-            foreach (MapArea area in MapAreas)
-                if (area.Polygon != null)
-                    foreach (MacPointCollection macPointCollection in MacPointCollections)
-                        foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
-                            if (!locationPoint.InArea)
-                                locationPoint.InArea = Polygon2.Contains(area.Polygon, Vector2.Zero, Rotation2.Zero, locationPoint, false);
+                foreach (MapArea area in MapAreas)
+                    if (area.Polygon != null)
+                        foreach (MacPointCollection macPointCollection in MacPointCollections)
+                            foreach (LocationPoint locationPoint in macPointCollection.MapLocationPoints[CurrentImageFile.FileName].Points)
+                                if (!locationPoint.InArea)
+                                    locationPoint.InArea = Polygon2.Contains(area.Polygon, Vector2.Zero, Rotation2.Zero, locationPoint, false);
+            }
 
             foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Update(time);
         }

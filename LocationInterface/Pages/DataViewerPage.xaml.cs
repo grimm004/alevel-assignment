@@ -262,8 +262,10 @@ namespace LocationInterface.Pages
                 recordBufferSizes.Add((uint)Math.Floor(database.Tables[i].RecordCount / (100d / SettingsManager.Active.PercentagePerUpdate)));
 
             Console.WriteLine("Converting files...");
+            List<bool[]> ignoreFieldsCollection = new List<bool[]>();
+            for (int i = 0; i < database.TableCount; i++) ignoreFieldsCollection.Add(ignoreFields);
             // Convert the CSVDatabase to a BINDatabase with the configured location, pre-calculated string sizes and buffer sizes, along with a callback to update the status bar and label
-            database.ToBINDatabase(SettingsManager.Active.LocationDataFolder, varCharSizes, recordBufferSizes, updateCommand: (table, ratio) =>
+            database.ToBINDatabase(SettingsManager.Active.LocationDataFolder, ignoreFieldsCollection, varCharSizes, recordBufferSizes, updateCommand: (table, ratio) =>
                 UpdateStatus("Converting Files (may take a while)", 100d * (database.Tables.IndexOf(table) + ratio) / database.TableCount));
             Console.WriteLine("Done");
 
@@ -293,6 +295,8 @@ namespace LocationInterface.Pages
             Console.WriteLine("Done");
         }
 
+        private bool[] ignoreFields = new[] { true, true, true, true, true, false, true, true, true, true, false, false, true, true, true, true, false, true, true, false, true, true, true, true, true, };
+
         // The current fields object for the table being processed
         private CSVTableFields currentFields;
         // The current filed sizes array for the table being processed
@@ -309,7 +313,7 @@ namespace LocationInterface.Pages
             // Loop through the fields in the current table
             for (int i = 0; i < currentFields.Fields.Length; i++)
                 // If the datatype of the current field is VarChar (string)
-                if (currentFields.Fields[i].DataType == Datatype.VarChar)
+                if (currentFields.Fields[i].DataType == Datatype.VarChar && !ignoreFields[i])
                     // If the size of the current value's string length is greater than the largest known size, set the largest known size to the current size
                     if (Encoding.UTF8.GetByteCount(((string)values[i])) > currentFieldSizes[i])
                         currentFieldSizes[i] = (ushort)Encoding.UTF8.GetByteCount(((string)values[i]));

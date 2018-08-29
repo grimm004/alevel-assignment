@@ -13,8 +13,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="MAC" IsReadOnly="True" Binding="{Binding Path=MAC}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Date" IsReadOnly="True" Binding="{Binding Path=Date}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Location" IsReadOnly="True" Binding="{Binding Path=Location}" Width="*"></DataGridTextColumn>
-                <DataGridTextColumn Header="Deck" IsReadOnly="True" Binding="{Binding Path=Deck}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Area" IsReadOnly="True" Binding="{Binding Path=Area}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Floor" IsReadOnly="True" Binding="{Binding Path=Floor}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="X" IsReadOnly="True" Binding="{Binding Path=X}" Width="*"></DataGridTextColumn>
                 <DataGridTextColumn Header="Y" IsReadOnly="True" Binding="{Binding Path=Y}" Width="*"></DataGridTextColumn>
             </DataGrid.Columns>
