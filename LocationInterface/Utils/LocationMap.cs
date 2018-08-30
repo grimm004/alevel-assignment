@@ -320,7 +320,7 @@ namespace LocationInterface.Utils
                         // Draw the point with the desired colour with its offset and multiplier
                         SpriteBatch.Draw(StandardContent.PointTexture, new Vector2(CurrentImageFile.FlipHorizontal ? MapTexture.Width : 0, CurrentImageFile.FlipVertical ? MapTexture.Height : 0)
                             + (new Vector2(CurrentImageFile.FlipHorizontal ? -1 : 1, CurrentImageFile.FlipVertical ? -1 : 1) * (CurrentImageFile.Offset +
-                            (CurrentImageFile.Scale * locationPoint))), null, locationPoint.InArea ? macPointCollection.Colour : Color.Black,
+                            (CurrentImageFile.Scale * locationPoint))), null, macPointCollection.Colour,
                             0f, new Vector2(PointRadius / 2), 1f, SpriteEffects.None, 0);
         }
 

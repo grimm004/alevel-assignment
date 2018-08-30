@@ -6,10 +6,10 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         SizeToContent="WidthAndHeight"
-        Title="Vendor Analysis">
+        Title="Analysis">
     
     <Grid>
         <Button x:Name="StartAnalysisButton" Content="Start Analysis" HorizontalAlignment="Stretch" Margin="10,10,10,10" VerticalAlignment="Top" Click="StartButtonClick"/>
-        <ProgressBar x:Name="analysisProgressBar" HorizontalAlignment="Stretch" Height="10" Margin="10,35,10,10" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="AnalysisProgressBar" HorizontalAlignment="Stretch" Height="10" Margin="10,35,10,10" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

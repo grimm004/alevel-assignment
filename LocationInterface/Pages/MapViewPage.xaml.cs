@@ -28,7 +28,7 @@ namespace LocationInterface.Pages
         private FollowManagerWindow FollowManagerWindow { get; }
         private MapperPluginWindow MapperPluginWindow { get; }
         private MacPointCollection[] FollowAddressPoints { get; set; }
-        
+
         public MapViewPage(Common common)
         {
             InitializeComponent();
@@ -94,10 +94,12 @@ namespace LocationInterface.Pages
                         {
                             // Get the location record representation of the location point
                             LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Area))
+                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Floor))
                                 macPointCollection.MapLocationPoints[k].Points.Add(new LocationPoint { Point = new Vector2((float)locationRecord.X, (float)locationRecord.Y), Node = locationRecord.Area, Time = locationRecord.Date.TimeOfDay });
                             break;
                         }
+
+            //Console.WriteLine(MacPointCollections.Length > 0 ? MacPointCollections[0].MapLocationPoints["Deck_4"].Points.Count : -1);
 
             MapViewer.LoadPoints(MacPointCollections);
         }
@@ -147,7 +149,7 @@ namespace LocationInterface.Pages
                                 fileName = locationFileName;
                                 locationIdentifier = collection.MapLocationPoints[locationFileName].LocationReference;
                             }
-                    
+
                     if (currentPoint != null)
                     {
                         int currentIndex = ImageFileReferences.IndexOf(ImageFileReferences.Where(i => i.FileName == fileName).First());

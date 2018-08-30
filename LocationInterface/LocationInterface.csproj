@@ -201,8 +201,8 @@
     <Compile Include="Windows\TimeSetterWindow.xaml.cs">
       <DependentUpon>TimeSetterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\VendorAnalysisWindow.xaml.cs">
-      <DependentUpon>VendorAnalysisWindow.xaml</DependentUpon>
+    <Compile Include="Windows\AnalysisWindow.xaml.cs">
+      <DependentUpon>AnalysisWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Windows\AddressListWindow.xaml">
       <SubType>Designer</SubType>
@@ -304,7 +304,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\VendorAnalysisWindow.xaml">
+    <Page Include="Windows\AnalysisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

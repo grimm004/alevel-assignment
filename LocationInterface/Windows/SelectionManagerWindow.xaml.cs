@@ -32,11 +32,15 @@ namespace LocationInterface.Windows
             DataContext = this;
             Addresses = new List<MacPointCollection>()
             {
-                new MacPointCollection() { Address = "00:0c:09:ee:2e:cb", Colour = Color.Black },
-                new MacPointCollection() { Address = "10:66:75:b4:0a:27", Colour = Color.Blue },
-                new MacPointCollection() { Address = "28:e0:2c:32:04:40", Colour = Color.Red },
-                new MacPointCollection() { Address = "2c:0e:3d:44:9a:08", Colour = Color.Green },
-                new MacPointCollection() { Address = "38:2d:e8:74:19:26", Colour = Color.Blue },
+                new MacPointCollection { Address = "10:b1:f8:e7:ca:d1", Colour = Color.Black },
+                new MacPointCollection { Address = "08:ee:8b:7f:09:2d", Colour = Color.Red },
+                new MacPointCollection { Address = "44:00:10:9f:bb:b0", Colour = Color.Green },
+                new MacPointCollection { Address = "58:c9:35:2a:a9:df", Colour = Color.Blue },
+                new MacPointCollection { Address = "5c:8d:4e:10:70:ba", Colour = Color.Orange },
+                new MacPointCollection { Address = "64:6e:69:9b:55:bb", Colour = Color.Yellow },
+                new MacPointCollection { Address = "64:6e:69:9b:61:b3", Colour = Color.Cyan },
+                new MacPointCollection { Address = "64:6e:69:b9:af:85", Colour = Color.Violet },
+                new MacPointCollection { Address = "fc:2d:5e:a0:e0:ac", Colour = Color.Black },
             };
 
             // Change the close action so that the window hides

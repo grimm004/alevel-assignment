@@ -61,7 +61,7 @@ namespace LocationInterface.Windows
         protected void RunAnalysis()
         {
             // Run the analysis
-            Analysis.Run(Common.LoadedDataTables, (ratio) => Dispatcher.Invoke(() => analysisProgressBar.Value = 100 * ratio));
+            Analysis.Run(Common.LoadedDataTables, (ratio) => Dispatcher.Invoke(() => AnalysisProgressBar.Value = 100 * ratio));
             // Do a thread-safe cll to re-set the start analysis button
             Dispatcher.Invoke(() =>
             {
