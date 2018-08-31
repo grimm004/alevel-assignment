@@ -23,7 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapTestPlugin", "MapTestPlu
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharpMath2", "..\SharpMath2\SharpMath2.shproj", "{53290E9B-7A54-4098-AB3D-E936D93BDF97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTest", "DatabaseTest\DatabaseTest.csproj", "{85FB13FF-C98B-418E-8C3F-F6932FD92445}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseTest", "DatabaseTest\DatabaseTest.csproj", "{85FB13FF-C98B-418E-8C3F-F6932FD92445}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heatmap", "Heatmap\Heatmap.csproj", "{9778E9E3-3480-4283-BE5A-CC423CD17F0C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -147,6 +149,14 @@ Global
 		{85FB13FF-C98B-418E-8C3F-F6932FD92445}.Release|x64.Build.0 = Release|Any CPU
 		{85FB13FF-C98B-418E-8C3F-F6932FD92445}.Release|x86.ActiveCfg = Release|Any CPU
 		{85FB13FF-C98B-418E-8C3F-F6932FD92445}.Release|x86.Build.0 = Release|Any CPU
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Debug|x64.ActiveCfg = Debug|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Debug|x86.ActiveCfg = Debug|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Debug|x86.Build.0 = Debug|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Release|Any CPU.ActiveCfg = Release|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Release|x64.ActiveCfg = Release|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Release|x86.ActiveCfg = Release|x86
+		{9778E9E3-3480-4283-BE5A-CC423CD17F0C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

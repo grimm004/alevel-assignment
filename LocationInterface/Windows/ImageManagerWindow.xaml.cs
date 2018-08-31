@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -27,12 +28,16 @@ namespace LocationInterface.Windows
         private void AddImageClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog selectFileDialog = new OpenFileDialog();
-            if (selectFileDialog.ShowDialog() == true && ImportImageFile(selectFileDialog.FileName, out string newFileName))
+            if (selectFileDialog.ShowDialog() == true)
             {
-                ImageFileWindow imageFileWindow = new ImageFileWindow(newFileName);
-                imageFileWindow.ShowDialog();
-                Changed = true;
-                UpdateTable();
+                if (ImportImageFile(selectFileDialog.FileName, out string newFileName))
+                {
+                    ImageFileWindow imageFileWindow = new ImageFileWindow(newFileName);
+                    imageFileWindow.ShowDialog();
+                    Changed = true;
+                    UpdateTable();
+                }
+                else MessageBox.Show("Could not import image file (unsupported format).", "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -52,8 +57,15 @@ namespace LocationInterface.Windows
 
             newFileName = $"{ imageName }.bmp";
             if (!IsImage(Path.GetExtension(sourceFileName))) return false;
-            System.Drawing.Image.FromFile(sourceFileName).Save($"{ SettingsManager.Active.ImageFolder }\\{ newFileName }", ImageFormat.Bmp);
-            return true;
+            try
+            {
+                System.Drawing.Image.FromFile(sourceFileName).Save($"{ SettingsManager.Active.ImageFolder }\\{ newFileName }", ImageFormat.Bmp);
+                return true;
+            }
+            catch (OutOfMemoryException)
+            {
+                return false;
+            }
         }
 
         private bool IsImage(string extension)

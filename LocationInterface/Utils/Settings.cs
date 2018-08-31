@@ -124,8 +124,10 @@ namespace LocationInterface.Utils
             + @"-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9]" +
             @"(?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]" +
             @"(?:[a-z0-9-]*[a-z0-9])?)\Z";
-        public const string DATAFILEHEADER =
+        public const string RAWDATAFILEHEADER =
             "rssireccount:INT,journey_type:TEXT,user_type:TEXT,apmac:TEXT,trilat_result:TEXT,floor:TEXT,area:TEXT,visit:INT,lable:TEXT,source:TEXT,ycoords:NUMBER,xcoords:NUMBER,zcoords:NUMBER,username:TEXT,assettype:TEXT,engine_ref:TEXT,start_ts:DATETIME,site:TEXT,first_ts:DATETIME,mac:TEXT,dwell:INT,building:TEXT,dwell_periods:INT,last_updated_time:DATETIME,rssifix:INT";
+        public const string CLEANEDDATAFILEHEADER =
+            "mac:TEXT,trilat_result:TEXT,time:DATETIME,dwell_periods:NUMBER,area:TEXT,floor:TEXT,until:DATETIME,t_diff:INT";
         public const int MAPUPS = 30;
     }
 }

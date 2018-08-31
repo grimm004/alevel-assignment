@@ -166,11 +166,11 @@
     <Compile Include="Windows\FollowManager.xaml.cs">
       <DependentUpon>FollowManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ImageFileWindow.xaml.cs">
-      <DependentUpon>ImageFileWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ImageEditorWindow.xaml.cs">
+      <DependentUpon>ImageEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\IndexManagerWindow.xaml.cs">
-      <DependentUpon>IndexManagerWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ImageManagerWindow.xaml.cs">
+      <DependentUpon>ImageManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InsertAnalysisWindow.xaml.cs">
       <DependentUpon>InsertAnalysisWindow.xaml</DependentUpon>
@@ -264,11 +264,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ImageFileWindow.xaml">
+    <Page Include="Windows\ImageEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\IndexManagerWindow.xaml">
+    <Page Include="Windows\ImageManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

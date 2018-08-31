@@ -8,6 +8,7 @@ using DatabaseManagerLibrary;
 using LocationInterface.Windows;
 using AnalysisSDK;
 using Microsoft.Xna.Framework;
+using System.Threading;
 
 namespace LocationInterface.Pages
 {
@@ -28,6 +29,7 @@ namespace LocationInterface.Pages
         private FollowManagerWindow FollowManagerWindow { get; }
         private MapperPluginWindow MapperPluginWindow { get; }
         private MacPointCollection[] FollowAddressPoints { get; set; }
+        private bool UpdatingPoints { get; set; }
 
         public MapViewPage(Common common)
         {
@@ -41,12 +43,12 @@ namespace LocationInterface.Pages
             
             ImageFileReferences = App.ImageIndex.ImageFileReferences;
 
-            SelectionManagerWindow = new SelectionManagerWindow(Common, UpdatePoints);
+            SelectionManagerWindow = new SelectionManagerWindow(Common, null);
             TimeSetterWindow = new TimeSetterWindow(UpdateTimedPoints);
             TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
             FollowManagerWindow = new FollowManagerWindow();
             MapperPluginWindow = new MapperPluginWindow(selectedPlugins => MapViewer.LoadPlugins(selectedPlugins.Select(selectedPlugin => selectedPlugin.Mapper).ToArray()), MapViewer.UnloadPlugins);
-
+            
             UpdateImageSelection();
         }
 
@@ -74,34 +76,49 @@ namespace LocationInterface.Pages
         /// </summary>
         public void UpdatePoints()
         {
-            // Check that there is a selected image file
-            // Get the selected MAC addresses
-            MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
+            if (!UpdatingPoints)
+            {
+                UpdatePointsButton.IsEnabled = false;
+                UpdatingPoints = true;
 
-            foreach (MacPointCollection collections in MacPointCollections)
-                foreach (string mapFileName in collections.MapLocationPoints.Keys)
-                    collections.MapLocationPoints[mapFileName].Points.Clear();
+                new Thread(new ThreadStart(() =>
+                {
+                    // Check that there is a selected image file
+                    // Get the selected MAC addresses
+                    MacPointCollections = SelectionManagerWindow.Addresses.ToArray();
 
-            if (Common.LoadedDataTables.Length > 0)
-                // Loop through each record in the current selected table where the deck
-                // is equal to the current deck map's ID
-                foreach (Record record in Common.LoadedDataTables[0].GetRecords())
-                    // Loop through each selected MAC address
-                    foreach (MacPointCollection macPointCollection in MacPointCollections)
-                        // If the current deck MAC address is equal to the current selected
-                        // MAC address
-                        if (record.GetValue<string>("mac") == macPointCollection.Address)
-                        {
-                            // Get the location record representation of the location point
-                            LocationRecord locationRecord = record.ToObject<LocationRecord>();
-                            foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Floor))
-                                macPointCollection.MapLocationPoints[k].Points.Add(new LocationPoint { Point = new Vector2((float)locationRecord.X, (float)locationRecord.Y), Node = locationRecord.Area, Time = locationRecord.Date.TimeOfDay });
-                            break;
-                        }
+                    foreach (MacPointCollection collections in MacPointCollections)
+                        foreach (string mapFileName in collections.MapLocationPoints.Keys)
+                            collections.MapLocationPoints[mapFileName].Points.Clear();
 
-            //Console.WriteLine(MacPointCollections.Length > 0 ? MacPointCollections[0].MapLocationPoints["Deck_4"].Points.Count : -1);
+                    if (Common.LoadedDataTables.Length > 0)
+                        // Loop through each record in the current selected table where the deck
+                        // is equal to the current deck map's ID
+                        foreach (Record record in Common.LoadedDataTables[0].GetRecords())
+                            // Loop through each selected MAC address
+                            foreach (MacPointCollection macPointCollection in MacPointCollections)
+                                // If the current deck MAC address is equal to the current selected
+                                // MAC address
+                                if (record.GetValue<string>("mac") == macPointCollection.Address)
+                                {
+                                    // Get the location record representation of the location point
+                                    LocationRecord locationRecord = record.ToObject<LocationRecord>();
+                                    foreach (string k in macPointCollection.MapLocationPoints.Keys.Where(k => macPointCollection.MapLocationPoints[k].LocationReference == locationRecord.Floor))
+                                        macPointCollection.MapLocationPoints[k].Points.Add(new LocationPoint
+                                        { Point = new Vector2((float)locationRecord.X, (float)locationRecord.Y), Node = locationRecord.Area, Time = locationRecord.Date.TimeOfDay });
+                                    break;
+                                }
 
-            MapViewer.LoadPoints(MacPointCollections);
+                    Dispatcher.Invoke(() =>
+                    {
+                        UpdatePointsButton.IsEnabled = true;
+                        MapViewer.LoadPoints(MacPointCollections);
+                        UpdatingPoints = false;
+                    });
+                }
+                ))
+                { IsBackground = false }.Start();
+            }
         }
 
         /// <summary>

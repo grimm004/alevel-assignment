@@ -165,50 +165,95 @@ namespace LocationInterface.Pages
 
                     // Skip a line in the source file
                     long position = 0;
+                    string header = "";
                     using (StreamReader reader = new StreamReader(fileInfos[i].OpenRead()))
-                        position = reader.ReadLine().Length;
-                    
-                    // Open the file to be imported
-                    using (FileStream sourceFile = fileInfos[i].OpenRead())
-                    // Create and open a new file in the file cache folder
-                    using (FileStream desinationFile = File.Create($"{ SettingsManager.Active.DataCacheFolder}\\{ fileInfos[i].Name }"))
                     {
-                        // Get the bytes for the new file CSVDatabase table header
-                        byte[] data = Encoding.UTF8.GetBytes(Constants.DATAFILEHEADER);
-                        // Write this data into the new file
-                        desinationFile.Write(data, 0, data.Length);
-                        sourceFile.Position = position;
-                        // Copy the file to be imported to the new file
-                        sourceFile.CopyTo(desinationFile);
+                        header = reader.ReadLine();
+                        position = header.Length;
                     }
-                }
-            // Get any gz (zipped) files in the directory
-            FileInfo[] zippedFileInfos = directorySelected.GetFiles("*.gz");
-            // Loop through the zipped files
-            for (int i = 0; i < zippedFileInfos.Length; i++)
-                // Check the file is not already in the index and does not already exist in the data cache
-                if (IsUniqueDataFile(GetZipFileName(zippedFileInfos[i].Name)) && !File.Exists($"{ SettingsManager.Active.DataCacheFolder}\\{ Path.GetFileNameWithoutExtension(zippedFileInfos[i].Name) }"))
-                {
-                    // Increment the file count
-                    processedFileCount++;
-                    // Update the status information
-                    UpdateStatus(string.Format("Importing '{0}'", zippedFileInfos[i].Name), 100d * i / zippedFileInfos.Length);
 
-                    // Open the file to be imported
-                    using (FileStream originalFileStream = zippedFileInfos[i].OpenRead())
-                    // Create and open a new file in the file cache folder
-                    using (FileStream decompressedFileStream = File.Create($"{ SettingsManager.Active.DataCacheFolder}\\{ Path.GetFileNameWithoutExtension(zippedFileInfos[i].Name) }"))
+                    DataFileFormat format = DataFileFormat.Unknown;
+                    switch (header)
                     {
-                        // Get the bytes for the new file CSVDatabase table header
-                        byte[] data = Encoding.UTF8.GetBytes(Constants.DATAFILEHEADER + Environment.NewLine);
-                        // Write this data into the new file
-                        decompressedFileStream.Write(data, 0, data.Length);
-                        // Create a GZipStream to unzip the file (a wrapper to read and interpret the zipped file)
-                        using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
-                            // Copy the file to be imported to the new file (unzipped)
-                            decompressionStream.CopyTo(decompressedFileStream);
+                        case "rssireccount,journey_type,user_type,apmac,trilat_result,floor,area,visit,lable,source,ycoords,xcoords,zcoords,username,assettype,engine_ref,start_ts,site,first_ts,mac,dwell,building,dwell_periods,last_updated_time,rssifix":
+                            Console.WriteLine("File type: RAW");
+                            format = DataFileFormat.RawData;
+                            break;
+                        case "mac,trilat_result,time,dwell_periods,area,deck,until,t_diff":
+                            Console.WriteLine("File type: CLEANED");
+                            format = DataFileFormat.CleanedData;
+                            break;
+                        case "mac,trilat_result,time,dwell_periods,area,floor,until,t_diff":
+                            Console.WriteLine("File type: CLEANED");
+                            format = DataFileFormat.CleanedData;
+                            break;
+                        default:
+                            Console.WriteLine("Could not identify data file format.");
+                            break;
                     }
+
+                    if (format != DataFileFormat.Unknown)
+                        // Open the file to be imported
+                        using (FileStream sourceFile = fileInfos[i].OpenRead())
+                        // Create and open a new file in the file cache folder
+                        using (FileStream desinationFile = File.Create($"{ SettingsManager.Active.DataCacheFolder}\\{ fileInfos[i].Name }"))
+                        {
+                            if (format == DataFileFormat.RawData)
+                            {
+                                // Get the bytes for the new file CSVDatabase table header
+                                byte[] data = Encoding.UTF8.GetBytes(Constants.RAWDATAFILEHEADER);
+                                // Write this data into the new file
+                                desinationFile.Write(data, 0, data.Length);
+                            }
+                            else if (format == DataFileFormat.CleanedData)
+                            {
+                                // Get the bytes for the new file CSVDatabase table header
+                                byte[] data = Encoding.UTF8.GetBytes(Constants.CLEANEDDATAFILEHEADER);
+                                // Write this data into the new file
+                                desinationFile.Write(data, 0, data.Length);
+                            }
+                            sourceFile.Position = position;
+                            // Copy the file to be imported to the new file
+                            sourceFile.CopyTo(desinationFile);
+                        }
                 }
+
+            //// Get any gz (zipped) files in the directory
+            //FileInfo[] zippedFileInfos = directorySelected.GetFiles("*.gz");
+            //// Loop through the zipped files
+            //for (int i = 0; i < zippedFileInfos.Length; i++)
+            //    // Check the file is not already in the index and does not already exist in the data cache
+            //    if (IsUniqueDataFile(GetZipFileName(zippedFileInfos[i].Name)) && !File.Exists($"{ SettingsManager.Active.DataCacheFolder}\\{ Path.GetFileNameWithoutExtension(zippedFileInfos[i].Name) }"))
+            //    {
+            //        // Increment the file count
+            //        processedFileCount++;
+            //        // Update the status information
+            //        UpdateStatus(string.Format("Importing '{0}'", zippedFileInfos[i].Name), 100d * i / zippedFileInfos.Length);
+
+            //        // Skip a line in the source file
+            //        long position = 0;
+            //        using (StreamReader reader = new StreamReader(fileInfos[i].OpenRead()))
+            //            position = reader.ReadLine().Length;
+
+            //        // Open the file to be imported
+            //        using (FileStream originalFileStream = zippedFileInfos[i].OpenRead())
+            //        // Create and open a new file in the file cache folder
+            //        using (FileStream decompressedFileStream = File.Create($"{ SettingsManager.Active.DataCacheFolder}\\{ Path.GetFileNameWithoutExtension(zippedFileInfos[i].Name) }"))
+            //        {
+            //            // Get the bytes for the new file CSVDatabase table header
+            //            byte[] data = Encoding.UTF8.GetBytes(Constants.DATAFILEHEADER + Environment.NewLine);
+            //            // Write this data into the new file
+            //            decompressedFileStream.Write(data, 0, data.Length);
+            //            // Create a GZipStream to unzip the file (a wrapper to read and interpret the zipped file)
+            //            using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+            //            {
+            //                originalFileStream.Position = position;
+            //                // Copy the file to be imported to the new file (unzipped)
+            //                decompressionStream.CopyTo(decompressedFileStream);
+            //            }
+            //        }
+            //    }
+
             // If the total number of files processed and placed in the cache is zero, warn the user
             if (processedFileCount == 0) System.Windows.Forms.MessageBox.Show("Could not find any data files to import.", "Data Import");
             // Else convert the imported files
@@ -422,9 +467,8 @@ namespace LocationInterface.Pages
         private void ClearCacheButtonClick(object sender, RoutedEventArgs e)
         {
             // Display a confirmation dialog
-            DialogResult result = System.Windows.Forms.MessageBox.Show("Are you sure you want to delete the data cache?", "Confirmation", MessageBoxButtons.YesNo);
             // If the user confirms yes, delete the cache
-            if (result == DialogResult.Yes) ClearCache();
+            if (System.Windows.Forms.MessageBox.Show("Are you sure you want to delete the data cache?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes) ClearCache();
         }
 
         /// <summary>
@@ -452,5 +496,12 @@ namespace LocationInterface.Pages
             // Open a new SelectionInformationWindow as a dialog
             new SelectionInformationWindow(SelectedDataFiles.ToArray()).ShowDialog();
         }
+    }
+
+    enum DataFileFormat
+    {
+        Unknown,
+        RawData,
+        CleanedData,
     }
 }
