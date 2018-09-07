@@ -12,10 +12,10 @@ namespace HeatMap
 {
     public class Map
     {
+
         #region Fields
-
-        int width, height;
-
+        private readonly int width;
+        private readonly int height;
         public static GraphicsDevice GraphicsDevice;
         public static Effect IntensityPenEffect;
         public static Effect ColorMapEffect;
@@ -136,13 +136,13 @@ namespace HeatMap
             if (_generating) return;
             _generating = true;
             Array2D array = new Array2D(width, height, 0);
-            Action onComplete = () =>
+            void onComplete()
             {
                 intensityTexture.SetData(array.AsAlphaMap());
                 _dirty = true;
                 _generating = false;
-            }; 
-            
+            }
+
             MapGenerator.ThreadedGenerateRandomHeight(array, MapGenerator.HeightFunction, onComplete);
             
         }
@@ -167,6 +167,7 @@ namespace HeatMap
         {
             DefaultColorMap = content.Load<Texture2D>("ColorMaps/DefaultColorMap");
             ColorMapEffect = content.Load<Effect>("ColorMapEffect");
+            Console.WriteLine(ColorMapEffect.Name);
             IntensityPenEffect = content.Load<Effect>("IntensityPenEffect");
             GraphicsDevice = device;
         }

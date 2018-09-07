@@ -251,8 +251,8 @@ namespace LocationInterface.Utils
             foreach (IMapper mapperPlugin in PluginMaps) mapperPlugin.Draw(time, SpriteBatch);
         }
 
-        private void DrawHeatPoint(HeatPoint HeatPoint, int Radius)
-        {
+        //private void DrawHeatPoint(HeatPoint HeatPoint, int Radius)
+        //{
             //// Create points generic list of points to hold circumference points
             //List<Point> CircumferencePointsList = new List<Point>();
             //// Create an empty point to predefine the point struct used in the circumference loop
@@ -303,7 +303,7 @@ namespace LocationInterface.Utils
             //GradientShaper.InterpolationColors = GradientSpecifications;
             //// Draw polygon (circle) using our point array and gradient brush
             //Canvas.FillPolygon(GradientShaper, CircumferencePointsArray);
-        }
+        //}
 
         /// <summary>
         /// Draw the current location points
@@ -357,27 +357,14 @@ namespace LocationInterface.Utils
                             "No Points", position + new Vector2(120 + (PointRadius * 2),
                             PointRadius / -2), Color.Black);
                         // If there is a point being played, draw its location node
-                        if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points.Count > 0)
-                            SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points[0].Node,
-                                position + new Vector2(175 + (PointRadius * 2),
-                                PointRadius / -2), Color.Black);
+                        //if (MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points.Count > 0)
+                            //SpriteBatch.DrawString(StandardContent.Font, MacPointCollections[i].MapLocationPoints[CurrentImageFile.FileName].Points[0].Node,
+                            //    position + new Vector2(175 + (PointRadius * 2),
+                            //    PointRadius / -2), Color.Black);
                     }
                     // Increment the y position
                     position.Y += 20;
                 }
-        }
-    }
-
-    public struct HeatPoint
-    {
-        public int X;
-        public int Y;
-        public byte Intensity;
-        public HeatPoint(int iX, int iY, byte bIntensity)
-        {
-            X = iX;
-            Y = iY;
-            Intensity = bIntensity;
         }
     }
 }

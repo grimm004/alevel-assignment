@@ -39,7 +39,8 @@ namespace LocationInterface.Windows
                 return new ImageFile
                 {
                     FileName = FileNameInput.Text,
-                    DataReference = DataReferenceInput.Text,
+                    LocationIdentifier = LocationIdentifierInput.Text,
+                    DataReference = DataFloorReferenceInput.Text,
                     AreaFileName = AreaFileNameEntry.Text,
                     FlipHorizontal = (bool)FlipHorizontalEntry.IsChecked,
                     FlipVertical = (bool)FlipVerticalEntry.IsChecked,
@@ -50,7 +51,8 @@ namespace LocationInterface.Windows
             set
             {
                 FileNameInput.Text = value.FileName;
-                DataReferenceInput.Text = value.DataReference;
+                LocationIdentifierInput.Text = value.LocationIdentifier;
+                DataFloorReferenceInput.Text = value.DataReference;
                 AreaFileNameEntry.Text = value.AreaFileName;
                 FlipHorizontalEntry.IsChecked = value.FlipHorizontal;
                 FlipVerticalEntry.IsChecked = value.FlipVertical;

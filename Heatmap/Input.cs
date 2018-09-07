@@ -160,7 +160,9 @@ namespace Engine
 
     public class Modifier
     {
-        Keys key1, key2;
+        private readonly Keys key1;
+        private readonly Keys key2;
+
         private Modifier(Keys key1, Keys key2)
         {
             this.key1 = key1;
@@ -220,7 +222,7 @@ namespace Engine
         protected MouseState LastMouseState;
         protected MouseState CurrentMouseState;
 
-        protected Dictionary<String, InputBinding> keybindings;
+        protected Dictionary<string, InputBinding> keybindings;
 
         protected float thumbstickThreshold = 0.0f;
         public float ThumbstickThreshold

@@ -7,6 +7,7 @@ namespace LocationInterface.Utils
     public class ImageFile
     {
         public string FileName { get; set; }
+        public string LocationIdentifier { get; set; }
         public string DataReference { get; set; }
         public Vector2 Scale { get; set; }
         public Vector2 Offset { get; set; }
@@ -23,7 +24,8 @@ namespace LocationInterface.Utils
             AreaFileName = "";
             Scale = new Vector2(1);
             Offset = Vector2.Zero;
-            DataReference = "None";
+            LocationIdentifier = "";
+            DataReference = "";
             FlipHorizontal = false;
             FlipVertical = false;
         }
@@ -37,6 +39,7 @@ namespace LocationInterface.Utils
         public ImageFile(string fileName, Vector2 scale, Vector2 offset, string areaFileName)
         {
             FileName = fileName;
+            LocationIdentifier = "";
             Scale = scale;
             Offset = offset;
             AreaFileName = areaFileName;
@@ -82,8 +85,9 @@ namespace LocationInterface.Utils
         public override int GetHashCode()
         {
             // Return the XOR of all the hash codes of the core class properties
-            return FileName.GetHashCode() ^ Scale.GetHashCode() ^ Offset.GetHashCode() ^ DataReference.GetHashCode() ^ AreaFileName.GetHashCode() ^ FlipHorizontal.GetHashCode() ^ FlipVertical.GetHashCode();
+            return FileName.GetHashCode() ^ Scale.GetHashCode() ^ Offset.GetHashCode() ^ LocationIdentifier.GetHashCode() ^ DataReference.GetHashCode() ^ AreaFileName.GetHashCode() ^ FlipHorizontal.GetHashCode() ^ FlipVertical.GetHashCode();
         }
+
         public override string ToString()
         {
             return $"ImageFile('{ FileName }', { Scale.ToString() }, { Offset })";

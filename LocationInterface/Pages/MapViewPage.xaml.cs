@@ -48,16 +48,30 @@ namespace LocationInterface.Pages
             TimeManagerWindow = new TimeManagerWindow(TimeSetterWindow.TimeChange, TimeEnabledEvent, TimeDisabledEvent);
             FollowManagerWindow = new FollowManagerWindow();
             MapperPluginWindow = new MapperPluginWindow(selectedPlugins => MapViewer.LoadPlugins(selectedPlugins.Select(selectedPlugin => selectedPlugin.Mapper).ToArray()), MapViewer.UnloadPlugins);
-            
+
+            UpdateLocationIdentifierSelection();
             UpdateImageSelection();
         }
 
-        private void UpdateImageSelection()
+        private void UpdateImageSelection(string locationIdentifier = "")
         {
             MapImageSelector.SelectedIndex = -1;
             MapImageSelector.Items.Clear();
-            foreach (ImageFileReference imageFileReference in ImageFileReferences)
-                MapImageSelector.Items.Add(imageFileReference);
+            foreach (ImageFileReference imageFileReference in ImageFileReferences.Where(i => string.IsNullOrWhiteSpace(locationIdentifier) || App.ImageIndex.GetImageFile(i).LocationIdentifier == locationIdentifier))
+                    MapImageSelector.Items.Add(imageFileReference);
+        }
+
+        private void UpdateLocationIdentifierSelection()
+        {
+            List<string> locationIdentifiers = new List<string>();
+            foreach (string locationIdentifier in ImageFileReferences.Select(i => App.ImageIndex.GetImageFile(i).LocationIdentifier))
+                if (!locationIdentifiers.Contains(locationIdentifier))
+                    locationIdentifiers.Add(locationIdentifier);
+
+            LocationIdentifierSelector.SelectedIndex = -1;
+            LocationIdentifierSelector.Items.Clear();
+            foreach (string locationIdentifier in locationIdentifiers)
+                LocationIdentifierSelector.Items.Add(locationIdentifier);
         }
 
         /// <summary>
@@ -131,6 +145,11 @@ namespace LocationInterface.Pages
             // Load the image in the map
             if (MapImageSelector.SelectedValue != null)
                 MapViewer.LoadMap(SelectedImageFile = App.ImageIndex.GetImageFile(MapImageSelector.SelectedValue as ImageFileReference));
+        }
+
+        private void MapLocationChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateImageSelection(LocationIdentifierSelector.SelectedItem as string);
         }
 
         /// <summary>
@@ -293,7 +312,8 @@ namespace LocationInterface.Pages
             if (indexManagerWindow.ShowDialog() == true)
             {
                 ImageFileReferences = App.ImageIndex.ImageFileReferences;
-                UpdateImageSelection();
+                UpdateLocationIdentifierSelection();
+                UpdateImageSelection(LocationIdentifierSelector.SelectedItem as string);
             }
         }
     }
