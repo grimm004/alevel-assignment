@@ -1,4 +1,4 @@
-# Airloc8
-Airloc8 A-Level Computer Science Project
+# Location Data Management and Visualiser
+A-Level Computer Science Project for Tes Media Group
 
-Requires Newtonsoft.Json and DatabaseManager
+Requires Newtonsoft.Json and grimm004/database-manager
